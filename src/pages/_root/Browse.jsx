@@ -13,6 +13,7 @@ export default function Page() {
   const { getToggleGenres, toggleGenres } = useAppUtil();
 
   const { data: genres } = useFetchGenres();
+  console.log("Genres",useFetchGenres());
 
   useEffect(() => {
     if (genres) setGenre(genres?.[0]?.id);

@@ -117,31 +117,30 @@ export const getFormatData = (arr, image_alt) => {
           index: index,
           id: item?.id,
           image:
+            item?.imageUrl ||
             item?.picture_big ||
             item?.cover_big ||
             item?.album?.cover_big ||
             image_alt,
           name: item?.title || item?.name,
-          desc:
-            item?.artist?.name ||
-            item?.description ||
-            item?.details?.description,
+          desc: item?.description ,
+          
 
           albumId: item?.album?.id,
           albumTitle: item?.album?.title,
           artistId: item?.artist?.id,
-          artistName: item?.artist?.name,
+          artistName: item?.artistName,
           genres: item?.genres,
-          type: item?.type,
+          type: "Album",
           duration: item?.duration,
-          releaseDate: item?.release_date || item?.creation_date,
+          releaseDate: item?.publishedAt,
           contributors: item?.contributors,
           tracksNo: item?.track_total || item?.nb_tracks,
           albumsNo: item?.nb_album || item?.details?.nb_album,
           fansNo: item?.nb_fan || item?.fans || item?.details?.nb_fan,
-          audioSrc: item?.preview,
+          audioSrc: item?.songUrl,
           tracks: item?.tracks,
-          details: item?.details,
+          details: item?.description,
         };
       })
     : [];

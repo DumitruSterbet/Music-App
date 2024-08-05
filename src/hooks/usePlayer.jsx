@@ -28,6 +28,7 @@ const formatTime = (seconds) => {
 };
 
 let autoplay = false;
+
 export default function usePlayer() {
   const [groovePlayer, setGroovePlayer] = useLocalStorage("groove-player");
 
@@ -67,6 +68,8 @@ export default function usePlayer() {
     updateTrackIndex,
   } = usePlayerStore();
 
+  console.log("Tracklist in usePlayer:", tracklist);
+ 
   const { updatePlayer } = useUpdateAccountPlayer();
 
   const { fetchTracks } = useFetchTracks();
@@ -83,10 +86,12 @@ export default function usePlayer() {
   const currentTrack = tracklist?.[trackIndex];
 
   const { audioSrc } = currentTrack || {};
+  console.log("Current Track Audio Source:", audioSrc);
 
   const usePlayerInit = () => {
     useEffect(() => {
-      if (currentTrack?.audioSrc) {
+      console.log("s-a pornit");
+      if (audioSrc) {
         load(audioSrc, {
           autoplay,
           loop: true,
@@ -94,7 +99,7 @@ export default function usePlayer() {
           initialVolume: vol,
         });
       }
-    }, [currentTrack, autoplay]);
+    }, [currentTrack,autoplay]);
 
     useEffect(() => {
       const animate = () => {
@@ -232,8 +237,8 @@ export default function usePlayer() {
 
   const handleGetPlaylist = (data) => {
     autoplay = true;
-
     if (data?.tracklist) {
+      console.log("Data info in usePlayer:", data);
       getPlaylist(data);
     }
 

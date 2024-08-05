@@ -28,8 +28,9 @@ export const useAppModal = create((set) => ({
   getModalContent: (value) => set(() => ({ modalContent: value })),
 }));
 
+
 export const usePlayerStore = create((set) => ({
-  tracklist: [],
+  //tracklist: [],
   playlistId: null,
   playlistType: null,
   trackIndex: 0,
@@ -41,139 +42,72 @@ export const usePlayerStore = create((set) => ({
   isLooping: false,
   isShuffle: false,
 
-  getTrackList: (value) =>
-    set((state) => {
-      const {
+  getTrackList: (value) => set((state) => (
+    
+    {
+    tracklist: value.tracklist || [],
+    playlistId: value.playlistId || 1,
+    playlistType: value.playlistType || 'Album',
+    trackIndex: value.trackIndex || 0,
+    trackId: value.trackId || null,
+    trackType: value.trackType || null,
+  })),
+  
+
+  getPlaylist: (value) => set((state) => {
+    const { tracklist, playlistId, playlistType, trackIndex, trackId, trackType } = value || {};
+    console.log("seted1",value,state);
+    if (tracklist?.length) {
+    
+      return {
         tracklist,
-        playlistId,
-        playlistType,
-        trackIndex,
-        trackId,
-        trackType,
-      } = value || {};
-
-      if (tracklist) state.tracklist = tracklist;
-      if (playlistId) state.playlistId = playlistId;
-      if (playlistType) state.playlistType = playlistType;
-      if (trackIndex) state.trackIndex = trackIndex;
-      if (trackId) state.trackId = trackId;
-      if (trackType) state.trackType = trackType;
-    }),
-
-  getPlaylist: (value) =>
-    set((state) => {
-      const {
-        tracklist,
-        playlistId,
-        playlistType,
-        trackIndex,
-        trackId,
-        trackType,
-      } = value || {};
-
-      if (
-        trackIndex?.toString() &&
-        state.playlistId === playlistId &&
-        state.tracklist.length &&
-        state.tracklist.length > trackIndex
-      ) {
-        return {
-          trackIndex: trackIndex,
-          trackId: trackId,
-          trackType: trackType,
-        };
-      }
-
-      const index = trackIndex || 0;
-
-      if (
-        tracklist?.length &&
-        playlistId &&
-        playlistType &&
-        state.playlistId !== playlistId
-      ) {
-        return {
-          tracklist: tracklist,
-          playlistId: playlistId,
-          playlistType: playlistType,
-          trackIndex: index,
-          trackId: tracklist[index].id,
-          trackType: tracklist[index].type,
-        };
-      }
-    }),
-
-  getCurrentPlaylist: (value) => set(() => ({ currentPlaylistDetails: value })),
-
-  updateTrackIndex: (value) => set(() => ({ trackIndex: value })),
-
-  getIsTrackPlaying: (value) => set(() => ({ isTrackPlaying: value })),
-
-  getNextTrack: () =>
-    set((state) => {
-      const { tracklist, trackIndex } = state;
-      const isLastSTrack = tracklist.length - 1 <= trackIndex;
-
-      if (isLastSTrack) {
-        return {
-          trackIndex: 0,
-          trackId: tracklist[0].id,
-        };
-      }
-
-      return {
-        trackIndex: trackIndex + 1,
-        trackId: tracklist[trackIndex + 1].id,
+        playlistId: playlistId || state.playlistId,
+        playlistType: playlistType || state.playlistType,
+        trackIndex: trackIndex || 0,
+        trackId: trackId || tracklist[trackIndex || 0]?.id,
+        trackType: trackType || tracklist[trackIndex || 0]?.type,
       };
-    }),
+    }
+  }),
 
-  getPrevTrack: () =>
-    set((state) => {
-      const { tracklist, trackIndex } = state;
+  getCurrentPlaylist: (value) => set({ currentPlaylistDetails: value }),
 
-      if (trackIndex <= 0) {
-        const index = tracklist.length - 1;
+  updateTrackIndex: (value) => set({ trackIndex: value }),
 
-        return {
-          trackIndex: index,
-          trackId: tracklist[index].id,
-        };
-      }
+  getIsTrackPlaying: (value) => set({ isTrackPlaying: value }),
 
-      return {
-        trackIndex: trackIndex - 1,
-        trackId: tracklist[trackIndex - 1].id,
-      };
-    }),
+  getNextTrack: () => set((state) => {
+    const isLastTrack = state.tracklist.length - 1 <= state.trackIndex;
+    return isLastTrack
+      ? { trackIndex: 0, trackId: state.tracklist[0]?.id }
+      : { trackIndex: state.trackIndex + 1, trackId: state.tracklist[state.trackIndex + 1]?.id };
+  }),
 
-  setOnAudioEnd: () =>
-    set((state) => {
-      const { tracklist, trackIndex, isLooping } = state;
-      const isLastSTrack = tracklist.length - 1 <= trackIndex;
+  getPrevTrack: () => set((state) => {
+    if (state.trackIndex <= 0) {
+      const index = state.tracklist.length - 1;
+      return { trackIndex: index, trackId: state.tracklist[index]?.id };
+    } else {
+      return { trackIndex: state.trackIndex - 1, trackId: state.tracklist[state.trackIndex - 1]?.id };
+    }
+  }),
 
-      if (isLooping) {
-        return {
-          trackIndex: trackIndex,
-          trackId: tracklist[trackIndex].id,
-        };
-      }
-      if (isLastSTrack) {
-        return {
-          trackIndex: 0,
-          trackId: tracklist[0].id,
-        };
-      }
+  setOnAudioEnd: () => set((state) => {
+    const isLastTrack = state.tracklist.length - 1 <= state.trackIndex;
+    if (state.isLooping) {
+      return { trackIndex: state.trackIndex, trackId: state.tracklist[state.trackIndex]?.id };
+    } else if (isLastTrack) {
+      return { trackIndex: 0, trackId: state.tracklist[0]?.id };
+    } else {
+      return { trackIndex: state.trackIndex + 1, trackId: state.tracklist[state.trackIndex + 1]?.id };
+    }
+  }),
 
-      return {
-        trackIndex: trackIndex + 1,
-        trackId: tracklist[trackIndex + 1].id,
-      };
-    }),
+  toggleIsLooping: () => set((state) => ({ isLooping: !state.isLooping })),
 
-  setIsLooping: () => set((state) => ({ isLooping: !state.isLooping })),
-
-  setIsShuffle: () => set((state) => ({ isShuffle: !state.isShuffle })),
+  toggleIsShuffle: () => set((state) => ({ isShuffle: !state.isShuffle })),
 }));
+
 
 export const useCurrentUser = create((set) => ({
   currentUser: null,

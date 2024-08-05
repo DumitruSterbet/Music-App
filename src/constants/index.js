@@ -28,6 +28,6 @@ export const navlinks = [
 ];
 
 export const logo = {
-  name: "GrooveIT",
+  name: "Powered by DS",
   icon: "PiMusicNoteFill",
 };

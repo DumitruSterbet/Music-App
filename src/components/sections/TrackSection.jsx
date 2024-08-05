@@ -29,16 +29,24 @@ export default function TrackSection({
 }) {
   useFetchMyPlaylists();
 
-  const { playlistId, trackId, trackType } = usePlayerStore() || {};
+   const { playlistId, trackId, trackType } = usePlayerStore() || {};
 
   const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer();
 
   const trackFormatted = useMemo(() => getFormatData(data), [data]);
 
+
+  console.log("tracks ",trackFormatted);
+  console.log("PlayListId ",{ playlistId, trackId, trackType });
+  
+
   const handleTrackClick = ({ id, type, index }) => {
+    console.log("dfs",{ id, type, index });
     if (trackId === id) {
+      console.log("sdss11111111111111112323231");
       handlePlayPause();
     } else {
+      console.log("sdss11111111111111111");
       handleGetPlaylist({
         tracklist: trackFormatted,
         playlistId: details?.id,

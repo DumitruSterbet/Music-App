@@ -162,6 +162,8 @@ const TrackCard = ({
   const { user, isLoaded } = currentUser || {};
 
   const { id, type, index } = item || {};
+
+  //console.log("Item",item);
   const isCurrentTrack =
     trackId === id && trackType === type && playlistId === details.id;
   const isCurrentPlaying = isCurrentTrack && isPlaying;
@@ -189,6 +191,7 @@ const TrackCard = ({
                 isCurrentTrack ? "bg-main opacity-70" : "bg-transparent"
               )}
             />
+           
             <img
               src={item.image}
               alt={item.name}
@@ -234,7 +237,8 @@ const TrackCard = ({
                     to={`/album/${item.albumId}`}
                     className="text-[14px] cursor-pointer hover:underline underline-offset-4 text-secondary"
                   >
-                    {truncate(item.albumTitle, 15)}
+
+                   {truncate(item.albumTitle, 15)}
                   </Link>
                 </>
               )}

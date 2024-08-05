@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-
 import { usePlayerStore } from "@/lib/store";
 import {
   useSaveFavouritePlaylist,
@@ -7,7 +6,7 @@ import {
   useRemoveFavouritePlaylist,
 } from "@/lib/actions";
 import { classNames, getFormatData } from "@/lib/utils";
-import { usePlayer } from "@/hooks";
+import usePlayer from "@/hooks/usePlayer";
 
 import {
   Title,
@@ -31,11 +30,10 @@ export default function BannerSection(props) {
   } = props;
 
   const { playlistId, playlistType } = usePlayerStore();
-
   const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer();
 
   const isCurrentPlaylist = useMemo(
-    () => playlistId === details?.id && playlistType === details?.type,
+    () => details && playlistId === details.id && playlistType === details.type,
     [details, playlistId, playlistType]
   );
 
@@ -53,7 +51,7 @@ export default function BannerSection(props) {
     fansNo,
     duration,
     releaseDate,
-  } = getFormatData([details])?.[0] || [];
+  } = getFormatData([details])?.[0] || {};
 
   const handleGetPlaylistFunc = () => {
     handleGetPlaylist({

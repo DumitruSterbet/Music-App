@@ -12,18 +12,14 @@ export const useFetchTopCharts = (params) => {
       if (!(id && section)) {
         throw new Error("Invalid params");
       }
+      console.log("Id",{id});
+      
       const data = await apiQuery({
-        endpoint: `editorial/${id}/${section}`,
+        endpoint: `album`,
       });
 
       let resp;
-      if (["charts"].includes(section)) {
-        resp = data;
-      } else {
-        resp = { [section]: data };
-      }
-
-      return resp;
+      return data;
     },
   });
 
@@ -36,11 +32,12 @@ export const useFetchNewReleases = ({ id }) => {
     queryFn: async () => {
       try {
         if (id) {
+  
           const data = await apiQuery({
-            endpoint: `editorial/${id}/releases`,
+            endpoint: `Album/GetByGenre/${id}`,
           });
-
-          return { ["releases"]: data };
+          console.log("Get Albums by genre result", data);
+          return data;
         } else {
           return null;
           // throw new Error("Invalid params");
@@ -85,7 +82,8 @@ export const useFetchGenres = () => {
         const response = await apiQuery({
           endpoint: `genre`,
         });
-        return response?.data?.filter((item) => item.name !== "All");
+        console.log("Genres 2", response);
+        return response;//?.data?.filter((item) => item.name !== "All");
       } catch (error) {
         // console.log(error);
       }
@@ -101,9 +99,11 @@ export const useFetchGenreById = ({ id }) => {
     queryFn: async () => {
       try {
         if (id) {
+          console.log("Genre ID2",id);
           const response = await apiQuery({
             endpoint: `genre/${id}`,
           });
+          console.log("Genre Data",response);
           return response;
         } else {
           return null;
@@ -186,8 +186,11 @@ export const useFetchArtist = ({ id }) => {
 
 export const useFetchChartBySection = ({ id, section }) => {
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
+
+  
     queryKey: [`chartsBySection_${section}_${id}`, { id, section }],
     queryFn: async () => {
+      console.log("Call chart");
       try {
         if (id && section) {
           const response = await apiQuery({
@@ -213,23 +216,39 @@ export const useFetchPlaylists = ({ id, section }) => {
     queryFn: async () => {
       try {
         if (id && section) {
+
           const response = await apiQuery({
-            endpoint: `${section}/${id}`,
+            endpoint: `Products/GetByAlbum/${id}`,
           });
 
-          return response;
+         
+
+          // Validate and return the response
+          if (response) {
+            return response;
+          } else {
+   
+            return null;
+          }
         } else {
+         
           return null;
         }
-      } catch (error) {
-        // console.log(error);
+      } catch (err) {
+    
+        return null;
       }
     },
   });
 
-  return { isPending, isSuccess, isError, isFetching, error, data };
+  return {
+    playlists: data,
+    isPending: isFetching,
+    isSuccess: isSuccess,
+    isError: isError,
+    error: error,
+  };
 };
-
 export const fetchMultiplePlaylists = async (data) => {
   try {
     if (!data) {
@@ -263,9 +282,9 @@ export const useFetchTracks = () => {
       if (id && type) {
         try {
           setGetId(id);
-
+console.log("Fetch",id);
           const response = await apiQuery({
-            endpoint: `${type}/${id}/tracks`,
+            endpoint: `Products/GetByAlbum/${id}`,
           });
 
           if (callback) callback(response.data);
@@ -293,8 +312,10 @@ export const useFetchSearch = ({ searchText }) => {
     queryFn: async () => {
       const limit = "";
 
+
+      console.log("Search ",searchText);
       if (searchText?.trim()) {
-        const [tracks, albums, artists, playlists, radios] = await Promise.all([
+        /* const [tracks, albums, artists, playlists, radios] = await Promise.all([
           apiQuery({
             endpoint: `search/track?q=${searchText}${limit}`,
           }),
@@ -318,8 +339,10 @@ export const useFetchSearch = ({ searchText }) => {
           artists,
           playlists,
           radios,
-        };
-      } else {
+        }; */
+        return null;
+      } 
+      else {
         return null;
       }
     },

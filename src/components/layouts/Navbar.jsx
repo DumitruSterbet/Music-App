@@ -104,7 +104,7 @@ const Searchbar = () => {
   );
 };
 
-const SignUpButtons = () => {
+/* const SignUpButtons = () => {
   const navigate = useNavigate();
   return (
     <div className="flex items-center gap-0 px-4">
@@ -121,7 +121,7 @@ const SignUpButtons = () => {
     </div>
   );
 };
-
+ */
 const notificationList = [
   {
     id: "1",
@@ -422,7 +422,7 @@ export default function Navbar() {
             <Searchbar />
             <MobileToggleButton />
           </div>
-          {isLoaded && !isMobile ? (
+         {/*  {isLoaded && !isMobile ? (
             <div className="flex items-center h-full gap-4 nav-icons">
               {user ? (
                 <>
@@ -433,7 +433,7 @@ export default function Navbar() {
                 <SignUpButtons />
               )}
             </div>
-          ) : null}
+          ) : null} */}
         </div>
       </div>
     </nav>

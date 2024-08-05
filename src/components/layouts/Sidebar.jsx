@@ -156,7 +156,7 @@ const Sidebar = () => {
               ]),
         ],
       },
-      {
+     /*  {
         name: "Account",
         subLinks: [
           ...(user
@@ -202,7 +202,7 @@ const Sidebar = () => {
                 },
               ]),
         ],
-      },
+      }, */
     ];
   }, [user]);
 

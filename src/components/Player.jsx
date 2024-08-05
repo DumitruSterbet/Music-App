@@ -109,6 +109,8 @@ export default function TrackPlayer() {
     isShuffle,
   } = usePlayer();
 
+  
+  console.log("Playerrrr MAin ",tracklist, currentTrack);
   const [miniPlayer, setMiniPlayer] = useState(false);
   const [openQueue, setOpenQueue] = useState(false);
   const { playing, duration, muted } = useGlobalAudioPlayer();
@@ -172,16 +174,21 @@ export default function TrackPlayer() {
 
   const isPlayerBoxed = player === "boxed" || isMobile;
 
+  if (tracklist!=undefined){
+  console.log("Playerrrr MAin ",tracklist, currentTrack);
+
   const getQueueTracks = tracklist.slice(
     currentTrack?.index + 1,
     currentTrack?.index + 4
   );
+  }
 
   if (duration === Infinity) return null;
 
   return (
     <>
-      {currentTrack && (
+      {//currentTrack && 
+      (
         <div
           className={classNames(
             "fixed bottom-0 flex flex-col justify-between z-30 duration-500 transition-max-height bg-sidebar",
@@ -204,7 +211,7 @@ export default function TrackPlayer() {
               Queue List
             </p>
             <ul className="list-none divide-y divide-divider">
-              {getQueueTracks ? (
+     {/*          {getQueueTracks ? (
                 getQueueTracks?.map((item, index) => (
                   <li
                     key={item?.id}
@@ -219,7 +226,7 @@ export default function TrackPlayer() {
                 <li className="flex items-center gap-4 p-4 text-sm">
                   <span className="text-secondary">End of queue</span>
                 </li>
-              )}
+              )} */}
             </ul>
           </div>
 

@@ -9,8 +9,11 @@ import { usePlayer } from "@/hooks";
 import { Icon, MetaDetailsMediaCard } from "@/components";
 
 export default function MediaCard({ item, type }) {
+  
+  
+  
   const navigate = useNavigate();
-
+ 
   const { playlistId, playlistType } = usePlayerStore();
 
   const { fetchTracks, isSubmitting, getId } = useFetchTracks();
@@ -63,6 +66,7 @@ export default function MediaCard({ item, type }) {
                 type === "artist" ? "rounded-full" : " rounded"
               )}
             >
+     
               <Icon
                 name="BsMusicNoteBeamed"
                 size={60}

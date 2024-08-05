@@ -17,6 +17,7 @@ export default function Discover() {
     isSuccess: isTopChartDataSuccess,
   } = useFetchTopCharts({ id: "0", section: "charts" });
 
+ 
   const {
     data: newReleases,
     isPending: isNewReleaseDataPending,
@@ -28,10 +29,12 @@ export default function Discover() {
   const { playlists, artists, albums, podcasts } = topChartData || {};
   const { releases } = newReleases || {};
 
+  console.log("Discovery page ", topChartData);
+  
   return (
     <section className="discover_page">
       <div className="flex flex-col gap-y-16">
-        {recentPlayed && recentPlayed?.length ? (
+      {/*   {recentPlayed && recentPlayed?.length ? (
           <div className="relative">
             <Sections.MediaSectionMinified
               data={recentPlayed}
@@ -48,18 +51,18 @@ export default function Discover() {
             />
           </div>
         ) : null}
-
+ */}
         <Sections.MediaSection
-          data={playlists?.data}
+          data={topChartData}
           title="Discover"
-          subTitle="Explore sonic realms with our Discover feature."
+          subTitle="Explore albums "
           type="playlist"
           cardItemNumber={10}
           isLoading={isTopChartDataPending}
           isSuccess={isTopChartDataSuccess}
         />
 
-        <Sections.MediaSection
+       <Sections.MediaSection
           data={artists?.data}
           title="Suggested Artists"
           subTitle="Discover new sounds with handpicked artists tailored to your taste."
@@ -99,7 +102,7 @@ export default function Discover() {
           type="podcast"
           isLoading={isTopChartDataPending}
           isSuccess={isTopChartDataSuccess}
-        />
+        />  
       </div>
     </section>
   );

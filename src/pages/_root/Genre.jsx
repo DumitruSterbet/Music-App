@@ -8,12 +8,16 @@ import {
 import { Sections } from "@/components";
 
 export default function Genre({ id }) {
+
+  
+  
   const {
     data: genre,
     isSuccess: genreDataSuccess,
     isPending: genreDataPending,
   } = useFetchGenreById({ id });
-
+  console.log("Genre Id Page Genre",useFetchGenreById({ id }).data );
+  console.log("Genre Id Tes",{genre} );
   const {
     data: playlists,
     isPending: playlistsDataPending,
@@ -47,6 +51,7 @@ export default function Genre({ id }) {
   } = useFetchNewReleases({
     id,
   });
+  console.log("Genres new releases",newReleases);
 
   const {
     data: radios,
@@ -61,13 +66,14 @@ export default function Genre({ id }) {
   const { selection } = topSelection || {};
 
   const genreName = genre?.name;
+  console.log("Genre name",genreName);
 
   const gridNumber = 5;
 
   return (
     <section className="genre_section">
       <div className="relative z-20 flex flex-col gap-10">
-        <Sections.MediaSection
+      {/*   <Sections.MediaSection
           data={playlists?.data}
           title={`Trending Now in ${genreName}`}
           titleType="large"
@@ -77,10 +83,10 @@ export default function Genre({ id }) {
           gridNumber={gridNumber}
           isLoading={playlistsDataPending && genreDataPending}
           isSuccess={playlistsDataSuccess && genreDataSuccess}
-        />
+        /> */}
 
-        <Sections.MediaSection
-          data={releases?.data}
+         <Sections.MediaSection
+          data={newReleases}
           title={`New ${genreName} Releases`}
           titleType="large"
           titleDivider={false}
@@ -91,7 +97,7 @@ export default function Genre({ id }) {
           isSuccess={releasesDataSuccess && genreDataSuccess}
         />
 
-        <Sections.MediaSection
+      {/*   <Sections.MediaSection
           data={selection?.data}
           title={`Editor's Picks in ${genreName}`}
           titleType="large"
@@ -126,7 +132,7 @@ export default function Genre({ id }) {
           gridNumber={gridNumber}
           isLoading={radiosDataPending && genreDataPending}
           isSuccess={radiosDataSuccess && genreDataSuccess}
-        />
+        />  */}
       </div>
     </section>
   );

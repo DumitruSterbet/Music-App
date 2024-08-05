@@ -1,32 +1,67 @@
 import axios from "axios";
 import imageCompression from "browser-image-compression";
-import {
-  collection as firebaseCollection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-  addDoc,
-  getCountFromServer,
-  orderBy,
-  deleteDoc,
-  onSnapshot,
-} from "@firebase/firestore";
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from "@firebase/storage";
 
-import { db, storage } from "@/configs";
+const API_BASE_URL = "https://localhost:7199/api"; // Replace with your actual API base URL
 
 const DEEZER_API_URL = import.meta.env.VITE_PUBLIC_DEEZER_API_URL;
 const CORS_URL = import.meta.env.VITE_PUBLIC_CORS_URL;
 
+const getBaseUrl = (endpoint) => {
+  return `${CORS_URL}/${DEEZER_API_URL}/${endpoint}`;
+};
+
+
+
+export const getAlbums = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/album`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch albums');
+  }
+};
+// API query functions
+export const getItemsByName = async (name) => {
+  const response = await axios.get(`${API_BASE_URL}/products/filterBy/${name}`);
+  return response.data;
+};
+
+export const getAllItems = async (query) => {
+  const response = await axios.post(`${API_BASE_URL}/products/GetAllItems`, query);
+  return response.data;
+};
+
+export const getProductById = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/products/${id}`);
+  return response.data;
+};
+
+export const addItem = async (product) => {
+  const response = await axios.post(API_BASE_URL, product);
+  return response.data;
+};
+
+export const addBulkItems = async (url) => {
+  const response = await axios.post(`${API_BASE_URL}/products/ExtractByUrl`, { url });
+  return response.data;
+};
+
+export const updateItem = async (id, product) => {
+  const response = await axios.put(`${API_BASE_URL}/products/${id}`, product);
+  return response.data;
+};
+
+export const deleteItem = async (id) => {
+  const response = await axios.delete(`${API_BASE_URL}/${id}`);
+  return response.data;
+};
+
+
+
+
+
+
+// Upload image function
 export const uploadImage = async ({ imageFile, storagePath, fileName }) => {
   const compressImgOption = {
     maxSizeMB: 0.05,
@@ -36,85 +71,38 @@ export const uploadImage = async ({ imageFile, storagePath, fileName }) => {
 
   const compressedFile = await imageCompression(imageFile, compressImgOption);
 
-  const storageRef = ref(
-    storage,
-    `${storagePath}/${fileName || compressedFile.name}`
-  );
-  const snapshot = await uploadBytes(storageRef, compressedFile);
-  const downloadURL = await getDownloadURL(snapshot.ref);
-  return downloadURL;
-};
+  // Assuming you have an endpoint to upload images
+  const formData = new FormData();
+  formData.append("file", compressedFile);
+  formData.append("storagePath", storagePath);
+  formData.append("fileName", fileName || compressedFile.name);
 
-export const fbAddDoc = async ({ data, collection }) =>
-  await addDoc(firebaseCollection(db, collection), data);
-
-export const fbSetDoc = async ({ data, id, collection }) =>
-  await setDoc(doc(db, collection, id), data);
-
-export const fbGetDoc = async ({ collection, id }) =>
-  await getDoc(doc(db, collection, id));
-
-export const fbUpdateDoc = async ({ data, collection, id }) =>
-  await updateDoc(doc(db, collection, id), data);
-
-export const fbDeleteDoc = async ({ collection, id }) =>
-  await deleteDoc(doc(db, collection, id));
-
-export const fbGetCollection = async ({
-  collection,
-  whereQueries = [],
-  orderByQueries = [],
-}) => {
-  const whereQ = whereQueries.map((item) => {
-    const [key, sign, value] = item;
-    return where(key, sign, value);
-  });
-  const orderByQ = orderByQueries.map((item) => {
-    const [key, value] = item;
-    return orderBy(key, value);
+  const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 
-  const q = query(firebaseCollection(db, collection), ...whereQ, ...orderByQ);
-  return await getDocs(q);
+  return response.data.downloadURL;
 };
 
-export const fbSnapshotDoc = ({ collection, id, callback }) => {
-  if (id) {
-    return onSnapshot(doc(db, collection, id), (doc) => {
-      callback(doc);
-    });
-  }
-};
+// Firestore functions
 
-export const fbDeleteStorage = async (storagePath) => {
-  await deleteObject(ref(storage, storagePath));
-};
-
-export const fbCountCollection = async ({ collection, whereQueries }) => {
-  const whereQ = whereQueries.map((item) => {
-    const [key, sign, value] = item;
-    return where(key, sign, value);
-  });
-
-  const q = query(firebaseCollection(db, collection), ...whereQ);
-  const snapshot = await getCountFromServer(q);
-  return snapshot.data().count;
-};
-
-const getBaseUrl = (endpoint) => {
-  return `${CORS_URL}/${DEEZER_API_URL}/${endpoint}`;
-};
-
-export const apiQuery = async ({ endpoint, config, method = "GET" }) => {
+export const apiQuery = async ({endpoint, config, method = "GET" }) => {
   try {
+    ///${endpoint}
+
+    console.log("genre by Id endpoint ",endpoint);
+
     const options = {
-      url: getBaseUrl(endpoint),
+      url: `${API_BASE_URL}/${endpoint}`
+      ,     
       method,
       ...config,
     };
 
     const response = await axios(options);
-
+    console.log("genre by Id",response);
     return response.data;
   } catch (error) {
     let err = error.response
@@ -127,10 +115,14 @@ export const apiQuery = async ({ endpoint, config, method = "GET" }) => {
   }
 };
 
+
+
+
+// Data formatting function
 export const dataFormatted = async (data) => {
   try {
     const dataMapped = data
-      ? Object?.entries(data)?.map(async (dataItem) => {
+      ? Object.entries(data).map(async (dataItem) => {
           const key = dataItem[0];
           const { data: value } = dataItem[1] || {};
 
@@ -170,4 +162,54 @@ export const dataFormatted = async (data) => {
   } catch (error) {
     throw new Error(error);
   }
+};
+export const fbAddDoc = async ({ data, collection }) => {
+  const response = await axios.post(`${API_BASE_URL}/addDoc`, { data, collection });
+  return response.data;
+};
+
+export const fbSetDoc = async ({ data, id, collection }) => {
+  const response = await axios.post(`${API_BASE_URL}/setDoc`, { data, id, collection });
+  return response.data;
+};
+
+export const fbGetDoc = async ({ collection, id }) => {
+  const response = await axios.get(`${API_BASE_URL}/getDoc/${collection}/${id}`);
+  return response.data;
+};
+
+export const fbUpdateDoc = async ({ data, collection, id }) => {
+  const response = await axios.put(`${API_BASE_URL}/updateDoc/${collection}/${id}`, data);
+  return response.data;
+};
+
+export const fbDeleteDoc = async ({ collection, id }) => {
+  const response = await axios.delete(`${API_BASE_URL}/deleteDoc/${collection}/${id}`);
+  return response.data;
+};
+
+export const fbGetCollection = async ({ collection, whereQueries = [], orderByQueries = [] }) => {
+  const response = await axios.post(`${API_BASE_URL}/getCollection`, { collection, whereQueries, orderByQueries });
+  return response.data;
+};
+
+export const fbSnapshotDoc = ({ collection, id, callback }) => {
+  const eventSource = new EventSource(`${API_BASE_URL}/snapshot/${collection}/${id}`);
+  eventSource.onmessage = (event) => {
+    callback(JSON.parse(event.data));
+  };
+
+  return () => {
+    eventSource.close();
+  };
+};
+
+export const fbDeleteStorage = async (storagePath) => {
+  const response = await axios.delete(`${API_BASE_URL}/deleteStorage`, { data: { storagePath } });
+  return response.data;
+};
+
+export const fbCountCollection = async ({ collection, whereQueries }) => {
+  const response = await axios.post(`${API_BASE_URL}/countCollection`, { collection, whereQueries });
+  return response.data.count;
 };
