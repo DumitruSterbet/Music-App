@@ -282,7 +282,7 @@ export const useFetchTracks = () => {
       if (id && type) {
         try {
           setGetId(id);
-console.log("Fetch",id);
+           console.log("Fetch",id);
           const response = await apiQuery({
             endpoint: `Products/GetByAlbum/${id}`,
           });
@@ -312,35 +312,15 @@ export const useFetchSearch = ({ searchText }) => {
     queryFn: async () => {
       const limit = "";
 
-
-      console.log("Search ",searchText);
       if (searchText?.trim()) {
-        /* const [tracks, albums, artists, playlists, radios] = await Promise.all([
-          apiQuery({
-            endpoint: `search/track?q=${searchText}${limit}`,
-          }),
-          apiQuery({
-            endpoint: `search/album?q=${searchText}${limit}`,
-          }),
-          apiQuery({
-            endpoint: `search/artist?q=${searchText}${limit}`,
-          }),
-          apiQuery({
-            endpoint: `search/playlist?q=${searchText}${limit}`,
-          }),
-          apiQuery({
-            endpoint: `search/radio?q=${searchText}${limit}`,
-          }),
-        ]);
 
-        return {
-          tracks,
-          albums,
-          artists,
-          playlists,
-          radios,
-        }; */
-        return null;
+       const response = await apiQuery({
+          endpoint: `search/${searchText}`,
+        });
+    
+        const {artists,albums,soundtracks} =response;
+
+        return  { artists, albums ,soundtracks};
       } 
       else {
         return null;

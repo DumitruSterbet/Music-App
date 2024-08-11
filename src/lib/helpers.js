@@ -90,9 +90,8 @@ export const uploadImage = async ({ imageFile, storagePath, fileName }) => {
 
 export const apiQuery = async ({endpoint, config, method = "GET" }) => {
   try {
-    ///${endpoint}
-
-    console.log("genre by Id endpoint ",endpoint);
+  
+    console.log("Tema user ",endpoint);
 
     const options = {
       url: `${API_BASE_URL}/${endpoint}`

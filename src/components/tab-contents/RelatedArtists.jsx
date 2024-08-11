@@ -8,7 +8,7 @@ export default function RelatedArtists({
   return (
     <div className="relative mt-8 artists_tab_content">
       <Sections.MediaSection
-        data={relatedArtists?.data}
+        data={relatedArtists}
         enableTitle={false}
         type="artist"
         isLoading={isPending}

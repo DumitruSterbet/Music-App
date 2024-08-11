@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import useLocalStorage from "use-local-storage";
+import { apiQuery } from "@/lib/helpers";
 import {
   EmailAuthProvider,
   reauthenticateWithCredential,
@@ -97,30 +98,24 @@ export const useUpdateProfile = () => {
 };
 
 export const useUpdateAccountTheme = () => {
+
   const [, setThemeLS] = useLocalStorage("groove-theme-config");
 
   const { currentUser } = useCurrentUser();
   const { userId } = currentUser || {};
-
+ 
   const {
     mutate: updateTheme,
     isPending: isSubmitting,
     isSuccess: isSubmitted,
   } = useMutation({
     mutationFn: async (prefs) => {
-      if (userId) {
-        try {
-          await fbUpdateDoc({
-            data: { prefs },
-            collection: "users",
-            id: userId,
-          });
-        } catch (err) {
-          console.error("error", err);
-        }
-      } else {
-        setThemeLS(prefs);
-      }
+
+        const response = await apiQuery({
+          endpoint: `styleSettings`,
+        });
+        setThemeLS(response);
+      
     },
   });
 

@@ -16,7 +16,7 @@ export default function Playlist() {
   
 
   const { tracks } = playlists || {};
-console.log("PlayList page dsd",playlists);
+console.log("Playlist page",playlists);
   if (!section || !id || !allowedSection.includes(section)) {
     return <Navigate to="/discover" replace />;
   }

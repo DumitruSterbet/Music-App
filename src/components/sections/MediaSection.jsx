@@ -29,7 +29,7 @@ export default function MediaSection({
 }) 
 {
   const getCardItemNumber = cardItemNumber || data?.length;
-//console.log("data section",data);
+   
   const listFormatted = useMemo(() => {
     if (data) {
       if (randomListNumber) {

@@ -8,8 +8,9 @@ export default function TopTracks({
 }) {
   return (
     <div className="relative mt-8 tracks_tab_content">
+      
       <Sections.TrackSection
-        data={topTracks?.data}
+        data={topTracks}
         details={{
           id: details?.id,
           type: details?.type,

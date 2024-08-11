@@ -5,6 +5,34 @@ import { classNames } from "@/lib/utils";
 import { Icon } from "@/components";
 
 import { Skeleton } from "./skeletons/Skeleton";
+import { connect } from "react-redux";
+
+
+
+const transformContent = (content) => {
+  const transformed = {};
+  console.log("Content", content); // Logs the original content
+
+  if (typeof content === 'object' && content !== null) {
+    console.log("Content is a object"); // This log occurs if content is an object
+    Object.entries(content).forEach(([category, data]) => {
+      console.log("Content data",data);
+      if (Array.isArray(data)) {
+
+        transformed[category] = data.map(item => {
+          if (typeof item === 'object' && item !== null) {
+            return item;
+          }
+          return null;
+        }).filter(item => item !== null);
+      }
+    });
+  } else {
+    console.log('Content is not an object:', content);
+  }
+
+  return transformed;
+};
 
 export function AppTab({
   currentTab,
@@ -14,6 +42,8 @@ export function AppTab({
   isLoaded,
   fullWidth,
 }) {
+
+  transformContent(content);
   return (
     <Tabs.Root className="relative flex flex-col" value={currentTab}>
       <Tabs.List
@@ -45,7 +75,7 @@ export function AppTab({
                     value={tab.id}
                     onClick={() => setCurrentTab(tab.id)}
                   >
-                    {tab.icon && <Icon name={tab.icon} size={22} />}
+                    {tab.icon && <Icon name={tab.icon} size={25} />}
                     {tab.name}
                   </Tabs.Trigger>
                 ) : null}
@@ -63,3 +93,4 @@ export function AppTab({
     </Tabs.Root>
   );
 }
+

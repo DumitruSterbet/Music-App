@@ -85,7 +85,7 @@ export default function Discover() {
         />
 
         <Sections.MediaSection
-          data={releases?.data}
+          data={topChartData}
           title="New Releases"
           subTitle="Discover fresh and latest soundscapes in our collection."
           cardItemNumber={10}

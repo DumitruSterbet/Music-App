@@ -14,19 +14,15 @@ export default function AllSearch({
 
   const bannerD = useMemo(() => {
     let details, type, tracks;
-    if (artists?.data?.length) {
-      details = artists?.data[0];
+    if (artists?.length) {
+      details = artists[0];
       type = "artist";
-      tracks = tracks?.data;
-    } else if (albums?.data?.length) {
-      details = albums?.data[0];
+      tracks = tracks;
+    } else if (albums?.length) {
+      details = albums[0].tracks;
       type = "album";
-      tracks = albums?.data[0]?.tracks;
-    } else if (playlists?.data?.length) {
-      details = playlists?.data[0];
-      type = "playlist";
-      tracks = playlists?.data[0]?.tracks;
-    }
+      tracks = albums[0]?.tracks;
+    } 
 
     return { details, type, tracks };
   }, [albums, artists, playlists]);
@@ -44,7 +40,7 @@ export default function AllSearch({
           />
 
           <Sections.MediaSection
-            data={artists?.data?.slice(0, 3)}
+            data={artists?.slice(0, 3)}
             title="Artists"
             titleType="medium"
             titleDivider={false}
@@ -57,7 +53,7 @@ export default function AllSearch({
           />
 
           <Sections.MediaSection
-            data={albums?.data?.slice(0, 3)}
+            data={albums?.slice(0, 3)}
             title="Albums"
             titleType="medium"
             titleDivider={false}
@@ -70,7 +66,7 @@ export default function AllSearch({
           />
 
           <Sections.MediaSection
-            data={playlists?.data?.slice(0, 3)}
+            data={playlists?.slice(0, 3)}
             title="Playlists"
             titleType="medium"
             titleDivider={false}
@@ -85,7 +81,7 @@ export default function AllSearch({
         <div className="flex flex-col col-span-1 gap-8 md:col-span-4">
           <div className="sticky top-0">
             <Sections.TrackSection
-              data={tracks?.data?.slice(0, 5)}
+              data={tracks?.slice(0, 5)}
               details={{
                 id: bannerD?.details?.id,
                 type: bannerD?.type,
@@ -104,23 +100,7 @@ export default function AllSearch({
               isSuccess={isSuccess}
             />
 
-            <Sections.TrackSection
-              data={radios?.data?.slice(0, 6)}
-              details={{
-                id: radioId,
-                type: "radio",
-              }}
-              disableHeader
-              disableRowList={["album", "duration", "actions"]}
-              imageDims="16"
-              enableTitle
-              listDivider={false}
-              titleName="Radios"
-              titleDivider={false}
-              titleType="medium"
-              isLoading={isPending}
-              isSuccess={isSuccess}
-            />
+            
           </div>
         </div>
       </div>

@@ -35,6 +35,7 @@ const MoreButtonDropDown = ({
 
   const { deleteTrackFromMyPlaylist } = useRemoveTrackFromMyPlaylist();
   const { data: myPlaylists } = useFetchMyPlaylists();
+  console.log("Here");
 
   return (
     <DropdownMenu
