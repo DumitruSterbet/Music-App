@@ -11,12 +11,11 @@ import { connect } from "react-redux";
 
 const transformContent = (content) => {
   const transformed = {};
-  console.log("Content", content); // Logs the original content
+ 
 
   if (typeof content === 'object' && content !== null) {
-    console.log("Content is a object"); // This log occurs if content is an object
+
     Object.entries(content).forEach(([category, data]) => {
-      console.log("Content data",data);
       if (Array.isArray(data)) {
 
         transformed[category] = data.map(item => {
@@ -28,7 +27,7 @@ const transformContent = (content) => {
       }
     });
   } else {
-    console.log('Content is not an object:', content);
+
   }
 
   return transformed;

@@ -44,20 +44,18 @@ export function formatTime(seconds) {
   return timeString.trim();
 }
 
-export const formatDuration = (seconds) => {
-  if (isNaN(seconds) || seconds < 0) {
-    return "Invalid input";
-  }
+export const formatDuration = (duration) => {
+  // Split the duration string by the colon
+  const parts = duration.split(':');
 
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
+  // Extract minutes and seconds
+  const minutes = parts[1];
+  const seconds = parts[2].split('.')[0]; // Get the seconds part and remove the fractional part
 
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-  const formattedSeconds =
-    remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
-
-  return `${formattedMinutes}:${formattedSeconds}`;
+  // Format the duration as MM:SS
+  return `${minutes}:${seconds}`;
 };
+
 
 export function formatDateString(date) {
   return dayjs(date).format("DD-MM-YYYY");
@@ -113,6 +111,7 @@ export const getRandomList = (arr, count, min, max) => {
 export const getFormatData = (arr, image_alt) => {
   return arr?.length
     ? arr?.map((item, index) => {
+      console.log("Image ", item?.imageUrl);
         return {
           index: index,
           id: item?.id,
@@ -128,8 +127,9 @@ export const getFormatData = (arr, image_alt) => {
 
           albumId: item?.album?.id,
           albumTitle: item?.album?.title,
-          artistId: item?.artist?.id,
-          artistName: item?.artistName,
+          //artistsId: item?.artistsId,
+         // artistName: item?.artistName,
+          artists:item?.artists,
           genres: item?.genres,
           type: "Album",
           duration: item?.duration,

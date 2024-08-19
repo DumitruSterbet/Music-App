@@ -7,6 +7,7 @@ import {
 } from "@/lib/actions";
 import { classNames, getFormatData } from "@/lib/utils";
 import usePlayer from "@/hooks/usePlayer";
+import {getAlbumDetailedInfo} from "@/lib/actions/editorial.action.js"
 
 import {
   Title,
@@ -40,18 +41,40 @@ export default function BannerSection(props) {
   const trackFormatted = useMemo(() => getFormatData(tracks), [tracks]);
 
   const {
-    image,
-    name,
+   // image,
+    //name,
     type,
     desc,
     genres,
     contributors,
-    tracksNo,
+    //tracksNo,
     albumsNo,
     fansNo,
-    duration,
-    releaseDate,
+   // duration,
+   // releaseDate,
   } = getFormatData([details])?.[0] || {};
+
+  const formatDuration = (duration) => {
+    if (!duration) return '';
+  
+    // Assuming the duration is a string in the format "hh:mm:ss" or "d.hh:mm:ss"
+    const parts = duration.split(':');
+    const hours = parseInt(parts[0], 10) || 0;
+    const minutes = parseInt(parts[1], 10) || 0;
+    const seconds = parseInt(parts[2], 10) || 0;
+  
+    return `${hours} hrs ${minutes} mins ${seconds} secs`;
+  };
+
+
+ const albumDetails = getAlbumDetailedInfo(details[0]?.albumId).data;
+ const name = albumDetails?.name;
+ const image = albumDetails?.imageUrl;
+ const tracksNo = albumDetails?.songQuantity;
+ const releaseDate =albumDetails?.publishedAt;
+ const duration = formatDuration(albumDetails?.duration);
+ const albumArtists = albumDetails?.artistsId;
+ console.log("Duration",albumArtists);
 
   const handleGetPlaylistFunc = () => {
     handleGetPlaylist({
@@ -61,6 +84,8 @@ export default function BannerSection(props) {
       savePlay: true,
     });
   };
+
+
 
   const { saveFavouritePlaylist } = useSaveFavouritePlaylist();
   const { removeFavouritePlaylist } = useRemoveFavouritePlaylist();

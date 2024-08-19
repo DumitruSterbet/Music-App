@@ -11,9 +11,7 @@ export const useFetchTopCharts = (params) => {
 
       if (!(id && section)) {
         throw new Error("Invalid params");
-      }
-      console.log("Id",{id});
-      
+      }     
       const data = await apiQuery({
         endpoint: `album`,
       });
@@ -36,7 +34,6 @@ export const useFetchNewReleases = ({ id }) => {
           const data = await apiQuery({
             endpoint: `Album/GetByGenre/${id}`,
           });
-          console.log("Get Albums by genre result", data);
           return data;
         } else {
           return null;
@@ -82,7 +79,6 @@ export const useFetchGenres = () => {
         const response = await apiQuery({
           endpoint: `genre`,
         });
-        console.log("Genres 2", response);
         return response;//?.data?.filter((item) => item.name !== "All");
       } catch (error) {
         // console.log(error);
@@ -99,11 +95,9 @@ export const useFetchGenreById = ({ id }) => {
     queryFn: async () => {
       try {
         if (id) {
-          console.log("Genre ID2",id);
           const response = await apiQuery({
             endpoint: `genre/${id}`,
           });
-          console.log("Genre Data",response);
           return response;
         } else {
           return null;
@@ -140,14 +134,14 @@ export const useFetchGenreBySection = ({ id, section }) => {
   return { isPending, isSuccess, isError, isFetching, error, data };
 };
 
-export const useFetchArtist = ({ id }) => {
-  const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
+export const useFetchArtist = (id) => {
+  return useQuery({
     queryKey: [`artist_${id}`, { id }],
     queryFn: async () => {
-      try {
-        if (id) {
-          const limit = "?limit=20";
-
+      console.log("DDDD");
+      if (id) {
+        const limit = "?limit=20";
+        try {
           const [
             details,
             topTracks,
@@ -172,17 +166,21 @@ export const useFetchArtist = ({ id }) => {
             playlists,
             radios,
           };
-        } else {
-          return null;
+        } catch (error) {
+          console.error("Error fetching artist data:", error);
+          throw error;
         }
-      } catch (error) {
-        // console.log(error);
+      } else {
+        return null;
       }
     },
+    onError: (error) => {
+      console.error("Error in useQuery:", error);
+    },
   });
-
-  return { isPending, isSuccess, isError, isFetching, error, data };
 };
+
+
 
 export const useFetchChartBySection = ({ id, section }) => {
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
@@ -222,8 +220,6 @@ export const useFetchPlaylists = ({ id, section }) => {
           });
 
          
-
-          // Validate and return the response
           if (response) {
             return response;
           } else {
@@ -271,6 +267,102 @@ export const fetchMultiplePlaylists = async (data) => {
     // console.log(error);
   }
 };
+
+
+
+export const useGetArtistByIds = ({ ids }) => {
+  const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
+    queryKey: [`artistByIds_${ids.join('_')}`, { ids }],
+    queryFn: async () => {
+      try {
+        if (ids && ids.length > 0) {
+          const response = await apiQuery({
+            endpoint: 'Artist/GetByIds',
+            method: 'POST',
+            config: {
+              data: ids, // Pass the array of IDs as the request body
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+          });
+          return response;
+        } else {
+          return null;
+        }
+      } catch (error) {
+        // Handle the error as needed
+        console.error(error);
+      }
+    },
+  });
+
+  return { isPending, isSuccess, isError, isFetching, error, data };
+};
+
+
+export const useDownload = async (data) => {
+  try {
+    if (!data) {
+      throw new Error("Invalid params");
+    }
+   console.log("Data",data);
+    const response = await apiQuery({
+      endpoint: 'Products/Download',
+      method: 'POST',
+      config: {
+        data, 
+        responseType: 'blob',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    });
+
+    if (response) {
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${data.name}.mp3`; // Set the filename based on data.name
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url); // Clean up the URL object
+    } else {
+      console.error('Failed to download song: No response received');
+    }
+  } catch (error) {
+    console.error('Error downloading song:', error);
+  }
+};
+
+
+export const getAlbumDetailedInfo = (id ) => {
+
+ 
+  const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
+    queryKey: [`genreById_${id}`, { id }],
+    queryFn: async () => {
+      try {
+        if (id) {
+       
+          const response = await apiQuery({
+            endpoint: `album/${id}`,
+          });
+          return response;
+        } else {
+          return null;
+        }
+      } catch (error) {
+        // console.log(error);
+      }
+    },
+  });
+
+  return { isPending, isSuccess, isError, isFetching, error, data };
+};
+
+
 
 export const useFetchTracks = () => {
   const [getId, setGetId] = useState(null);

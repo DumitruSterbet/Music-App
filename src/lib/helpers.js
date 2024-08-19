@@ -1,7 +1,7 @@
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 
-const API_BASE_URL = "https://localhost:7199/api"; // Replace with your actual API base URL
+const API_BASE_URL = "https://productsapi20240819025750.azurewebsites.net/api"; // Replace with your actual API base URL
 
 const DEEZER_API_URL = import.meta.env.VITE_PUBLIC_DEEZER_API_URL;
 const CORS_URL = import.meta.env.VITE_PUBLIC_CORS_URL;
@@ -90,8 +90,7 @@ export const uploadImage = async ({ imageFile, storagePath, fileName }) => {
 
 export const apiQuery = async ({endpoint, config, method = "GET" }) => {
   try {
-  
-    console.log("Tema user ",endpoint);
+  console.log("Endpoint ",endpoint,config ,method);
 
     const options = {
       url: `${API_BASE_URL}/${endpoint}`
@@ -101,7 +100,6 @@ export const apiQuery = async ({endpoint, config, method = "GET" }) => {
     };
 
     const response = await axios(options);
-    console.log("genre by Id",response);
     return response.data;
   } catch (error) {
     let err = error.response

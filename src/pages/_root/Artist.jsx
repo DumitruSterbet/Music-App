@@ -10,10 +10,14 @@ export default function Artist() {
     data: artist,
     isPending: artistDataPending,
     isSuccess: artistDataSuccess,
-  } = useFetchArtist({ id });
+    isError: artistDataError,
+    error: artistDataErrorDetails
+  } = useFetchArtist(id);
 
-  const { details, topTracks, albums, playlists, relatedArtists } =
-    artist || {};
+  // Log to debug
+  console.log("Fetched artist data:", artist);
+
+  const { details, topTracks, albums, playlists, relatedArtists } = artist || {};
 
   const [currentTab, setCurrentTab] = useState("discography");
 
@@ -56,6 +60,9 @@ export default function Artist() {
     ),
   };
 
+  if (artistDataPending) return <div>Loading artist data...</div>;
+  if (artistDataError) return <div>Error: {artistDataErrorDetails.message}</div>;
+
   return (
     <section className="relative artist_section">
       <Sections.BannerSection
@@ -79,21 +86,21 @@ export default function Artist() {
             {
               id: "top_tracks",
               name: "Top Tracks",
-              display: topTracks?.data?.length,
+              display: topTracks?.data?.length > 0,
             },
             {
               id: "playlists",
               name: "Playlists",
-              display: playlists?.data?.length,
+              display: playlists?.data?.length > 0,
             },
             {
               id: "related_artists",
               name: "Related Artists",
-              display: relatedArtists?.data?.length,
+              display: relatedArtists?.data?.length > 0,
             },
-            { id: "albums", name: "Albums", display: albums?.data?.length },
+            { id: "albums", name: "Albums", display: albums?.data?.length > 0 },
           ]}
-          isLoaded={Boolean(artist)}
+          isLoaded={artistDataSuccess}
         />
       </div>
     </section>

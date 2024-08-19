@@ -1,10 +1,12 @@
 import { useState } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
   useAddTrackToMyPlaylist,
   useRemoveTrackFromMyPlaylist,
   useFetchMyPlaylists,
+  useDownload
 } from "@/lib/actions";
 import { useCurrentUser } from "@/lib/store";
 import {
@@ -35,7 +37,7 @@ const MoreButtonDropDown = ({
 
   const { deleteTrackFromMyPlaylist } = useRemoveTrackFromMyPlaylist();
   const { data: myPlaylists } = useFetchMyPlaylists();
-  console.log("Here");
+
 
   return (
     <DropdownMenu
@@ -164,10 +166,21 @@ const TrackCard = ({
 
   const { id, type, index } = item || {};
 
-  //console.log("Item",item);
   const isCurrentTrack =
     trackId === id && trackType === type && playlistId === details.id;
   const isCurrentPlaying = isCurrentTrack && isPlaying;
+
+  const downloadSong = async (item) => {
+    const soundtrack = {
+        name: item?.name,
+        audioSrc: item?.audioSrc
+    };
+   await useDownload(soundtrack);
+   
+};
+
+  
+
 
   return (
     <li
@@ -218,31 +231,25 @@ const TrackCard = ({
             </div>
           </div>
           <div className="flex flex-col flex-1 w-full gap-1 text-onNeutralBg">
-            <span className="text-sm">{truncate(item.name, 15)}</span>
+            <span className="text-sm">{truncate(item.name, 32)}  </span>
             <div className="flex flex-col xs:flex-row">
-              <Link
-                title="Artist"
-                to={`/artist/${item.artistId}`}
-                className="text-secondary text-[14px] hover:underline underline-offset-4 cursor-pointer"
-              >
-                {item.artistName}
-              </Link>
+            
+            {
+  item.artists.map((artist, index) => (
+    <span key={artist.Id}>
+      <Link
+        title="Artist"
+        to={`/artist/${artist.Id}`}
+        className="text-secondary text-[14px] hover:underline underline-offset-4 cursor-pointer"
+      >
+        {artist.Name}
+      </Link>
+      {index < item.artists.length - 1 && <>&nbsp;&nbsp;</>} {/* Adds space between names */}
+    </span>
+  ))
+}
 
-              {!disableRowList?.includes("album") && (
-                <>
-                  <span className="hidden xs:inline-block">
-                    &nbsp;&nbsp;{"."}&nbsp;&nbsp;
-                  </span>
-                  <Link
-                    title="Album"
-                    to={`/album/${item.albumId}`}
-                    className="text-[14px] cursor-pointer hover:underline underline-offset-4 text-secondary"
-                  >
 
-                   {truncate(item.albumTitle, 15)}
-                  </Link>
-                </>
-              )}
             </div>
           </div>
         </div>
@@ -252,6 +259,24 @@ const TrackCard = ({
               {formatDuration(item.duration)}
             </div>
           )}
+
+      
+                      {/* Download button */}
+                      <button
+                        onClick={() => downloadSong(item)}
+                        className="flex items-center justify-end gap-2 text-sm text-right"
+                        title="download"
+                       >
+                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" className="text-onNeutralBg" height="26" width="26" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M19 8h-14"></path>
+                            <path d="M5 12h9"></path>
+                            <path d="M11 16h-6"></path>
+                            <path d="M15 16h6"></path>
+                            <path d="M18 13v6"></path>
+                        </svg>
+                    </button>
+
 
           {user && isLoaded && (
             <>

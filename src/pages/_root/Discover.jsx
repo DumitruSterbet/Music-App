@@ -1,16 +1,11 @@
 import {
-  useFetchRecentPlayed,
   useFetchTopCharts,
   useFetchNewReleases,
 } from "@/lib/actions";
 import { Sections } from "@/components";
 
 export default function Discover() {
-  const {
-    data: recentPlayed,
-    isPending: isRecentPlayedDataPending,
-    isSuccess: isRecentPlayedDataSucsess,
-  } = useFetchRecentPlayed();
+
   const {
     data: topChartData,
     isPending: isTopChartDataPending,

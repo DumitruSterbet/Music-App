@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from "react";
 
-import { useFetchMyPlaylists } from "@/lib/actions";
+import { useFetchMyPlaylists} from "@/lib/actions";
 import { usePlayerStore } from "@/lib/store";
 import { classNames, getFormatData } from "@/lib/utils";
 import { usePlayer } from "@/hooks";
@@ -33,20 +33,18 @@ export default function TrackSection({
 
   const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer();
 
+  
   const trackFormatted = useMemo(() => getFormatData(data), [data]);
 
 
-  console.log("tracks ",trackFormatted);
-  console.log("PlayListId ",{ playlistId, trackId, trackType });
+
   
 
   const handleTrackClick = ({ id, type, index }) => {
-    console.log("dfs",{ id, type, index });
+
     if (trackId === id) {
-      console.log("sdss11111111111111112323231");
       handlePlayPause();
     } else {
-      console.log("sdss11111111111111111");
       handleGetPlaylist({
         tracklist: trackFormatted,
         playlistId: details?.id,

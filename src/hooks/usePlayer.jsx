@@ -68,7 +68,7 @@ export default function usePlayer() {
     updateTrackIndex,
   } = usePlayerStore();
 
-  console.log("Tracklist in usePlayer:", tracklist);
+
  
   const { updatePlayer } = useUpdateAccountPlayer();
 
@@ -86,7 +86,7 @@ export default function usePlayer() {
   const currentTrack = tracklist?.[trackIndex];
 
   const { audioSrc } = currentTrack || {};
-  console.log("Current Track Audio Source:", audioSrc);
+
 
   const usePlayerInit = () => {
     useEffect(() => {

@@ -109,8 +109,7 @@ export default function TrackPlayer() {
     isShuffle,
   } = usePlayer();
 
-  
-  console.log("Playerrrr MAin ",tracklist, currentTrack);
+
   const [miniPlayer, setMiniPlayer] = useState(false);
   const [openQueue, setOpenQueue] = useState(false);
   const { playing, duration, muted } = useGlobalAudioPlayer();
@@ -175,7 +174,7 @@ export default function TrackPlayer() {
   const isPlayerBoxed = player === "boxed" || isMobile;
 
   if (tracklist!=undefined){
-  console.log("Playerrrr MAin ",tracklist, currentTrack);
+
 
   const getQueueTracks = tracklist.slice(
     currentTrack?.index + 1,

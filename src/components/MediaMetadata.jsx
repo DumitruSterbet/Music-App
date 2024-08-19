@@ -79,7 +79,7 @@ export const MetaDetails = ({
           {albumsNo} {pluralize("album", albumsNo)}
         </span>
       ) : null}
-      {duration && <span>{formatTime(duration)}&nbsp;|&nbsp;</span>}
+      {duration && <span>{duration}&nbsp;|&nbsp;</span>}
       {releaseDate && <span>{formatDateString(releaseDate)}</span>}
     </div>
   );
