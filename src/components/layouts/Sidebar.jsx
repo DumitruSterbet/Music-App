@@ -13,6 +13,7 @@ import { Icon, Overlay, Title, Tooltip, Button, Skeletons } from "@/components";
 
 const User = () => {
   const { currentUser } = useCurrentUser();
+  console.log("User",user);
 
   const { user } = currentUser || {};
   const { email, username, imageUrl } = user || {};
@@ -68,6 +69,7 @@ const CreatePlaylistTooltipContent = ({ hideTooltip }) => {
 };
 
 const Sidebar = () => {
+ 
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [toggleNav, setToggleNav] = useState(false);
@@ -87,6 +89,7 @@ const Sidebar = () => {
   const { sidebar, orientation, isMobile } = theme || defaultThemeConfig;
   const isHorizontal = orientation === "horizontal" && !isMobile;
 
+  console.log("User",navigate);
   const isFolded = sidebar === "folded";
 
   useEffect(() => {
@@ -250,7 +253,7 @@ const Sidebar = () => {
             isHorizontal && "flex h-full border-t border-divider"
           )}
         >
-          {isLoadedUser ? (
+          { (
             <>
               {navlinks.map((item) => (
                 <div
@@ -263,7 +266,7 @@ const Sidebar = () => {
                         "block p-3 mx-3 text-gray-400 text-sm uppercase"
                       )}
                     >
-                      {item.name}
+                      {item.name} 
                     </span>
                   )}
 
@@ -347,12 +350,10 @@ const Sidebar = () => {
                 </div>
               ))}
             </>
-          ) : (
-            <Skeletons.NavlistSkeleton />
           )}
-          {isLoadedUser && user && isMobile && isLoadedUser && (
+          { isMobile && (
             <div className="fixed bottom-0 p-2 bg-sidebar w-sidebar max-h-[100px]">
-              <User />
+             
             </div>
           )}
         </div>

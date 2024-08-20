@@ -135,36 +135,44 @@ export const useFetchGenreBySection = ({ id, section }) => {
 };
 
 export const useFetchArtist = (id) => {
+
+
   return useQuery({
     queryKey: [`artist_${id}`, { id }],
     queryFn: async () => {
-      console.log("DDDD");
+      console.log("DDDD",id);
       if (id) {
         const limit = "?limit=20";
         try {
-          const [
-            details,
-            topTracks,
-            albums,
-            relatedArtists,
-            playlists,
-            radios,
-          ] = await Promise.all([
-            apiQuery({ endpoint: `artist/${id}` }),
-            apiQuery({ endpoint: `artist/${id}/top${limit}` }),
-            apiQuery({ endpoint: `artist/${id}/albums${limit}` }),
-            apiQuery({ endpoint: `artist/${id}/related${limit}` }),
-            apiQuery({ endpoint: `artist/${id}/playlists${limit}` }),
-            apiQuery({ endpoint: `artist/${id}/radio` }),
-          ]);
+          const promises = [
+            apiQuery({ endpoint: `artist/${id}` }), // Artist details
+            apiQuery({ endpoint: `products/${id}/top${limit}` }), // Top tracks
+            apiQuery({ endpoint: `album/${id}/albums${limit}` }), // Albums
+            apiQuery({ endpoint: `artist/${id}/related${limit}` }), // Related artists
+           // apiQuery({ endpoint: `artist/${id}/playlists${limit}` }) // Playlists
+          ];
+        
+          // Await all promises and destructure the results
+          const [detailsResponse, topTracksResponse, albumsResponse, relatedArtistsResponse, playlistsResponse] = await Promise.all(promises);
+        
 
+          console.log("Raw Responses:", { detailsResponse, topTracksResponse, albumsResponse, relatedArtistsResponse});
+
+          // Extract data from responses (assuming data is in a 'data' field)
+          const details = detailsResponse;
+          const topTracks = topTracksResponse;
+          const albums = albumsResponse;
+          const relatedArtists = relatedArtistsResponse;
+        //  const playlists = playlistsResponse.data;
+
+        //console.log("Raw Responses:", { detailsResponse, topTracksResponse, albumsResponse });
+    
           return {
             details,
             topTracks,
             albums,
             relatedArtists,
-            playlists,
-            radios,
+          //  playlists
           };
         } catch (error) {
           console.error("Error fetching artist data:", error);

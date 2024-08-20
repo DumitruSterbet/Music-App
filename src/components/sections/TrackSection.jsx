@@ -27,19 +27,19 @@ export default function TrackSection({
   isLoading,
   isSuccess,
 }) {
+
   useFetchMyPlaylists();
+ 
 
-   const { playlistId, trackId, trackType } = usePlayerStore() || {};
-
-  const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer();
 
   
+  const { playlistId, trackId, trackType } = usePlayerStore() || {};
+  const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer(); 
   const trackFormatted = useMemo(() => getFormatData(data), [data]);
-
-
-
   
 
+  console.log("data23 data ",data);
+  console.log("data23 ",trackFormatted);
   const handleTrackClick = ({ id, type, index }) => {
 
     if (trackId === id) {

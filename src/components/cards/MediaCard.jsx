@@ -10,8 +10,7 @@ import { Icon, MetaDetailsMediaCard } from "@/components";
 
 export default function MediaCard({ item, type }) {
   
-  
-  console.log("Media Card",item ,type)
+
   const navigate = useNavigate();
  
   const { playlistId, playlistType } = usePlayerStore();

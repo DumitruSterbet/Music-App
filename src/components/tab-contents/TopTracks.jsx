@@ -6,6 +6,8 @@ export default function TopTracks({
   isPending,
   isSuccess,
 }) {
+
+  console.log("Top tracks",topTracks,details);
   return (
     <div className="relative mt-8 tracks_tab_content">
       

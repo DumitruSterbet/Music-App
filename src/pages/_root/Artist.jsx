@@ -14,11 +14,10 @@ export default function Artist() {
     error: artistDataErrorDetails
   } = useFetchArtist(id);
 
-  // Log to debug
-  console.log("Fetched artist data:", artist);
+  
 
   const { details, topTracks, albums, playlists, relatedArtists } = artist || {};
-
+  console.log("Fetched artist data:",  details, topTracks, albums, playlists, relatedArtists);
   const [currentTab, setCurrentTab] = useState("discography");
 
   const content = {
@@ -86,19 +85,15 @@ export default function Artist() {
             {
               id: "top_tracks",
               name: "Top Tracks",
-              display: topTracks?.data?.length > 0,
+              display: topTracks?.length > 0,
             },
-            {
-              id: "playlists",
-              name: "Playlists",
-              display: playlists?.data?.length > 0,
-            },
+            
             {
               id: "related_artists",
               name: "Related Artists",
-              display: relatedArtists?.data?.length > 0,
+              display: relatedArtists?.length > 0,
             },
-            { id: "albums", name: "Albums", display: albums?.data?.length > 0 },
+            { id: "albums", name: "Albums", display: albums?.length > 0 },
           ]}
           isLoaded={artistDataSuccess}
         />

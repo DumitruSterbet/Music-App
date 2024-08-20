@@ -25,6 +25,7 @@ export default function Playlist() {
   } = useGetArtistByIds({ ids: uniqueArtistIds });
 
   useEffect(() => {
+   
     if (Array.isArray(playlists)) {
       const allArtistIds = playlists.flatMap(song => {
         if (song && Array.isArray(song.artistsId)) {

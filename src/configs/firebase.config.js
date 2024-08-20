@@ -1,4 +1,4 @@
-import { initializeApp } from "@firebase/app";
+/* import { initializeApp } from "@firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -22,3 +22,4 @@ export const githubProvider = new GithubAuthProvider();
 
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+ */

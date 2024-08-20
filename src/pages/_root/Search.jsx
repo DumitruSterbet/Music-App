@@ -26,45 +26,7 @@ export default function Search() {
   const { soundtracks, albums, playlists, artists } = searchResult || {};
 
   const tracks = soundtracks;
-  console.log("search form search page tracks",tracks);
-  const tracks2 = [
-    {
-      id: 1,
-      name: 'Shape of You',
-      artist: 'Ed Sheeran',
-      album: '÷ (Divide)',
-      duration: '3:53',
-      releaseDate: '2017-01-06',
-      genre: 'Pop'
-    },
-    {
-      id: 2,
-      name: 'Blinding Lights',
-      artist: 'The Weeknd',
-      album: 'After Hours',
-      duration: '3:20',
-      releaseDate: '2019-11-29',
-      genre: 'Synthwave'
-    },
-    {
-      id: 3,
-      name: 'Levitating',
-      artist: 'Dua Lipa',
-      album: 'Future Nostalgia',
-      duration: '3:23',
-      releaseDate: '2020-03-27',
-      genre: 'Disco'
-    },
-    {
-      id: 4,
-      name: 'Watermelon Sugar',
-      artist: 'Harry Styles',
-      album: 'Fine Line',
-      duration: '2:54',
-      releaseDate: '2020-05-15',
-      genre: 'Pop'
-    }
-  ];
+
   
   const content = {
     all: (
@@ -78,7 +40,7 @@ export default function Search() {
     
     tracks: (
       <TabContents.TopTracks
-        topTracks= {tracks2}
+        topTracks= {tracks}
         isPending={searchDataPending}
         isSuccess={searchDataSuccess}
       />
@@ -111,7 +73,7 @@ export default function Search() {
   content={content}
   tabs={[
     { id: "all", name: "All", display: true },
-    { id: "tracks", name: "Tracks", display: tracks2?.length },
+    { id: "tracks", name: "Tracks", display: tracks?.length },
     { id: "artists", name: "Artists", display: artists?.length },
     { id: "albums", name: "Albums", display: albums?.length },
   ]}

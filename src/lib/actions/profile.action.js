@@ -3,17 +3,18 @@ import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import useLocalStorage from "use-local-storage";
 import { apiQuery } from "@/lib/helpers";
-import {
+
+/* import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
   updateProfile,
-} from "@firebase/auth";
+} from "@firebase/auth"; */
 
 import { useCurrentUser } from "@/lib/store";
 import { fbUpdateDoc, uploadImage, fbSnapshotDoc } from "@/lib/helpers";
 import { useNotification } from "@/hooks";
-import { auth } from "@/configs";
+//import { auth } from "@/configs";
 
 export const useGetProfile = () => {
   const [, setThemeLS] = useLocalStorage("groove-theme-config");

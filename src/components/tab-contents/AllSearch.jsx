@@ -31,14 +31,14 @@ export default function AllSearch({
     <div className="relative h-screen mt-8 all_tab_content">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-10">
         <div className="flex flex-col col-span-1 gap-8 md:col-span-6">
-          <Sections.BannerSection
+          {/* <Sections.BannerSection
             details={bannerD?.details}
             tracks={bannerD?.tracks}
             type="search"
             isLoading={isPending}
             isSuccess={isSuccess}
           />
-
+ */}
           <Sections.MediaSection
             data={artists?.slice(0, 3)}
             title="Artists"

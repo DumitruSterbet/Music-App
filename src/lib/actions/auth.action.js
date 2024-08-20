@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import {
+/* import {
   confirmPasswordReset,
   createUserWithEmailAndPassword,
   getRedirectResult,
@@ -13,12 +13,12 @@ import {
   signOut,
   updateProfile,
   verifyPasswordResetCode,
-} from "@firebase/auth";
+} from "@firebase/auth"; */
 
 import { useCurrentUser } from "@/lib/store";
 import { fbSetDoc } from "@/lib/helpers";
 import { useNotification } from "@/hooks";
-import { auth, googleProvider, githubProvider } from "@/configs";
+/* import { auth, googleProvider, githubProvider } from "@/configs"; */
 
 export const useAuthState = () => {
   const {
@@ -28,43 +28,8 @@ export const useAuthState = () => {
   } = useCurrentUser();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const isPasswordEnabled = user?.providerData
-          .reduce((acc, item) => {
-            acc.push(item.providerId);
-            return acc;
-          }, [])
-          ?.includes("password");
-
-        const {
-          uid,
-          displayName: username,
-          email,
-          metadata,
-          photoURL: imageUrl,
-        } = user;
-
-        getCurrentUser({
-          userId: profile && uid,
-          user: {
-            ...profile,
-            uid,
-            username,
-            email,
-            metadata,
-            imageUrl,
-            isPasswordEnabled,
-          },
-          isLoading: false,
-          isLoaded: true,
-        });
-      } else {
-        getCurrentUser({ isLoaded: true, isLoading: false });
-        getUserProfile(null);
-      }
-    });
-    return unsubscribe;
+   
+    return undefined;
   }, [getCurrentUser, profile]);
 };
 
