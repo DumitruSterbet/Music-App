@@ -1,14 +1,10 @@
 import { useMemo } from "react";
+import { Helmet } from "react-helmet";
 import { usePlayerStore } from "@/lib/store";
-import {
-  useSaveFavouritePlaylist,
-  useListFavouritePlaylist,
-  useRemoveFavouritePlaylist,
-} from "@/lib/actions";
+
 import { classNames, getFormatData } from "@/lib/utils";
 import usePlayer from "@/hooks/usePlayer";
-import {getAlbumDetailedInfo} from "@/lib/actions/editorial.action.js"
-
+import { getAlbumDetailedInfo } from "@/lib/actions/editorial.action.js";
 import {
   Title,
   IconButton,
@@ -41,40 +37,46 @@ export default function BannerSection(props) {
   const trackFormatted = useMemo(() => getFormatData(tracks), [tracks]);
 
   const {
-   // image,
-    //name,
-    type,
     desc,
     genres,
     contributors,
-    //tracksNo,
     albumsNo,
     fansNo,
-   // duration,
-   // releaseDate,
   } = getFormatData([details])?.[0] || {};
 
   const formatDuration = (duration) => {
     if (!duration) return '';
-  
-    // Assuming the duration is a string in the format "hh:mm:ss" or "d.hh:mm:ss"
     const parts = duration.split(':');
     const hours = parseInt(parts[0], 10) || 0;
     const minutes = parseInt(parts[1], 10) || 0;
     const seconds = parseInt(parts[2], 10) || 0;
-  
     return `${hours} hrs ${minutes} mins ${seconds} secs`;
   };
 
+  let type;
+  let name, image, tracksNo, releaseDate, duration, albumArtists;
+  let pagename;
+  //let artistName;
+  if (Array.isArray(details)) {
+    type = "album";
+    pagename="Album";
+    const albumDetails = getAlbumDetailedInfo(details[0]?.albumId).data;
+    name = albumDetails?.name;
+    image = albumDetails?.imageUrl;
+    tracksNo = albumDetails?.songQuantity;
+    releaseDate = albumDetails?.publishedAt;
+    duration = formatDuration(albumDetails?.duration);
+    albumArtists  = details?.flatMap(item => item.artists.map(artist => artist.name)).join(', '); 
 
- const albumDetails = getAlbumDetailedInfo(details[0]?.albumId).data;
- const name = albumDetails?.name;
- const image = albumDetails?.imageUrl;
- const tracksNo = albumDetails?.songQuantity;
- const releaseDate =albumDetails?.publishedAt;
- const duration = formatDuration(albumDetails?.duration);
- const albumArtists = albumDetails?.artistsId;
- console.log("Duration",albumArtists);
+  } else {
+    type = "artist";
+    pagename="Artist";
+    name = details?.name;
+    image = details?.imageUrl;
+    tracksNo = details?.songQuantity;
+    releaseDate = details?.publishedAt;
+    albumArtists =name;
+  }
 
   const handleGetPlaylistFunc = () => {
     handleGetPlaylist({
@@ -87,20 +89,23 @@ export default function BannerSection(props) {
 
 
 
-  const { saveFavouritePlaylist } = useSaveFavouritePlaylist();
-  const { removeFavouritePlaylist } = useRemoveFavouritePlaylist();
-  const {
-    data: listFavouritePlaylist,
-    isSuccess: listFavouritePlaylistDataSuccess,
-  } = useListFavouritePlaylist();
-
-  const { favouriteplaylistList, favouriteplaylistId } =
-    listFavouritePlaylist || {};
-
-  const isFavourite = favouriteplaylistList?.includes(`${details?.id}`);
-
   return (
     <div className="relative banner_section">
+      <Helmet>
+        <title>{` Download ${pagename}  ${name} - Beat up `}</title>
+        <meta name="description" content={ ` Download ${pagename}  ${name}  Download MP3 or WAV format - Beat up`} />
+     
+       
+    <meta property="og:title" content={` Download ${pagename}  ${name} - Site name`} />
+    <meta property="og:description" content={` Download ${pagename}  ${name}  Download MP3 or WAV format - Site name`} />
+    <meta property="og:url" content={window.location.href} />
+  
+    <meta name="twitter:title" content={ `Download ${pagename}  ${name} - Site name`} />
+    <meta name="twitter:description" content={` Download ${pagename} ${name}  Download MP3 or WAV format - Site name`} />
+ 
+ 
+      </Helmet>
+
       {typeAlt !== "search" && (
         <div className="absolute w-full h-full rounded bg-primary-opacity" />
       )}
@@ -125,13 +130,12 @@ export default function BannerSection(props) {
             )}
           >
             {showPattern && <PatternBg />}
-
             <img
               src={image}
               alt=""
               className={classNames(
-                "aspect-square h-[180px] w-[180px] shadow_card",
-                type === "artist" ? "rounded-full" : "rounded"
+                "aspect-square h-[200px]  shadow_card",
+                type === "artist" ? "rounded-full w-[350px] " : "rounded w-[200px]"
               )}
             />
             <div
@@ -153,7 +157,6 @@ export default function BannerSection(props) {
                   divider={false}
                   desc={desc || <Contributors contributors={contributors} />}
                 />
-
                 {typeAlt !== "search" && (
                   <MetaDetails
                     {...{ tracksNo, albumsNo, fansNo, duration, releaseDate }}
@@ -179,38 +182,7 @@ export default function BannerSection(props) {
                         : handleGetPlaylistFunc
                     }
                   />
-                  {!["search", "artist"].includes(typeAlt) &&
-                    listFavouritePlaylistDataSuccess && (
-                      <IconButton
-                        name={
-                          isFavourite ? "MdFavorite" : "MdOutlineFavoriteBorder"
-                        }
-                        className={classNames(
-                          "h-10 w-10",
-                          isFavourite && "!bg-switch border border-red-500"
-                        )}
-                        iconClassName={classNames(
-                          "!text-onNeutralBg",
-                          isFavourite && "!text-red-700"
-                        )}
-                        onClick={() => {
-                          const data = {
-                            [details?.id]: {
-                              id: details?.id,
-                              type: details?.type,
-                            },
-                          };
-                          if (isFavourite) {
-                            removeFavouritePlaylist({
-                              playlistD: data,
-                              id: favouriteplaylistId,
-                            });
-                          } else {
-                            saveFavouritePlaylist(data);
-                          }
-                        }}
-                      />
-                    )}
+                
                 </div>
               )}
             </div>

@@ -39,7 +39,7 @@ export default function Playlist() {
       const uniqueIds = [...new Set(allArtistIds)];
       setUniqueArtistIds(uniqueIds);
     } else {
-      console.error("Invalid playlists data, not an array.");
+      
     }
   }, [playlists]);
 

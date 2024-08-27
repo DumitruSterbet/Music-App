@@ -95,7 +95,7 @@ export default function MediaSectionMinified({
                         <Cards.MediaCardMinified
                           key={item.id}
                           item={item}
-                          type={item?.type || type}
+                          type={ type}
                           imageDims={imageDims}
                           isMyPlaylist={isMyPlaylist}
                         />

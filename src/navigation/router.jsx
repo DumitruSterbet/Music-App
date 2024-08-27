@@ -12,6 +12,7 @@ import {
   Profile,
   Notifications,
   Error,
+  Premium
 } from "@/pages/_root";
 
 import { Register, Login, ForgetPass, VerifyForgetPass } from "@/pages/_auth";
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
           {
             path: "/profile",
             element: <Profile />,
+          },
+          {
+            path: "/premium",
+            element: <Premium />,
           },
           {
             path: "/notifications",

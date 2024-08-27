@@ -10,3 +10,4 @@ export { default as MyPlaylist } from "./MyPlaylist";
 export { default as Profile } from "./Profile";
 export { default as Notifications } from "./Notifications";
 export { default as Error } from "./Error";
+export  {default as Premium} from "./Premium"

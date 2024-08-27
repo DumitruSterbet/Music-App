@@ -102,6 +102,8 @@ export const apiQuery = async ({endpoint, config, method = "GET" }) => {
     const response = await axios(options);
     return response.data;
   } catch (error) {
+
+    
     let err = error.response
       ? {
           message:

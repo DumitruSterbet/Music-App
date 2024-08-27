@@ -4,16 +4,18 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiQuery } from "@/lib/helpers";
 
 export const useFetchTopCharts = (params) => {
+  const { id, section, limit , page = 1 } = params ?? {};
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
     queryKey: ["topCharts", params],
     queryFn: async () => {
       const { id, section } = params ?? {};
 
+      console.log("Test",limit);
       if (!(id && section)) {
         throw new Error("Invalid params");
       }     
       const data = await apiQuery({
-        endpoint: `album`,
+        endpoint: `album?limit=${limit}&page=${page}`,
       });
 
       let resp;
@@ -136,7 +138,6 @@ export const useFetchGenreBySection = ({ id, section }) => {
 
 export const useFetchArtist = (id) => {
 
-
   return useQuery({
     queryKey: [`artist_${id}`, { id }],
     queryFn: async () => {
@@ -188,6 +189,26 @@ export const useFetchArtist = (id) => {
   });
 };
 
+
+export const useFetchArtists = (page, limit) => {
+  return useQuery({
+    queryKey: ['fetchArtists', page, limit], // Add queryKey to cache results based on page and limit
+    queryFn: async () => {
+
+      try {
+        const detailsResponse = await apiQuery({ endpoint: `artist?limit=${limit}&page=${page}`});
+        return detailsResponse;
+      } 
+      catch (error) {
+        console.error("Error fetching artist data:", error);
+        throw error;
+      }
+    },
+    onError: (error) => {
+      console.error("Error in useQuery:", error);
+    },
+  });
+};
 
 
 export const useFetchChartBySection = ({ id, section }) => {

@@ -7,13 +7,12 @@ import { useAppUtil, useAppModal, useCurrentUser } from "@/lib/store";
 import { useLogout } from "@/lib/actions";
 
 import { useTheme } from "@/hooks";
-import { themeConfig, defaultThemeConfig } from "@/configs";
+import { themeConfig } from "@/configs";
 
 import { Icon, Overlay, Title, Tooltip, Button, Skeletons } from "@/components";
 
 const User = () => {
   const { currentUser } = useCurrentUser();
-  console.log("User",user);
 
   const { user } = currentUser || {};
   const { email, username, imageUrl } = user || {};
@@ -86,7 +85,7 @@ const Sidebar = () => {
 
   const { close: modalClose } = useAppModal();
 
-  const { sidebar, orientation, isMobile } = theme || defaultThemeConfig;
+  const { sidebar, orientation, isMobile } = theme ;
   const isHorizontal = orientation === "horizontal" && !isMobile;
 
   console.log("User",navigate);

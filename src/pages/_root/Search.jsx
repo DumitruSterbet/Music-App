@@ -23,9 +23,11 @@ export default function Search() {
     data: searchResult,
   } = useFetchSearch({ searchText: getQuery });
 
-  const { soundtracks, albums, playlists, artists } = searchResult || {};
 
-  const tracks = soundtracks;
+
+  console.log("search1", searchResult);
+  const { soundtracks, albums, artists } = searchResult || {};
+
 
   
   const content = {
@@ -38,9 +40,9 @@ export default function Search() {
       />
     ),
     
-    tracks: (
+    soundtracks: (
       <TabContents.TopTracks
-        topTracks= {tracks}
+        topTracks= {soundtracks}
         isPending={searchDataPending}
         isSuccess={searchDataSuccess}
       />
@@ -65,31 +67,31 @@ export default function Search() {
     <section className="search_page relative">
       {!searchDataPending ? (
         <>
-          {searchDataSuccess && tracks?.length 
+          {searchDataSuccess 
           ? (
             <Tab
-  currentTab={currentTab}
-  setCurrentTab={setCurrentTab}
-  content={content}
-  tabs={[
-    { id: "all", name: "All", display: true },
-    { id: "tracks", name: "Tracks", display: tracks?.length },
-    { id: "artists", name: "Artists", display: artists?.length },
-    { id: "albums", name: "Albums", display: albums?.length },
-  ]}
-  isLoaded={Boolean(searchResult)}
-/>
-          ) : (
-            <div className="rounded p-4 bg-card shadow-lg w-fit">
-              <Title name="No result found!" type="small" divider={false} />
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="rounded p-4 bg-card shadow-lg w-fit">
-          <Title name="Searching ..." type="small" divider={false} />
-        </div>
-      )}
+                currentTab={currentTab}
+                setCurrentTab={setCurrentTab}
+                content={content}
+                tabs={[
+                  { id: "all", name: "All", display: true },
+                  { id: "soundtracks", name: "Tracks", display: soundtracks?.length },
+                  { id: "artists", name: "Artists", display: artists?.length },
+                  { id: "albums", name: "Albums", display: albums?.length },
+                ]}
+                isLoaded={Boolean(searchResult)}
+              />
+                ) : (
+                  <div className="rounded p-4 bg-card shadow-lg w-fit">
+                    <Title name="No result found!" type="small" divider={false} />
+                  </div>
+                )}
+                </>
+              ) : (
+                <div className="rounded p-4 bg-card shadow-lg w-fit">
+                  <Title name="Searching ..." type="small" divider={false} />
+                </div>
+              )}
     </section>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+
 import { Link, useNavigate } from "react-router-dom";
 
 import {
@@ -179,6 +179,10 @@ const TrackCard = ({
    
 };
 
+const goToPremiumPage = () => {
+  window.location.href = '/premium'; // Redirect to the Premium page
+};
+
   
 
 
@@ -263,7 +267,7 @@ const TrackCard = ({
       
                       {/* Download button */}
                       <button
-                        onClick={() => downloadSong(item)}
+                         onClick={goToPremiumPage}
                         className="flex items-center justify-end gap-2 text-sm text-right"
                         title="download"
                        >

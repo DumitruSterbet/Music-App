@@ -66,7 +66,7 @@ export default function Artist() {
     <section className="relative artist_section">
       <Sections.BannerSection
         details={details}
-        tracks={topTracks?.data}
+        tracks={topTracks}
         type="artist"
         isLoading={artistDataPending}
         isSuccess={artistDataSuccess}

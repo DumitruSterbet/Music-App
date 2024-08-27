@@ -4,17 +4,11 @@ import { useMutation } from "@tanstack/react-query";
 import useLocalStorage from "use-local-storage";
 import { apiQuery } from "@/lib/helpers";
 
-/* import {
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-  updatePassword,
-  updateProfile,
-} from "@firebase/auth"; */
 
 import { useCurrentUser } from "@/lib/store";
 import { fbUpdateDoc, uploadImage, fbSnapshotDoc } from "@/lib/helpers";
 import { useNotification } from "@/hooks";
-//import { auth } from "@/configs";
+
 
 export const useGetProfile = () => {
   const [, setThemeLS] = useLocalStorage("groove-theme-config");
@@ -102,8 +96,6 @@ export const useUpdateAccountTheme = () => {
 
   const [, setThemeLS] = useLocalStorage("groove-theme-config");
 
-  const { currentUser } = useCurrentUser();
-  const { userId } = currentUser || {};
  
   const {
     mutate: updateTheme,
@@ -115,8 +107,18 @@ export const useUpdateAccountTheme = () => {
         const response = await apiQuery({
           endpoint: `styleSettings`,
         });
-        setThemeLS(response);
-      
+       
+        if(response !=null)
+          {
+           
+            setThemeLS(response);
+         }
+         else
+         {
+        
+         setThemeLS(null);
+        }
+
     },
   });
 

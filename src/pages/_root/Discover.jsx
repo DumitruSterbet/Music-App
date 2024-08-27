@@ -1,103 +1,123 @@
+import { useState } from "react";
 import {
   useFetchTopCharts,
-  useFetchNewReleases,
+  useFetchArtists,
 } from "@/lib/actions";
+
+import { Helmet } from "react-helmet";
 import { Sections } from "@/components";
 
 export default function Discover() {
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const [topChartCurrentPage, setTopChartCurrentPage] = useState(1);
+  const topChartItemsPerPage = 10;
+
 
   const {
     data: topChartData,
     isPending: isTopChartDataPending,
     isSuccess: isTopChartDataSuccess,
-  } = useFetchTopCharts({ id: "0", section: "charts" });
-
- 
-  const {
-    data: newReleases,
-    isPending: isNewReleaseDataPending,
-    isSuccess: isNewReleaseDataSuccess,
-  } = useFetchNewReleases({
+  } = useFetchTopCharts({
     id: "0",
+    section: "charts",
+    page: topChartCurrentPage,
+    limit: topChartItemsPerPage,
   });
 
-  const { playlists, artists, albums, podcasts } = topChartData || {};
-  const { releases } = newReleases || {};
 
-  console.log("Discovery page ", topChartData);
-  
+  const { data: artists } = useFetchArtists(currentPage, itemsPerPage);
+
+
+  const handleArtistPageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  // Handle page change for top charts
+  const handleTopChartPageChange = (newPage) => {
+    setTopChartCurrentPage(newPage);
+  };
+
   return (
     <section className="discover_page">
+      <Helmet>
+        <title>{` Download Electronic Music - Site name `}</title>
+        <meta name="description" content={ ` Download Electronic Music  Download MP3 or WAV format - Site name`} />
+     
+       
+    <meta property="og:title" content={` Download Electronic Music - Site name`} />
+    <meta property="og:description" content={`  Download Electronic Music  Download MP3 or WAV format - Site name`} />
+    <meta property="og:url" content={window.location.href} />
+  
+    <meta name="twitter:title" content={ `Download Electronic Music - Site name`} />
+    <meta name="twitter:description" content={`  Download Electronic Music  Download MP3 or WAV format - Site name`} />
+ 
+ 
+      </Helmet>
       <div className="flex flex-col gap-y-16">
-      {/*   {recentPlayed && recentPlayed?.length ? (
-          <div className="relative">
-            <Sections.MediaSectionMinified
-              data={recentPlayed}
-              title="Recent Played"
-              titleType="large"
-              subTitle="Rediscover the Soundtrack of Your Moments."
-              type="playlist"
-              gridNumber={3}
-              cardItemNumber={9}
-              bgColor
-              showPattern
-              isLoading={isRecentPlayedDataPending}
-              isSuccess={isRecentPlayedDataSucsess}
-            />
-          </div>
-        ) : null}
- */}
+        {/* Top Charts Section */}
         <Sections.MediaSection
           data={topChartData}
           title="Discover"
-          subTitle="Explore albums "
+          subTitle="Explore albums"
           type="playlist"
-          cardItemNumber={10}
+          cardItemNumber={topChartItemsPerPage}
           isLoading={isTopChartDataPending}
           isSuccess={isTopChartDataSuccess}
         />
 
-       <Sections.MediaSection
-          data={artists?.data}
+        {/* Pagination controls for top charts */}
+        <div className="pagination-controls flex justify-center items-center gap-4 mt-4">
+          <button
+            onClick={() => handleTopChartPageChange(topChartCurrentPage - 1)}
+            disabled={topChartCurrentPage === 1}
+            className="pagination-button"
+          >
+            &larr;
+          </button>
+          <span className="text-center">Page {topChartCurrentPage}</span>
+          <button
+            onClick={() => handleTopChartPageChange(topChartCurrentPage + 1)}
+            disabled={topChartData && topChartData.length < topChartItemsPerPage}
+            className="pagination-button"
+          >
+            &rarr;
+          </button>
+        </div>
+
+        {/* Suggested Artists Section */}
+        <Sections.MediaSection
+          data={artists}
           title="Suggested Artists"
           subTitle="Discover new sounds with handpicked artists tailored to your taste."
-          skeletonItemNumber={5}
+          skeletonItemNumber={10}
           randomListNumber={5}
-          cardItemNumber={10}
+          cardItemNumber={itemsPerPage}
           type="artist"
           isLoading={isTopChartDataPending}
           isSuccess={isTopChartDataSuccess}
         />
 
-        <Sections.MediaSection
-          data={albums?.data}
-          title="Editor's Picks"
-          subTitle="Curation of standout tracks."
-          cardItemNumber={10}
-          type="album"
-          isLoading={isTopChartDataPending}
-          isSuccess={isTopChartDataSuccess}
-        />
-
-        <Sections.MediaSection
-          data={topChartData}
-          title="New Releases"
-          subTitle="Discover fresh and latest soundscapes in our collection."
-          cardItemNumber={10}
-          type="album"
-          isLoading={isNewReleaseDataPending}
-          isSuccess={isNewReleaseDataSuccess}
-        />
-
-        <Sections.MediaSection
-          data={podcasts?.data}
-          title="Podcasts For You"
-          subTitle="Listen and enjoy personalized audio content just for you."
-          gridNumber={4}
-          type="podcast"
-          isLoading={isTopChartDataPending}
-          isSuccess={isTopChartDataSuccess}
-        />  
+        {/* Pagination controls for artists */}
+        <div className="pagination-controls flex justify-center items-center gap-4 mt-4">
+          <button
+            onClick={() => handleArtistPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="pagination-button"
+          >
+            &larr;
+          </button>
+          <span className="text-center">Page {currentPage}</span>
+          <button
+            onClick={() => handleArtistPageChange(currentPage + 1)}
+            disabled={artists && artists.length < itemsPerPage}
+            className="pagination-button"
+          >
+            &rarr;
+          </button>
+        </div>
       </div>
     </section>
   );
