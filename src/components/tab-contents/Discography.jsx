@@ -10,6 +10,7 @@ export default function Discography({
 }) {
   const { details, topTracks, albums, relatedArtists} =
     data || {};
+    console.log("Artsits",data);
 
   const radioId = useId();
 

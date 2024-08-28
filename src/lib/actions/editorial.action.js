@@ -154,7 +154,7 @@ export const useFetchArtist = (id) => {
           ];
         
           // Await all promises and destructure the results
-          const [detailsResponse, topTracksResponse, albumsResponse, relatedArtistsResponse, playlistsResponse] = await Promise.all(promises);
+          const [detailsResponse, topTracksResponse, albumsResponse, relatedArtistsResponse] = await Promise.all(promises);
         
 
           console.log("Raw Responses:", { detailsResponse, topTracksResponse, albumsResponse, relatedArtistsResponse});

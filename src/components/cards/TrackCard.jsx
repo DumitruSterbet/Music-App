@@ -164,7 +164,8 @@ const TrackCard = ({
   const { currentUser } = useCurrentUser();
   const { user, isLoaded } = currentUser || {};
 
-  const { id, type, index } = item || {};
+  const { id, type, index, artists } = item || {};
+  console.log("Dima2",artists);
 
   const isCurrentTrack =
     trackId === id && trackType === type && playlistId === details.id;
@@ -239,19 +240,19 @@ const goToPremiumPage = () => {
             <div className="flex flex-col xs:flex-row">
             
             {
-  item.artists.map((artist, index) => (
-    <span key={artist.Id}>
-      <Link
-        title="Artist"
-        to={`/artist/${artist.Id}`}
-        className="text-secondary text-[14px] hover:underline underline-offset-4 cursor-pointer"
-      >
-        {artist.Name}
-      </Link>
-      {index < item.artists.length - 1 && <>&nbsp;&nbsp;</>} {/* Adds space between names */}
-    </span>
-  ))
-}
+                artists.map((artist, index) => (
+                  <span key={artist.id}>
+                    <Link
+                      title={artist.name}
+                      to={`/artist/${artist.id}`}
+                      className="text-secondary text-[14px] hover:underline underline-offset-4 cursor-pointer"
+                    >
+                      {artist.name}
+                    </Link>
+                    {index < artists.length - 1 && '\u00A0\u00A0'} {/* Adds space between names */}
+                  </span>
+                ))
+                  }
 
 
             </div>

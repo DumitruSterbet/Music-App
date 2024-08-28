@@ -15,6 +15,7 @@ export default function Playlist() {
     isSuccess: playlistDataSuccess,
   } = useFetchPlaylists({ id, section });
 
+  console.log("Playlist3",playlists);
   const [uniqueArtistIds, setUniqueArtistIds] = useState([]);
   const [transformedPlaylists, setTransformedPlaylists] = useState([]);
 
@@ -64,6 +65,7 @@ export default function Playlist() {
   if (!section || !id || !allowedSection.includes(section)) {
     return <Navigate to="/discover" replace />;
   }
+  console.log("Transformed",transformedPlaylists);
 
   return (
     <section className="playlist_section">
@@ -73,7 +75,7 @@ export default function Playlist() {
         <>
           <Sections.BannerSection
             details={playlists}
-            tracks={transformedPlaylists}
+            tracks={playlists}
             isLoading={playlistDataPending || artistsDataPending}
             isSuccess={playlistDataSuccess}
             showPattern
@@ -81,7 +83,7 @@ export default function Playlist() {
 
           <div className="relative mt-8">
             <Sections.TrackSection
-              data={transformedPlaylists}
+              data={playlists}
               details={{
                 id: playlists?.id,
                 type: playlists?.type,

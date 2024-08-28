@@ -31,12 +31,11 @@ export default function TrackSection({
   useFetchMyPlaylists();
  
 
-
   
   const { playlistId, trackId, trackType } = usePlayerStore() || {};
   const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer(); 
   const trackFormatted = useMemo(() => getFormatData(data), [data]);
-  
+  console.log("dima",trackFormatted);
   const handleTrackClick = ({ id, type, index }) => {
 
     if (trackId === id) {
