@@ -8,9 +8,9 @@ import {
   useSaveRecentPlayed,
   useFetchTracks,
   useUpdateAccountPlayer,
-} from "@/lib/actions";
-import { usePlayerStore, useCurrentUser } from "@/lib/store";
-import { getFormatData } from "@/lib/utils";
+} from "../lib/actions";
+import { usePlayerStore, useCurrentUser } from "../lib/store";
+import { getFormatData } from "../lib/utils";
 
 const formatTime = (seconds) => {
   if (seconds === Infinity) {

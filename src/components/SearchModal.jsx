@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { truncate } from "lodash";
 
-import { useAddTrackToMyPlaylist, useFetchSearch } from "@/lib/actions";
-import { classNames, formatIndexToDouble, formatDuration } from "@/lib/utils";
-import { useDebounce } from "@/hooks";
+import { useAddTrackToMyPlaylist, useFetchSearch } from "../lib/actions";
+import { classNames, formatIndexToDouble, formatDuration } from "../lib/utils";
+import { useDebounce } from "../hooks";
 
-import { Icon, Title } from "@/components";
+import { Icon, Title } from "../components";
 
 const ModalContent = ({
   item,

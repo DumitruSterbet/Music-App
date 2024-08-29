@@ -1,5 +1,5 @@
-import { useAppModal } from "@/lib/store";
-import { classNames } from "@/lib/utils";
+import { useAppModal } from "../lib/store";
+import { classNames } from "../lib/utils";
 
 import { IconButton } from "./buttons";
 

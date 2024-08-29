@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import * as Slider from "@radix-ui/react-slider";
 import { useGlobalAudioPlayer } from "react-use-audio-player";
 
-import { truncate, classNames, formatIndexToDouble } from "@/lib/utils";
-import { usePlayer, useTheme } from "@/hooks";
+import { truncate, classNames, formatIndexToDouble } from "../lib/utils";
+import { usePlayer, useTheme } from "../hooks";
 
-import { IconButton, Icon } from "@/components";
+import { IconButton, Icon } from "../components";
 
 const PlayerVolume = ({ muted, volume, handleVolumeMute, handleSetVolume }) => {
   return (

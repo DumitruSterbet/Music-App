@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 
-import { classNames } from "@/lib/utils";
+import { classNames } from "../lib/utils";
 
 export function AppDropdownMenu({
   DropdownTrigger,

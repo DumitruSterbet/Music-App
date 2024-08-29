@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { apiQuery } from "@/lib/helpers";
+import { apiQuery } from "../../lib/helpers";
 
 export const useFetchTopCharts = (params) => {
   const { id, section, limit , page = 1 } = params ?? {};

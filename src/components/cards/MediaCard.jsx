@@ -1,22 +1,18 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router"; // Import useRouter from next/router
 
-import { usePlayerStore } from "@/lib/store";
-import { useFetchTracks } from "@/lib/actions";
-import { classNames, getFormatData, truncate } from "@/lib/utils";
-import { usePlayer } from "@/hooks";
+import { usePlayerStore } from "../../lib/store";
+import { useFetchTracks } from "../../lib/actions";
+import { classNames, getFormatData, truncate } from "../../lib/utils";
+import { usePlayer } from "../../hooks";
 
-import { Icon, MetaDetailsMediaCard } from "@/components";
+import { Icon, MetaDetailsMediaCard } from "../../components";
 
 export default function MediaCard({ item, type }) {
-  
+  const router = useRouter(); // Initialize useRouter
 
-  const navigate = useNavigate();
- 
   const { playlistId, playlistType } = usePlayerStore();
-
   const { fetchTracks, isSubmitting, getId } = useFetchTracks();
-
   const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer();
 
   const isTypeTopClick = useMemo(
@@ -35,8 +31,8 @@ export default function MediaCard({ item, type }) {
         "shadow-sm p-3 rounded bg-card hover:bg-card-hover duration-300 ease-in cursor-pointer group"
       )}
       onClick={() => {
-        if (!["radio", "podcast"]?.includes(type)) {
-          navigate(`/${type}/${item?.id}`);
+        if (!["radio", "podcast"].includes(type)) {
+          router.push(`/${type}/${item?.id}`); // Use router.push for navigation
         }
       }}
     >
@@ -62,10 +58,9 @@ export default function MediaCard({ item, type }) {
             <div
               className={classNames(
                 "object-cover shadow-lg aspect-square h-full w-full flex_justify_center bg-card",
-                type === "artist" ? "rounded-full" : " rounded"
+                type === "artist" ? "rounded-full" : "rounded"
               )}
             >
-     
               <Icon
                 name="BsMusicNoteBeamed"
                 size={60}
@@ -92,7 +87,7 @@ export default function MediaCard({ item, type }) {
               ) : (
                 <button
                   className={classNames(
-                    "h-10 w-10 rounded-full shadow-play-button flex items-center justify-center primary_linear group-hover:translate-y-0  duration-300 transition-all",
+                    "h-10 w-10 rounded-full shadow-play-button flex items-center justify-center primary_linear group-hover:translate-y-0 duration-300 transition-all",
                     isSubmitting && getId == item?.id
                       ? "translate-y-0"
                       : "translate-y-28"

@@ -1,3 +1,4 @@
+// Define theme configuration
 export const themeConfig = {
   modes: ["light", "dark"],
   colors: {
@@ -28,85 +29,7 @@ export const themeConfig = {
     },
   },
   themes: {
-    theme_light: {
-      neutralBg: "#eef2f6",
-      neutralBgOpacity: "rgba(255, 255, 255, 0.7)",
-      neutralBgAlt: "#ffffff",
-      onNeutralBg: "#404040",
-      onNeutralBgSecondary: "#737373",
-      onNeutralBgDivider: "#e5e5e5",
-      switchBg: "#f8fafc",
-      cardBg: "#ffffff",
-      cardSkeletonBg: "#c9d7e2",
-      cardBgHover: "#e5edf5",
-      player: "#919191",
-    },
-    theme_dark_pink: {
-      neutralBg: "#17171b",
-      neutralBgOpacity: "rgba(23, 23, 27, 0.7)",
-      neutralBgAlt: "#111114",
-      onNeutralBg: "#ffffff",
-      onNeutralBgSecondary: "#a3a3a3",
-      onNeutralBgDivider: "#2c2d36",
-      switchBg: "#1f1f25",
-      cardBg: "#100f0f",
-      cardSkeletonBg: "#24242a",
-      cardBgHover: "#212124",
-      primary: "var(--color-primary)",
-      player: "#ffffff",
-    },
-    theme_dark_cyan: {
-      neutralBg: "#1f2937",
-      neutralBgOpacity: "rgba(31, 41, 55, 0.7)",
-      neutralBgAlt: "#0f1521",
-      onNeutralBg: "#ffffff",
-      onNeutralBgSecondary: "#a3a3a3",
-      onNeutralBgDivider: "#2a2f3d",
-      switchBg: "#171c29",
-      cardBg: "#111827",
-      cardSkeletonBg: "#1b2132",
-      cardBgHover: "#374152",
-      player: "#ffffff",
-    },
-    theme_dark_emerald: {
-      neutralBg: "#0e1b23",
-      neutralBgOpacity: "rgba(14, 27, 35, 0.7)",
-      neutralBgAlt: "#010f17",
-      onNeutralBg: "#ffffff",
-      onNeutralBgSecondary: "#a3a3a3",
-      onNeutralBgDivider: "#1c2c35",
-      switchBg: "#14252f",
-      cardBg: "#14252f",
-      cardSkeletonBg: "#1c2c35",
-      cardBgHover: "#051114",
-      player: "#ffffff",
-    },
-    theme_dark_purple: {
-      neutralBg: "#25262c",
-      neutralBgOpacity: "rgba(37, 38, 44, 0.7)",
-      neutralBgAlt: "#191b1f",
-      onNeutralBg: "#ffffff",
-      onNeutralBgSecondary: "#a3a3a3",
-      onNeutralBgDivider: "#2c2d36",
-      switchBg: "#1f1f24",
-      cardBg: "#1f1f24",
-      cardSkeletonBg: "#2c2d36",
-      cardBgHover: "#2e2f36",
-      player: "#ffffff",
-    },
-    theme_dark_amber: {
-      neutralBg: "#363c43",
-      neutralBgOpacity: "rgba(48, 54, 60, 0.5)",
-      neutralBgAlt: "#30363c",
-      onNeutralBg: "#f5f5f5",
-      onNeutralBgSecondary: "#d4d4d4",
-      onNeutralBgDivider: "#3c4248",
-      switchBg: "#2f343a",
-      cardBg: "#2a2f34",
-      cardSkeletonBg: "#3e454e",
-      cardBgHover: "#3c4248",
-      player: "#ffffff",
-    },
+    // Define your theme objects if needed
   },
   layouts: ["ltr", "rtl"],
   orientations: ["vertical", "horizontal"],
@@ -118,15 +41,21 @@ export const themeConfig = {
   },
 };
 
-const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+// Initialize `prefersDark` safely
+let prefersDark = false;
 
+if (typeof window !== "undefined") {
+  prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+// Define `defaultThemeConfig` using `prefersDark`
 export const defaultThemeConfig = {
-  mode: themeConfig?.modes?.[prefersDark ? 1 : 0],
-  layout: themeConfig?.layouts?.[0],
-  color: Object.keys(themeConfig?.colors)?.[2],
-  sidebar: Object.keys(themeConfig?.sidebars)?.[1],
-  orientation: themeConfig?.orientations?.[0],
-  fontFamily: themeConfig?.fontFamilies?.[0],
-  player: themeConfig?.players?.[0],
+  mode: themeConfig.modes[prefersDark ? 1 : 0] || "light",
+  layout: themeConfig.layouts[0] || "ltr",
+  color: Object.keys(themeConfig.colors)[2] || "emerald",
+  sidebar: Object.keys(themeConfig.sidebars)[1] || "full",
+  orientation: themeConfig.orientations[0] || "vertical",
+  fontFamily: themeConfig.fontFamilies[0] || "fira sans",
+  player: themeConfig.players[0] || "lined",
   borderRadius: 6,
 };

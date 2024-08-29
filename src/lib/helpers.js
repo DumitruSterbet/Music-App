@@ -3,8 +3,8 @@ import imageCompression from "browser-image-compression";
 
 const API_BASE_URL = "https://productsapi20240819025750.azurewebsites.net/api"; // Replace with your actual API base URL
 
-const DEEZER_API_URL = import.meta.env.VITE_PUBLIC_DEEZER_API_URL;
-const CORS_URL = import.meta.env.VITE_PUBLIC_CORS_URL;
+//const DEEZER_API_URL = import.meta.env.VITE_PUBLIC_DEEZER_API_URL;
+//const CORS_URL = import.meta.env.VITE_PUBLIC_CORS_URL;
 
 const getBaseUrl = (endpoint) => {
   return `${CORS_URL}/${DEEZER_API_URL}/${endpoint}`;

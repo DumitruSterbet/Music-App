@@ -1,4 +1,4 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
+/* import { Navigate, createBrowserRouter } from "react-router-dom";
 import {
   Discover,
   Browse,
@@ -13,10 +13,10 @@ import {
   Notifications,
   Error,
   Premium
-} from "@/pages/_root";
+} from "../../pages/_root";
 
-import { Register, Login, ForgetPass, VerifyForgetPass } from "@/pages/_auth";
-import { RootLayout, AuthLayout } from "@/pages/_layout";
+import { Register, Login, ForgetPass, VerifyForgetPass } from "../../pages/_auth";
+import { RootLayout, AuthLayout } from "../../pages/_layout";
 
 export const router = createBrowserRouter([
   {
@@ -107,3 +107,4 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
+ */

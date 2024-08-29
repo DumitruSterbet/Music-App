@@ -7,16 +7,16 @@ import {
   useRemoveTrackFromMyPlaylist,
   useFetchMyPlaylists,
   useDownload
-} from "@/lib/actions";
-import { useCurrentUser } from "@/lib/store";
+} from "../../lib/actions";
+import { useCurrentUser } from "../../lib/store";
 import {
   classNames,
   formatDuration,
   formatIndexToDouble,
   truncate,
-} from "@/lib/utils";
+} from "../../lib/utils";
 
-import { IconButton, DropdownMenu, Icon } from "@/components";
+import { IconButton, DropdownMenu, Icon } from "../../components";
 
 const MoreButtonDropDown = ({
   trackId,

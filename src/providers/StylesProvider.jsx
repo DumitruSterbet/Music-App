@@ -1,11 +1,25 @@
+import { useEffect, useState } from "react";
 import { startCase } from "lodash";
 import { useMediaQuery } from "react-responsive";
-
-import { useTheme } from "@/hooks";
-import { themeConfig, defaultThemeConfig } from "@/configs";
+import { useTheme } from "../hooks";
+import { themeConfig, defaultThemeConfig } from "../configs";
 
 const StylesProvider = () => {
-  const [themeStorage] = useTheme();
+  const [themeStorage, setThemeStorage] = useTheme();
+  const [isClient, setIsClient] = useState(false);
+
+  console.log("da",themeStorage);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Ensure hooks are not conditionally called
+  const isLargeScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+  const isExtraLargeScreen = useMediaQuery({ query: "(min-width: 1280px)" });
+
+  if (!isClient) {
+    return null;
+  }
 
   const {
     mode,
@@ -17,46 +31,38 @@ const StylesProvider = () => {
     isMobile,
     borderRadius,
   } = themeStorage || defaultThemeConfig;
+
   const isHorizontal = orientation === "horizontal";
+  const { colors, sidebars } = themeConfig || {};
 
-  const { colors, themes, sidebars } = themeConfig || {};
-
-  const isLargeScreen = useMediaQuery({
-    query: "(min-width: 1024px)",
-  });
-
-  const isExtraLargeScreen = useMediaQuery({
-    query: "(min-width: 1280px)",
-  });
-
-  const theme = mode === "light" ? "theme_light" : `theme_dark_${color}`;
-
-  const themeObj = themes?.[theme];
-  const colorObj = colors?.[color];
-  const sT = sidebars?.[sidebar];
-
+  const sidebarWidth = isLargeScreen ? (isHorizontal ? 0 : sidebars?.[sidebar] || "0") : 0;
   const aside = 320;
   const asideMobile = isExtraLargeScreen ? aside : 0;
   const navHeight = 80;
   const playerHeight = 70;
 
-  const sidebarWidth = isLargeScreen ? (isHorizontal ? 0 : sT) : 0;
+  const themeObj = colors?.[color] || {};
+  const sT = sidebars?.[sidebar] || "0";
 
   const {
-    neutralBg,
-    neutralBgOpacity,
-    neutralBgAlt,
-    onNeutralBg,
-    onNeutralBgSecondary,
-    player,
-    onNeutralBgDivider,
-    switchBg,
-    cardBg,
-    cardSkeletonBg,
-    cardBgHover,
-  } = themeObj || {};
+    neutralBg = "transparent",
+    neutralBgOpacity = "transparent",
+    neutralBgAlt = "transparent",
+    onNeutralBg = "black",
+    onNeutralBgSecondary = "grey",
+    player = "transparent",
+    onNeutralBgDivider = "black",
+    switchBg = "transparent",
+    cardBg = "transparent",
+    cardSkeletonBg = "transparent",
+    cardBgHover = "transparent",
+  } = themeObj;
 
-  const { primary, primaryOpacity, primaryLightGray } = colorObj || {};
+  const {
+    primary = "#000000",
+    primaryOpacity = "rgba(0, 0, 0, 0.1)",
+    primaryLightGray = "#cccccc",
+  } = colors?.[color] || {};
 
   const styles = `
     :root {
@@ -83,9 +89,7 @@ const StylesProvider = () => {
       --logo-width: ${120}px;
 
       --main-width: calc(100% - ${sidebarWidth}px - ${asideMobile}px);
-      --main-margin-top: ${
-        isHorizontal && !isMobile ? `${navHeight * 2}px` : `${navHeight}px`
-      };
+      --main-margin-top: ${isHorizontal && !isMobile ? `${navHeight * 2}px` : `${navHeight}px`};
       --direction: ${layout};
       --font-family: ${startCase(fontFamily)};
       --border-radius: ${borderRadius}px;

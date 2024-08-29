@@ -2,8 +2,8 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { fileBlob } from "@/lib/utils";
-import { ImageUploader, IconButton, Button } from "@/components";
+import { fileBlob } from "../lib/utils";
+import { ImageUploader, IconButton, Button } from "../components";
 
 const FormMessage = ({ errorMessage }) => {
   const message = errorMessage?.message || String(errorMessage || "");

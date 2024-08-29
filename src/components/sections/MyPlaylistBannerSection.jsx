@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { useEditMyPlaylist, useRemoveMyPlaylist } from "@/lib/actions";
-import { usePlayerStore } from "@/lib/store";
-import { getFormatData } from "@/lib/utils";
-import { editMyPlaylistValidation } from "@/lib/validations";
-import { usePlayer } from "@/hooks";
+import { useEditMyPlaylist, useRemoveMyPlaylist } from "../../lib/actions";
+import { usePlayerStore } from "../../lib/store";
+import { getFormatData } from "../../lib/utils";
+import { editMyPlaylistValidation } from "../../lib/validations";
+import { usePlayer } from "../../hooks";
 
 import {
   Icon,
@@ -18,7 +18,7 @@ import {
   Contributors,
   MetaDetails,
   Skeletons,
-} from "@/components";
+} from "../../components";
 
 const EditMyPlaylist = ({ details, editMyPlaylist, isSubmitting }) => {
   const [files, setFiles] = useState(null);

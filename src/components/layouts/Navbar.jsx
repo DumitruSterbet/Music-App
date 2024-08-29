@@ -1,26 +1,23 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useRouter } from 'next/router';
 import { useMediaQuery } from "react-responsive";
 import { isEmpty } from "lodash";
 
-import { useLogout } from "@/lib/actions";
-import { classNames, getTimeOfDay } from "@/lib/utils";
-import { useAppUtil, useCurrentUser } from "@/lib/store";
-import { useTheme } from "@/hooks";
+import { classNames, getTimeOfDay } from "../../lib/utils";
+import { useAppUtil, useCurrentUser } from "../../lib/store";
+import { useTheme } from "../../hooks";
 
-import { Button, Icon, DropdownMenu, Overlay } from "@/components";
-import { defaultThemeConfig } from "@/configs";
-import { logo } from "@/constants";
+import { Button, Icon, DropdownMenu, Overlay } from "../../components";
+import { defaultThemeConfig } from "../../configs";
+import { logo } from "../../constants";
+import Link from 'next/link';
 
 const Searchbar = () => {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const router = useRouter();
   const [input, setInput] = useState("");
   const ref = useRef();
 
   const { getSearchRef } = useAppUtil();
-
   const { getToggleSearch, toggleSearch } = useAppUtil();
   const [theme] = useTheme();
 
@@ -29,10 +26,10 @@ const Searchbar = () => {
     if (query) {
       setInput(query);
     }
-    if (!pathname.includes("/search")) {
+    if (!router.pathname.includes("/search")) {
       setInput("");
     }
-  }, [pathname]);
+  }, [router.pathname]);
 
   useEffect(() => {
     getSearchRef(ref);
@@ -42,12 +39,12 @@ const Searchbar = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       if (!isEmpty(input.trim()) && input.trim().length >= 3) {
-        const path = location.pathname;
+        const path = router.pathname;
 
         if (path === "/search") {
-          navigate("?q=" + input);
+          router.push({ pathname: path, query: { q: input } });
         } else {
-          navigate("search?q=" + input);
+          router.push({ pathname: "/search", query: { q: input } });
         }
       }
     }
@@ -104,215 +101,6 @@ const Searchbar = () => {
   );
 };
 
-/* const SignUpButtons = () => {
-  const navigate = useNavigate();
-  return (
-    <div className="flex items-center gap-0 px-4">
-      <Button
-        label="Sign Up"
-        onClick={() => navigate("/register")}
-        className="!text-onNeutralBg !border-onNeutralBg"
-      />
-      <Button
-        variant="contained"
-        label="Log In"
-        onClick={() => navigate("/login")}
-      />
-    </div>
-  );
-};
- */
-const notificationList = [
-  {
-    id: "1",
-    content:
-      "Mark Smith reacted to your recent added playlist - My first playlist",
-    time: "1 minute ago",
-  },
-  {
-    id: "2",
-    content: "Sarah Johnson created a new playlist - Downtown Music",
-    time: "1 day ago",
-  },
-  {
-    id: "3",
-    content: "Bob Manuel sent you a private message",
-    time: "1 week ago",
-  },
-];
-
-const NotificationButton = () => {
-  return (
-    <div className="flex items-center h-full">
-      <DropdownMenu
-        DropdownTrigger={() => (
-          <div className="relative group">
-            <div className="absolute flex items-center justify-center w-4 h-4 rounded-full top-2 right-2 bg-primary animate-bounce group-hover:bg-white">
-              <span className="text-xs text-white group-hover:text-primary">
-                {notificationList?.length}
-              </span>
-            </div>
-            <div className="w-12 h-12 transition-colors duration-500 rounded flex_justify_center bg-primary-opacity group-hover:bg-primary">
-              <Icon
-                name="IoMdNotificationsOutline"
-                className="group-hover:!text-white"
-              />
-            </div>
-          </div>
-        )}
-        DropdownContent={() => (
-          <div className="p-2 space-y-2">
-            <div className="flex items-center gap-3 p-3 rounded bg-main">
-              <p className="text-base">All notifications</p>
-              <div className="flex items-center justify-center w-4 h-4 rounded-full bg-primary group-hover:bg-white">
-                <span className="text-xs text-white group-hover:text-primary">
-                  {3}
-                </span>
-              </div>
-            </div>
-            <ul className="list-none divide-y divide-divider">
-              {notificationList.map((item) => (
-                <li
-                  className="p-3 rounded cursor-pointer hover:bg-main"
-                  key={item.id}
-                >
-                  <Link className="flex gap-3" to="/notifications">
-                    <Icon name="IoMdNotificationsOutline" />
-                    <div className="flex flex-col flex-1 gap-1">
-                      <p className="text-sm">{item.content}</p>
-                      <span className="text-xs text-secondary">
-                        {item.time}
-                      </span>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <hr className="w-full border-t border-divider" />
-
-            <Link
-              className="inline-block w-full p-3 text-sm text-center hover:text-primary"
-              to={"/notifications"}
-            >
-              See all notifications
-            </Link>
-          </div>
-        )}
-        contentClassName="w-[300px]"
-      />
-    </div>
-  );
-};
-
-const UserMenu = () => {
-  const { currentUser } = useCurrentUser();
-
-  const { user } = currentUser || {};
-  const { email, username, imageUrl } = user || {};
-  const { logout: signOut } = useLogout();
-
-  const navigate = useNavigate();
-  return (
-    <div className="flex items-center h-full">
-      <DropdownMenu
-        DropdownTrigger={() => (
-          <div
-            className={classNames(
-              "rounded-full flex_justify_center transition-colors duration-500 gap-2 hover:bg-primary bg-primary-opacity p-2 h-full group"
-            )}
-          >
-            <div className="rounded-full w-9 h-9 flex_justify_center bg-main">
-              {imageUrl ? (
-                <img src={imageUrl} className="w-full h-full rounded-full" />
-              ) : (
-                <Icon name="FaRegUser" size={16} />
-              )}
-            </div>
-            <span className="pr-2">
-              <Icon
-                name="MdOutlineSettings"
-                className="group-hover:!text-white"
-              />
-            </span>
-          </div>
-        )}
-        DropdownContent={() => (
-          <div className="p-2 space-y-3">
-            {email && (
-              <div className="p-3 text-sm rounded bg-main">
-                <h5 className="text-lg font-semibold">
-                  {getTimeOfDay()},{" "}
-                  <span className="font-normal capitalize">{username}</span>
-                </h5>
-                {/* <p className="text-base">@{username}</p> */}
-                <span className="text-secondary">{email}</span>
-              </div>
-            )}
-            <hr className="w-full border-t border-divider" />
-
-            <div className="relative flex flex-col gap-3 p-4 overflow-hidden rounded bg-main">
-              <h5 className="text-lg font-semibold">Upgrade your plan</h5>
-              <p>70% discount for 1 years subscriptions.</p>
-              <Button
-                label="Go Premium"
-                variant="contained"
-                className="w-fit"
-              />
-              <div className="absolute w-[200px] h-[200px] border-[19px] rounded-full border-primary top-[65px] right-[-150px]" />
-              <div className="absolute w-[200px] h-[200px] border-[3px] rounded-full border-primary top-[135px] right-[-70px]" />
-            </div>
-            <hr className="w-full border-t border-divider" />
-
-            <ul className="list-none divide divide-divider">
-              {[
-                {
-                  id: "profile",
-                  name: "Profile",
-                  icon: "BiUser",
-                  onClick: () => navigate("profile"),
-                },
-                {
-                  id: "notifications",
-                  name: "Notifications",
-                  icon: "IoMdNotificationsOutline",
-                  onClick: () => navigate("notifications"),
-                },
-                {
-                  id: "logout",
-                  name: "Logout",
-                  icon: "MdLogout",
-                  onClick: signOut,
-                },
-              ].map((item) => (
-                <li
-                  className="rounded cursor-pointer hover:text-primary hover:font-semibold group"
-                  key={item.id}
-                >
-                  <button
-                    className="w-full p-4 text-left"
-                    onClick={item.onClick}
-                  >
-                    <div className="flex gap-3">
-                      <Icon
-                        name={item.icon}
-                        className="group-hover:text-primary"
-                      />
-
-                      <p className="text-sm whitespace-nowrap">{item.name}</p>
-                    </div>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        contentClassName="min-w-[300px]"
-      />
-    </div>
-  );
-};
-
 const MobileToggleButton = () => {
   const { getToggleMenu, toggleMenu } = useAppUtil();
 
@@ -364,7 +152,7 @@ const Logo = ({ isFolded, isHorizontal }) => {
         showFull ? "bg-primary" : "lg:bg-sidebar"
       )}
     >
-      <Link to="/" className="flex items-center h-full gap-2 logo w-fit">
+      <Link href="/" className="flex items-center h-full gap-2 logo w-fit">
         <div
           className={
             showFull
@@ -422,18 +210,7 @@ export default function Navbar() {
             <Searchbar />
             <MobileToggleButton />
           </div>
-         {/*  {isLoaded && !isMobile ? (
-            <div className="flex items-center h-full gap-4 nav-icons">
-              {user ? (
-                <>
-                  <NotificationButton />
-                  <UserMenu />
-                </>
-              ) : (
-                <SignUpButtons />
-              )}
-            </div>
-          ) : null} */}
+
         </div>
       </div>
     </nav>

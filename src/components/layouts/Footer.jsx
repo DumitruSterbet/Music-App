@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { Title, Icon } from "@/components";
+import { Title, Icon } from "../../components";
 
 const downloadBtnList = [
   { name: "App Store", desc: "Download on", icon: "FaApple" },

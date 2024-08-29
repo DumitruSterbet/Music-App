@@ -15,9 +15,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
   verifyPasswordResetCode,
 } from "@firebase/auth"; */
 
-import { useCurrentUser } from "@/lib/store";
-import { fbSetDoc } from "@/lib/helpers";
-import { useNotification } from "@/hooks";
+import { useCurrentUser } from "../../lib/store";
+import { fbSetDoc } from "../../lib/helpers";
+import { useNotification } from "../../hooks";
 /* import { auth, googleProvider, githubProvider } from "@/configs"; */
 
 export const useAuthState = () => {

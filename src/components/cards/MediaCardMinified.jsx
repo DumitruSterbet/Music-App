@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
-import { usePlayerStore } from "@/lib/store";
-import { useFetchTracks } from "@/lib/actions";
+import { usePlayerStore } from "../../lib/store";
+import { useFetchTracks } from "../../lib/actions";
 import {
   classNames,
   formatDateString,
@@ -9,10 +9,10 @@ import {
   getFormatData,
   truncate,
   pluralize,
-} from "@/lib/utils";
-import { usePlayer } from "@/hooks";
+} from "../../lib/utils";
+import { usePlayer } from "../../hooks";
 
-import { Icon, IconButton } from "@/components";
+import { Icon, IconButton } from "../../components";
 
 const imageDimsOpt = {
   16: "h-16 w-16",

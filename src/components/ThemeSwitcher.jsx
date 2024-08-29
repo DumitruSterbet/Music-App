@@ -2,11 +2,11 @@ import { useState } from "react";
 import { capitalize, startCase } from "lodash";
 import Slider from "rc-slider";
 
-import { classNames } from "@/lib/utils";
-import { useAppUtil } from "@/lib/store";
-import { useTheme } from "@/hooks";
+import { classNames } from "../lib/utils";
+import { useAppUtil } from "../lib/store";
+import { useTheme } from "../hooks";
 
-import { themeConfig, defaultThemeConfig } from "@/configs";
+import { themeConfig, defaultThemeConfig } from "../configs";
 
 import { Icon, Button, Tab, Overlay } from ".";
 

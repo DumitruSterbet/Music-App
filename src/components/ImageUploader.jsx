@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { classNames } from "@/lib/utils";
+import { classNames } from "../lib/utils";
 
-import { Icon } from "@/components";
+import { Icon } from "../components";
 
 export default function ImageUploader({
   blobUrl,

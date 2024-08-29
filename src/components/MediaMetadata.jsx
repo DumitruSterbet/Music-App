@@ -5,7 +5,7 @@ import {
   formatNumberWithCommas,
   formatTime,
   pluralize,
-} from "@/lib/utils";
+} from "../lib/utils";
 
 export const Genres = ({ genres }) => {
   return (

@@ -1,9 +1,9 @@
 import { useId, useMemo } from "react";
 
-import { getRandomList, classNames } from "@/lib/utils";
-import { useFetchChartBySection } from "@/lib/actions";
+import { getRandomList, classNames } from "../lib/utils";
+import { useFetchChartBySection } from "../lib/actions";
 
-import { Sections, Footer } from "@/components";
+import { Sections, Footer } from "../components";
 
 const TopPlay = () => {
   const {

@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from "react";
 
-import { useFetchMyPlaylists} from "@/lib/actions";
-import { usePlayerStore } from "@/lib/store";
-import { classNames, getFormatData } from "@/lib/utils";
-import { usePlayer } from "@/hooks";
+import { useFetchMyPlaylists} from "../../lib/actions";
+import { usePlayerStore } from "../../lib/store";
+import { classNames, getFormatData } from "../../lib/utils";
+import { usePlayer } from "../../hooks";
 
-import { ShowMoreButton, Title, Skeletons, Cards } from "@/components";
+import { ShowMoreButton, Title, Skeletons, Cards } from "../../components";
 
 export default function TrackSection({
   data,

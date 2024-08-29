@@ -1,41 +1,44 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import useLocalStorage from "use-local-storage";
-import { apiQuery } from "@/lib/helpers";
+import { useEffect, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { uploadImage, fbUpdateDoc, fbSnapshotDoc, apiQuery } from '../../lib/helpers';
+import { useCurrentUser } from '../../lib/store';
+import { useNotification } from '../../hooks';
+//import { updateProfile, auth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth'; // Import these from your Firebase setup
 
-
-import { useCurrentUser } from "@/lib/store";
-import { fbUpdateDoc, uploadImage, fbSnapshotDoc } from "@/lib/helpers";
-import { useNotification } from "@/hooks";
-
+const defaultTheme = { mode: 'light' };
+const defaultPlayerSettings = {}; // Define default player settings if needed
 
 export const useGetProfile = () => {
-  const [, setThemeLS] = useLocalStorage("groove-theme-config");
-  const [, setPlayerLS] = useLocalStorage("groove-player");
-
   const { currentUser, getUserProfile } = useCurrentUser();
   const { user } = currentUser || {};
 
   const [prof, setProf] = useState(null);
+  const [theme, setTheme] = useState(defaultTheme);
+  const [playerSettings, setPlayerSettings] = useState(defaultPlayerSettings);
+
   useEffect(() => {
     const callback = (doc) => {
-      setProf(doc?.data());
-      setThemeLS(doc?.data()?.prefs);
-      setPlayerLS(doc?.data()?.player);
-      getUserProfile(doc?.data());
+      if (doc?.data()) {
+        const data = doc.data();
+        setProf(data);
+        setTheme(data.prefs || defaultTheme);
+        setPlayerSettings(data.player || defaultPlayerSettings);
+        getUserProfile(data);
+      }
     };
 
-    const unsub = fbSnapshotDoc({
-      collection: "users",
-      id: user?.uid,
-      callback,
-    });
+    if (user?.uid) {
+      const unsub = fbSnapshotDoc({
+        collection: 'users',
+        id: user.uid,
+        callback,
+      });
 
-    return () => unsub;
-  }, [setPlayerLS, setThemeLS, user?.uid]);
+      return () => unsub();
+    }
+  }, [getUserProfile, user?.uid]);
 
-  return prof;
+  return { prof, theme, playerSettings };
 };
 
 export const useUpdateProfile = () => {
@@ -44,45 +47,41 @@ export const useUpdateProfile = () => {
 
   const [notify] = useNotification();
 
-  const {
-    mutate: updateUserProfile,
-    isPending: isSubmitting,
-    isSuccess: isSubmitted,
-  } = useMutation({
+  const { mutate: updateUserProfile, isLoading: isSubmitting, isSuccess: isSubmitted } = useMutation({
     mutationFn: async (values) => {
       if (userId) {
         try {
           let profileImage = null;
           if (values?.files) {
             profileImage = await uploadImage({
-              imageFile: values?.files[0],
+              imageFile: values.files[0],
               storagePath: `users/${userId}`,
-              fileName: "avatar.jpg",
+              fileName: 'avatar.jpg',
             });
           }
 
           await updateProfile(auth.currentUser, {
             photoURL: profileImage,
-            displayName: values?.username,
+            displayName: values.username,
           });
 
           await fbUpdateDoc({
-            data: { username: values?.username, photoURL: profileImage },
-            collection: "users",
+            data: { username: values.username, photoURL: profileImage },
+            collection: 'users',
             id: userId,
           });
 
           notify({
-            title: "Success",
-            variant: "success",
-            description: "Profile updated successfully",
+            title: 'Success',
+            variant: 'success',
+            description: 'Profile updated successfully',
           });
         } catch (err) {
-          console.error("error", err);
+          console.error('Error updating profile:', err);
           notify({
-            title: "Error",
-            variant: "error",
-            description: "An error occured!",
+            title: 'Error',
+            variant: 'error',
+            description: 'An error occurred!',
           });
         }
       }
@@ -93,32 +92,18 @@ export const useUpdateProfile = () => {
 };
 
 export const useUpdateAccountTheme = () => {
-
-  const [, setThemeLS] = useLocalStorage("groove-theme-config");
-
- 
-  const {
-    mutate: updateTheme,
-    isPending: isSubmitting,
-    isSuccess: isSubmitted,
-  } = useMutation({
+  // State for theme settings (if necessary)
+  const { mutate: updateTheme, isLoading: isSubmitting, isSuccess: isSubmitted } = useMutation({
     mutationFn: async (prefs) => {
-
+      try {
         const response = await apiQuery({
-          endpoint: `styleSettings`,
+          endpoint: 'styleSettings',
         });
-       
-        if(response !=null)
-          {
-           
-            setThemeLS(response);
-         }
-         else
-         {
-        
-         setThemeLS(null);
-        }
 
+        // Implement theme update logic here if necessary
+      } catch (err) {
+        console.error('Error updating theme:', err);
+      }
     },
   });
 
@@ -126,29 +111,21 @@ export const useUpdateAccountTheme = () => {
 };
 
 export const useUpdateAccountPlayer = () => {
-  const [, setPlayerLS] = useLocalStorage("groove-player");
-
   const { currentUser } = useCurrentUser();
   const { userId } = currentUser || {};
 
-  const {
-    mutate: updatePlayer,
-    isPending: isSubmitting,
-    isSuccess: isSubmitted,
-  } = useMutation({
+  const { mutate: updatePlayer, isLoading: isSubmitting, isSuccess: isSubmitted } = useMutation({
     mutationFn: async (player) => {
       if (userId) {
         try {
           await fbUpdateDoc({
-            data: { player: player },
-            collection: "users",
+            data: { player },
+            collection: 'users',
             id: userId,
           });
         } catch (err) {
-          console.error("error", err);
+          console.error('Error updating player:', err);
         }
-      } else {
-        setPlayerLS(player);
       }
     },
   });
@@ -162,32 +139,28 @@ export const useUpdatePassword = () => {
 
   const [notify] = useNotification();
 
-  const {
-    mutate: updatePass,
-    isPending: isSubmitting,
-    isSuccess: isSubmitted,
-  } = useMutation({
+  const { mutate: updatePass, isLoading: isSubmitting, isSuccess: isSubmitted } = useMutation({
     mutationFn: async (values) => {
       if (userId) {
         try {
           const credential = EmailAuthProvider.credential(
             auth.currentUser.email,
-            values?.currentPassword
+            values.currentPassword
           );
-          await reauthenticateWithCredential(auth?.currentUser, credential);
-          await updatePassword(auth?.currentUser, values?.newPassword);
+          await reauthenticateWithCredential(auth.currentUser, credential);
+          await updatePassword(auth.currentUser, values.newPassword);
 
           notify({
-            title: "Success",
-            variant: "success",
-            description: "Password updated successfully",
+            title: 'Success',
+            variant: 'success',
+            description: 'Password updated successfully',
           });
         } catch (err) {
-          console.error("error", err);
+          console.error('Error updating password:', err);
           notify({
-            title: "Error",
-            variant: "error",
-            description: "An error occured!",
+            title: 'Error',
+            variant: 'error',
+            description: 'An error occurred!',
           });
         }
       }

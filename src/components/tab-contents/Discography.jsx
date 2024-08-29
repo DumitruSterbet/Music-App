@@ -1,6 +1,6 @@
 import { useId } from "react";
 
-import { Sections } from "@/components";
+import { Sections } from "../../components";
 
 export default function Discography({
   setCurrentTab,
