@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router"; 
 
 import { usePlayerStore } from "../../lib/store";
 import { useFetchTracks } from "../../lib/actions";
@@ -26,7 +26,7 @@ export default function MediaCardMinified({
   imageDims = 16,
   isMyPlaylist,
 }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { playlistId, playlistType } = usePlayerStore();
 
   const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer();
@@ -40,7 +40,8 @@ export default function MediaCardMinified({
     <li
       className="col-span-1"
       onClick={() => {
-        navigate(`/${type}/${item?.id}`);
+        router.push(`/artist/${item?.id}`); 
+       
       }}
     >
       <div className="relative px-3 py-3 transition-all duration-300 cursor-pointer group bg-card border-divider hover:rounded hover:bg-card-hover">

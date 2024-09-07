@@ -5,13 +5,18 @@ import { usePlayerStore } from "../../lib/store";
 import { useFetchTracks } from "../../lib/actions";
 import { classNames, getFormatData, truncate } from "../../lib/utils";
 import { usePlayer } from "../../hooks";
-
+import {useFetchPlaylists} from "../../lib/actions"
 import { Icon, MetaDetailsMediaCard } from "../../components";
 
 export default function MediaCard({ item, type }) {
   const router = useRouter(); // Initialize useRouter
-
+ 
+  
   const { playlistId, playlistType } = usePlayerStore();
+  
+  const { playlists} = useFetchPlaylists({ id: item.id, section: "album" });
+
+
   const { fetchTracks, isSubmitting, getId } = useFetchTracks();
   const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer();
 
@@ -32,8 +37,17 @@ export default function MediaCard({ item, type }) {
       )}
       onClick={() => {
         if (!["radio", "podcast"].includes(type)) {
-          router.push(`/${type}/${item?.id}`); // Use router.push for navigation
-        }
+        
+         
+          if (type==="playlist" || type==="album"){
+          router.push(`/playlist/${item?.id}`); 
+          }
+          else if(type==="artist"){
+            router.push(`/artist/${item?.id}`);
+           }
+          }
+          
+        
       }}
     >
       <div className="relative">
@@ -70,7 +84,7 @@ export default function MediaCard({ item, type }) {
           )}
           {!isTypeTopClick && (
             <div className="play_button absolute -translate-y-[30%] -translate-x-[50%] top-[50%] left-[50%]">
-              {playlistId === item.id && playlistType === type ? (
+              {playlistId !== item.id && playlistType === type ? (
                 <button
                   className="flex items-center justify-center w-10 h-10 rounded-full shadow-dialog primary_linear"
                   onClick={(e) => {
@@ -96,8 +110,9 @@ export default function MediaCard({ item, type }) {
                   onClick={(e) => {
                     e.stopPropagation();
                     const callback = (tracks) => {
+                      console.log("tracks",tracks);
                       handleGetPlaylist({
-                        tracklist: getFormatData(tracks, item?.image),
+                        tracklist: getFormatData(playlists, item?.image),
                         playlistId: item?.id,
                         playlistType: item?.type,
                         savePlay: true,

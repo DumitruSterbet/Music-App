@@ -1,17 +1,15 @@
-import React from 'react';
-import  MyApp from './_app'
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
+const Home = () => {
+ // const router = useRouter();
+/* 
+  useEffect(() => {
+    // Redirect to /discover on load
+    router.replace('/discover');
+  }, [router]);
 
-
-
-
-const App = () => {
-  return (
-    
-   <MyApp>
- 
-   </MyApp>
-  );
+  return null; // No need to render anything */
 };
 
-export default App;
+export default Home;

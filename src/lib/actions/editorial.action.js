@@ -141,7 +141,7 @@ export const useFetchArtist = (id) => {
   return useQuery({
     queryKey: [`artist_${id}`, { id }],
     queryFn: async () => {
-      console.log("DDDD",id);
+     
       if (id) {
         const limit = "?limit=20";
         try {
@@ -238,17 +238,18 @@ export const useFetchChartBySection = ({ id, section }) => {
 };
 
 export const useFetchPlaylists = ({ id, section }) => {
+
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
     queryKey: [`playlist_${section}_${id}`, { id, section }],
     queryFn: async () => {
-      try {
+      try
+       {
+
         if (id && section) {
 
           const response = await apiQuery({
             endpoint: `Products/GetByAlbum/${id}`,
-          });
-
-         
+          });        
           if (response) {
             return response;
           } else {
@@ -260,10 +261,12 @@ export const useFetchPlaylists = ({ id, section }) => {
           return null;
         }
       } catch (err) {
-    
+
+     
         return null;
       }
     },
+    
   });
 
   return {
@@ -365,8 +368,32 @@ export const useDownload = async (data) => {
   }
 };
 
+export const useTopPick = ( ) => {
 
-export const getAlbumDetailedInfo = (id ) => {
+ 
+  const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
+    queryKey: ["topPick"],
+    queryFn: async () => {
+      try {
+              
+          const response = await apiQuery({
+            endpoint: `Products/GetTopPick`,
+          });
+          console.log("ToPicks query",response);
+          return response;
+        
+        
+      } catch (error) {
+        // console.log(error);
+      }
+    },
+  });
+
+  return { isPending, isSuccess, isError, isFetching, error, data };
+};
+
+
+export const useGetAlbumDetailedInfo = (id ) => {
 
  
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({

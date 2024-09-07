@@ -1,7 +1,0 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/_root/Discover": "pages/_root/Discover.js",
-  "/_layout/RootLayout": "pages/_layout/RootLayout.js"
-}

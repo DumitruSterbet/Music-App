@@ -1,11 +1,10 @@
-// pages/_app.js
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import { useAuthState, useGetProfile } from "../src/lib/actions";
 import { ThemeProvider, StylesProvider } from "../src/providers";
-import  "../src/index.css"
-
+import RootLayout from "./RootLayout";
 import React from 'react';
+import './global.css';
 
 const queryClient = new QueryClient();
 
@@ -14,17 +13,17 @@ function MyApp({ Component, pageProps }) {
   useGetProfile();
 
   return (
-
     <QueryClientProvider client={queryClient}>
       <div className="app">
+      <ToastContainer />
+      <ThemeProvider>
         <StylesProvider />
-        <ToastContainer />
-
-        <ThemeProvider>
-        <Component {...pageProps} />
-        </ThemeProvider> 
-
-       
+               
+        <RootLayout>
+          <Component {...pageProps} />
+        </RootLayout>
+        </ThemeProvider>
+    
       </div>
     </QueryClientProvider>
   );

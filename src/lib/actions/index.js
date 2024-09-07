@@ -13,7 +13,9 @@ export {
   fetchMultiplePlaylists,
   useDownload,
   useGetArtistByIds,
-  useFetchArtists
+  useFetchArtists,
+  useTopPick
+
 } from "./editorial.action";
 
 export {

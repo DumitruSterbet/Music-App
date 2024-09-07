@@ -21,8 +21,8 @@ export const useGetProfile = () => {
       if (doc?.data()) {
         const data = doc.data();
         setProf(data);
-        setTheme(data.prefs || defaultTheme);
-        setPlayerSettings(data.player || defaultPlayerSettings);
+        setTheme( defaultTheme);
+        setPlayerSettings( defaultPlayerSettings);
         getUserProfile(data);
       }
     };
@@ -49,65 +49,35 @@ export const useUpdateProfile = () => {
 
   const { mutate: updateUserProfile, isLoading: isSubmitting, isSuccess: isSubmitted } = useMutation({
     mutationFn: async (values) => {
-      if (userId) {
-        try {
-          let profileImage = null;
-          if (values?.files) {
-            profileImage = await uploadImage({
-              imageFile: values.files[0],
-              storagePath: `users/${userId}`,
-              fileName: 'avatar.jpg',
-            });
-          }
-
-          await updateProfile(auth.currentUser, {
-            photoURL: profileImage,
-            displayName: values.username,
-          });
-
-          await fbUpdateDoc({
-            data: { username: values.username, photoURL: profileImage },
-            collection: 'users',
-            id: userId,
-          });
-
-          notify({
-            title: 'Success',
-            variant: 'success',
-            description: 'Profile updated successfully',
-          });
-        } catch (err) {
-          console.error('Error updating profile:', err);
-          notify({
-            title: 'Error',
-            variant: 'error',
-            description: 'An error occurred!',
-          });
-        }
-      }
-    },
+    }
   });
 
   return { updateUserProfile, isSubmitting, isSubmitted };
 };
 
 export const useUpdateAccountTheme = () => {
-  // State for theme settings (if necessary)
-  const { mutate: updateTheme, isLoading: isSubmitting, isSuccess: isSubmitted } = useMutation({
-    mutationFn: async (prefs) => {
+  const mutation = useMutation({
+    mutationFn: async () => {
       try {
         const response = await apiQuery({
           endpoint: 'styleSettings',
         });
 
-        // Implement theme update logic here if necessary
+        console.log("Theme set res", response);
+        return response; // Return the full response object
       } catch (err) {
         console.error('Error updating theme:', err);
+        throw err; // Rethrow to handle in the caller
       }
     },
   });
 
-  return { updateTheme, isSubmitting, isSubmitted };
+  return {
+    updateTheme: mutation.mutate,
+    isSubmitting: mutation.isLoading,
+    isSubmitted: mutation.isSuccess,
+    error: mutation.error, // Expose the error for handling
+  };
 };
 
 export const useUpdateAccountPlayer = () => {
@@ -137,33 +107,10 @@ export const useUpdatePassword = () => {
   const { currentUser } = useCurrentUser();
   const { userId } = currentUser || {};
 
-  const [notify] = useNotification();
 
   const { mutate: updatePass, isLoading: isSubmitting, isSuccess: isSubmitted } = useMutation({
     mutationFn: async (values) => {
-      if (userId) {
-        try {
-          const credential = EmailAuthProvider.credential(
-            auth.currentUser.email,
-            values.currentPassword
-          );
-          await reauthenticateWithCredential(auth.currentUser, credential);
-          await updatePassword(auth.currentUser, values.newPassword);
-
-          notify({
-            title: 'Success',
-            variant: 'success',
-            description: 'Password updated successfully',
-          });
-        } catch (err) {
-          console.error('Error updating password:', err);
-          notify({
-            title: 'Error',
-            variant: 'error',
-            description: 'An error occurred!',
-          });
-        }
-      }
+     
     },
   });
 

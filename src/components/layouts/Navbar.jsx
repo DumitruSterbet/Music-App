@@ -152,7 +152,7 @@ const Logo = ({ isFolded, isHorizontal }) => {
         showFull ? "bg-primary" : "lg:bg-sidebar"
       )}
     >
-      <Link href="/" className="flex items-center h-full gap-2 logo w-fit">
+      <Link href="/discover" className="flex items-center h-full gap-2 logo w-fit">
         <div
           className={
             showFull

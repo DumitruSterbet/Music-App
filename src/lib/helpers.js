@@ -6,11 +6,21 @@ const API_BASE_URL = "https://productsapi20240819025750.azurewebsites.net/api"; 
 //const DEEZER_API_URL = import.meta.env.VITE_PUBLIC_DEEZER_API_URL;
 //const CORS_URL = import.meta.env.VITE_PUBLIC_CORS_URL;
 
-const getBaseUrl = (endpoint) => {
+/* const getBaseUrl = (endpoint) => {
   return `${CORS_URL}/${DEEZER_API_URL}/${endpoint}`;
 };
+ */
+export const useUpdateAccountTheme = async () => {
+  try {
 
-
+    const response = await axios.get(`${API_BASE_URL}/styleSettings`);
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error updating theme:', error);
+    // Handle the error (e.g., show a message to the user)
+  }
+};
 
 export const getAlbums = async () => {
   try {
@@ -90,7 +100,7 @@ export const uploadImage = async ({ imageFile, storagePath, fileName }) => {
 
 export const apiQuery = async ({endpoint, config, method = "GET" }) => {
   try {
-  console.log("Endpoint ",endpoint,config ,method);
+
 
     const options = {
       url: `${API_BASE_URL}/${endpoint}`
@@ -114,7 +124,47 @@ export const apiQuery = async ({endpoint, config, method = "GET" }) => {
   }
 };
 
+export const getGenreDetails = async (id) => {
+  if (!id) return null;
 
+  try {
+    const response = await axios.get(`${API_BASE_URL}/genre/${id}`);
+
+
+    return response.data; // Return the actual data from the response
+  } catch (error) {
+    console.error('Error fetching album details:', error);
+    throw error;
+  }
+};
+
+
+export const getAlbumDetailedInfoApi = async (id) => {
+  if (!id) return null;
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/album/${id}`);
+
+
+    return response.data; // Return the actual data from the response
+  } catch (error) {
+    console.error('Error fetching album details:', error);
+    throw error;
+  }
+};
+
+export const getAritstDetails = async (id) => {
+  if (!id) return null;
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/artist/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching album details:', error);
+    throw error;
+
+  }
+};
 
 
 // Data formatting function

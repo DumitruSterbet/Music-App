@@ -1,7 +1,7 @@
 import { useId, useMemo } from "react";
 
 import { getRandomList, classNames } from "../lib/utils";
-import { useFetchChartBySection } from "../lib/actions";
+import { useTopPick } from "../lib/actions";
 
 import { Sections, Footer } from "../components";
 
@@ -10,19 +10,17 @@ const TopPlay = () => {
     data: tracks,
     isPending: chartsDataPending,
     isSuccess: chartsDataSuccess,
-  } = useFetchChartBySection({
-    id: "0",
-    section: "tracks",
-  });
+  } = useTopPick();
 
   const topPickId = useId();
 
   const randomTopPicks = useMemo(() => {
-    const topTracks = tracks?.data || [];
+
+    const topTracks = tracks || [];
     return topTracks?.length
       ? getRandomList(topTracks, 5, 1, topTracks?.length)
       : [];
-  }, [tracks?.data]);
+  }, [tracks]);
 
   return (
     <section
@@ -37,7 +35,7 @@ const TopPlay = () => {
               data={randomTopPicks}
               details={{
                 id: topPickId,
-                type: "chart",
+                type: "TopPick",
               }}
               disableHeader
               disableRowList={[
@@ -48,10 +46,10 @@ const TopPlay = () => {
                 "like_button",
                 "dateCreated",
               ]}
-              imageDims="11"
+              imageDims="22"
               enableTitle
               titleName="Top Picks"
-              titleType="medium"
+              titleType="small"
               titleDivider={false}
               isLoading={chartsDataPending}
               isSuccess={chartsDataSuccess}

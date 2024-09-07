@@ -31,44 +31,7 @@ export const useSaveRecentPlayed = () => {
 
   const { mutate: saveRecentPlayed } = useMutation({
     mutationFn: async (playlist) => {
-      if (userId) {
-        try {
-          const recentPlayedRef = await fbGetDoc({
-            collection: "recentPlayed",
-            id: userId,
-          });
-
-          if (recentPlayedRef.exists()) {
-            const { playlist_ids } = recentPlayedRef.data() || {};
-            const notInArray = elementInArray(playlist_ids, playlist);
-            if (!notInArray) {
-              const playlistIdsData = [playlist, ...playlist_ids].slice(0, 6);
-
-              await fbUpdateDoc({
-                collection: "recentPlayed",
-                id: userId,
-                data: {
-                  playlist_ids: playlistIdsData,
-                },
-              });
-            }
-          } else {
-            await fbSetDoc({
-              collection: "recentPlayed",
-              id: userId,
-              data: {
-                user_id: userId,
-                playlist_ids: arrayUnion(playlist),
-                created_at: serverTimestamp(),
-              },
-            });
-          }
-        } catch (error) {
-          // console.log(error);
-        }
-      } else {
-        throw new Error("invalid params");
-      }
+   
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["recentPlayed"] });

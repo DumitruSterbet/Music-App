@@ -5,21 +5,8 @@ import { useTheme } from "../hooks";
 import { themeConfig, defaultThemeConfig } from "../configs";
 
 const StylesProvider = () => {
-  const [themeStorage, setThemeStorage] = useTheme();
-  const [isClient, setIsClient] = useState(false);
-
-  console.log("da",themeStorage);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Ensure hooks are not conditionally called
-  const isLargeScreen = useMediaQuery({ query: "(min-width: 1024px)" });
-  const isExtraLargeScreen = useMediaQuery({ query: "(min-width: 1280px)" });
-
-  if (!isClient) {
-    return null;
-  }
+  const [themeStorage] = useTheme();
+  const [styles, setStyles] = useState("");
 
   const {
     mode,
@@ -33,68 +20,105 @@ const StylesProvider = () => {
   } = themeStorage || defaultThemeConfig;
 
   const isHorizontal = orientation === "horizontal";
-  const { colors, sidebars } = themeConfig || {};
+  const { colors, themes, sidebars } = themeConfig || {};
 
-  const sidebarWidth = isLargeScreen ? (isHorizontal ? 0 : sidebars?.[sidebar] || "0") : 0;
+  const isLargeScreen = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
+
+  const isExtraLargeScreen = useMediaQuery({
+    query: "(min-width: 1280px)",
+  });
+
+  const theme = mode === "light" ? "theme_light" : `theme_dark_${color}`;
+  const themeObj = themes?.[theme];
+  const colorObj = colors?.[color];
+  const sT = sidebars?.[sidebar];
+
   const aside = 320;
   const asideMobile = isExtraLargeScreen ? aside : 0;
   const navHeight = 80;
   const playerHeight = 70;
 
-  const themeObj = colors?.[color] || {};
-  const sT = sidebars?.[sidebar] || "0";
+  const sidebarWidth = isLargeScreen ? (isHorizontal ? 0 : sT) : 0;
 
   const {
-    neutralBg = "transparent",
-    neutralBgOpacity = "transparent",
-    neutralBgAlt = "transparent",
-    onNeutralBg = "black",
-    onNeutralBgSecondary = "grey",
-    player = "transparent",
-    onNeutralBgDivider = "black",
-    switchBg = "transparent",
-    cardBg = "transparent",
-    cardSkeletonBg = "transparent",
-    cardBgHover = "transparent",
-  } = themeObj;
+    neutralBg,
+    neutralBgOpacity,
+    neutralBgAlt,
+    onNeutralBg,
+    onNeutralBgSecondary,
+    player,
+    onNeutralBgDivider,
+    switchBg,
+    cardBg,
+    cardSkeletonBg,
+    cardBgHover,
+  } = themeObj || {};
 
-  const {
-    primary = "#000000",
-    primaryOpacity = "rgba(0, 0, 0, 0.1)",
-    primaryLightGray = "#cccccc",
-  } = colors?.[color] || {};
+  const { primary, primaryOpacity, primaryLightGray } = colorObj || {};
 
-  const styles = `
-    :root {
-      --primary: ${primary};
-      --primary-light-gray: ${primaryLightGray};
-      --primary-opacity: ${primaryOpacity};
-      --neutralBg: ${neutralBg};
-      --neutralBgOpacity: ${neutralBgOpacity};
-      --neutralBgAlt: ${neutralBgAlt};
-      --onNeutralBg: ${onNeutralBg};
-      --onNeutralBgSecondary: ${onNeutralBgSecondary};
-      --playerBg: ${player};
-      --onNeutralBgDivider: ${onNeutralBgDivider};
-      --switchBg: ${switchBg};
-      --cardBg: ${cardBg};
-      --cardSkeletonBg: ${cardSkeletonBg};
-      --cardBgHover: ${cardBgHover};
-      --sidebar-width: ${isMobile ? sidebars["full"] : sT}px;
-      --aside-width: ${aside}px;
-      --sidebar-horizontal-width: ${sidebarWidth}px;
-      --nav-height: ${navHeight}px;
-      --nav-width: calc(100vw - ${asideMobile}px);
-      --player-height: ${playerHeight}px;
-      --logo-width: ${120}px;
+  useEffect(() => {
+    const calculatedStyles = `
+      :root {
+        --primary: ${primary};
+        --primary-light-gray: ${primaryLightGray};
+        --primary-opacity: ${primaryOpacity};
+        --neutralBg: ${neutralBg};
+        --neutralBgOpacity: ${neutralBgOpacity};
+        --neutralBgAlt: ${neutralBgAlt};
+        --onNeutralBg: ${onNeutralBg};
+        --onNeutralBgSecondary: ${onNeutralBgSecondary};
+        --playerBg: ${player};
+        --onNeutralBgDivider: ${onNeutralBgDivider};
+        --switchBg: ${switchBg};
+        --cardBg: ${cardBg};
+        --cardSkeletonBg: ${cardSkeletonBg};
+        --cardBgHover: ${cardBgHover};
+        --sidebar-width: ${isMobile ? sidebars["full"] : sT}px;
+        --aside-width: ${aside}px;
+        --sidebar-horizontal-width: ${sidebarWidth}px;
+        --nav-height: ${navHeight}px;
+        --nav-width: calc(100vw - ${asideMobile}px);
+        --player-height: ${playerHeight}px;
+        --logo-width: 120px;
 
-      --main-width: calc(100% - ${sidebarWidth}px - ${asideMobile}px);
-      --main-margin-top: ${isHorizontal && !isMobile ? `${navHeight * 2}px` : `${navHeight}px`};
-      --direction: ${layout};
-      --font-family: ${startCase(fontFamily)};
-      --border-radius: ${borderRadius}px;
-    }
-  `;
+        --main-width: calc(100% - ${sidebarWidth}px - ${asideMobile}px);
+        --main-margin-top: ${
+          isHorizontal && !isMobile ? `${navHeight * 2}px` : `${navHeight}px`
+        };
+        --direction: ${layout};
+        --font-family: ${startCase(fontFamily)};
+        --border-radius: ${borderRadius}px;
+      }
+    `;
+    setStyles(calculatedStyles);
+  }, [
+    primary,
+    primaryLightGray,
+    primaryOpacity,
+    neutralBg,
+    neutralBgOpacity,
+    neutralBgAlt,
+    onNeutralBg,
+    onNeutralBgSecondary,
+    player,
+    onNeutralBgDivider,
+    switchBg,
+    cardBg,
+    cardSkeletonBg,
+    cardBgHover,
+    isMobile,
+    sT,
+    asideMobile,
+    sidebarWidth,
+    navHeight,
+    playerHeight,
+    isHorizontal,
+    layout,
+    fontFamily,
+    borderRadius,
+  ]);
 
   return <style>{styles}</style>;
 };

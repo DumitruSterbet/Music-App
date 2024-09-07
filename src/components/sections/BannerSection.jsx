@@ -1,10 +1,9 @@
 import { useMemo } from "react";
-import Head from "next/head";
 import { usePlayerStore } from "../../lib/store";
 
 import { classNames, getFormatData } from "../../lib/utils";
 import usePlayer from "../../hooks/usePlayer";
-import { getAlbumDetailedInfo } from "../../lib/actions/editorial.action.js";
+
 import {
   Title,
   IconButton,
@@ -58,15 +57,16 @@ export default function BannerSection(props) {
   let pagename;
 
   if (Array.isArray(details)) {
+    console.log("Album detail",details);
     type = "album";
     pagename = "Album";
-    const albumDetails = getAlbumDetailedInfo(details[0]?.albumId).data;
+    /* const albumDetails = getAlbumDetailedInfo(details[0]?.albumId).data;
     name = albumDetails?.name;
     image = albumDetails?.imageUrl;
     tracksNo = albumDetails?.songQuantity;
     releaseDate = albumDetails?.publishedAt;
     duration = formatDuration(albumDetails?.duration);
-    albumArtists = details?.flatMap(item => item.artists.map(artist => artist.name)).join(', '); 
+    albumArtists = details?.flatMap(item => item.artists.map(artist => artist.name)).join(', ');  */
   } else {
     type = "artist";
     pagename = "Artist";
@@ -88,15 +88,7 @@ export default function BannerSection(props) {
 
   return (
     <div className="relative banner_section">
-      <Head>
-        <title>{`Download test - Beat up`}</title>
-        <meta name="description" content={`Download ${pagename} ${name} - Download MP3 or WAV format - Beat up`} />
-        <meta property="og:title" content={`Download ${pagename} ${name} - Site name`} />
-        <meta property="og:description" content={`Download ${pagename} ${name} - Download MP3 or WAV format - Site name`} />
-        <meta property="og:url" content={typeof window !== "undefined" ? window.location.href : ''} />
-        <meta name="twitter:title" content={`Download ${pagename} ${name} - Site name`} />
-        <meta name="twitter:description" content={`Download ${pagename} ${name} - Download MP3 or WAV format - Site name`} />
-      </Head>
+      
 
       {typeAlt !== "search" && (
         <div className="absolute w-full h-full rounded bg-primary-opacity" />

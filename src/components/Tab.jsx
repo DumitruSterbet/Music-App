@@ -26,10 +26,7 @@ const transformContent = (content) => {
         }).filter(item => item !== null);
       }
     });
-  } else {
-
-  }
-
+  } 
   return transformed;
 };
 

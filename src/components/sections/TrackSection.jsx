@@ -65,7 +65,7 @@ export default function TrackSection({
         </div>
       )}
 
-      {isSuccess && data?.length ? (
+{isSuccess && data?.length ? (
         <div className="track_section">
           {enableTitle && (
             <Title

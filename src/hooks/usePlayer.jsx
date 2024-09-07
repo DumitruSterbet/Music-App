@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGlobalAudioPlayer } from "react-use-audio-player";
 import useLocalStorage from "use-local-storage";
 
+
+
 import {
   useSaveRecentPlayed,
   useFetchTracks,
@@ -236,11 +238,14 @@ export default function usePlayer() {
   const getTimer = `${formatTime(timer)} / ${formatTime(duration)}`;
 
   const handleGetPlaylist = (data) => {
+  
     autoplay = true;
     if (data?.tracklist) {
       console.log("Data info in usePlayer:", data);
       getPlaylist(data);
     }
+    
+
 
     if (data?.savePlay) {
       saveRecentPlayed({

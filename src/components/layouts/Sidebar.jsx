@@ -36,33 +36,6 @@ const User = () => {
   );
 };
 
-const CreatePlaylistTooltipContent = ({ hideTooltip }) => {
-  const router = useRouter();
-
-  return (
-    <div className="p-4 rounded bg-card">
-      <Title
-        name="Create a Playlist?"
-        desc="Log in to create and share playlists."
-        type="small"
-      />
-      <div className="flex justify-end gap-2 item-center">
-        <Button
-          label="Not now"
-          variant="outlined"
-          className="border-0"
-          onClick={hideTooltip}
-        />
-        <Button
-          label="Sign In"
-          variant="contained"
-          onClick={() => router.push("/login")}
-        />
-      </div>
-    </div>
-  );
-};
-
 const Sidebar = () => {
   const router = useRouter();
   const pathname = router.pathname;
@@ -99,7 +72,7 @@ const Sidebar = () => {
           },
           {
             id: "browse",
-            name: "Browse",
+            name: "Genres",
             to: "/browse",
             icon: "RiListIndefinite",
             tooltip: "hover",
