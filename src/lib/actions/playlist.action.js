@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useNavigate } from "react-router-dom";
+
 import { v4 as uuidv4 } from "uuid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { arrayRemove, arrayUnion, serverTimestamp } from "@firebase/firestore";
 
-import { useCurrentUser } from "@/lib/store";
-import { elementInArray } from "@/lib/utils";
+import { useCurrentUser } from "../../lib/store";
+import { elementInArray } from "../../lib/utils";
 import {
   fbSetDoc,
   fbAddDoc,
@@ -17,59 +17,21 @@ import {
   fbCountCollection,
   uploadImage,
   fbDeleteStorage,
-} from "@/lib/helpers";
-
-import { useNotification } from "@/hooks";
-import { auth } from "@/configs";
+} from "../../lib/helpers";
+import { useRouter } from 'next/router';
+import { useNotification } from "../../hooks";
 
 import { fetchMultiplePlaylists } from "./editorial.action";
 
 // recent played
 export const useSaveRecentPlayed = () => {
-  const userId = auth?.currentUser?.uid;
+
 
   const queryClient = useQueryClient();
 
   const { mutate: saveRecentPlayed } = useMutation({
     mutationFn: async (playlist) => {
-      if (userId) {
-        try {
-          const recentPlayedRef = await fbGetDoc({
-            collection: "recentPlayed",
-            id: userId,
-          });
-
-          if (recentPlayedRef.exists()) {
-            const { playlist_ids } = recentPlayedRef.data() || {};
-            const notInArray = elementInArray(playlist_ids, playlist);
-            if (!notInArray) {
-              const playlistIdsData = [playlist, ...playlist_ids].slice(0, 6);
-
-              await fbUpdateDoc({
-                collection: "recentPlayed",
-                id: userId,
-                data: {
-                  playlist_ids: playlistIdsData,
-                },
-              });
-            }
-          } else {
-            await fbSetDoc({
-              collection: "recentPlayed",
-              id: userId,
-              data: {
-                user_id: userId,
-                playlist_ids: arrayUnion(playlist),
-                created_at: serverTimestamp(),
-              },
-            });
-          }
-        } catch (error) {
-          // console.log(error);
-        }
-      } else {
-        throw new Error("invalid params");
-      }
+   
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["recentPlayed"] });
@@ -120,10 +82,10 @@ export const useFetchMyPlaylists = () => {
   const { currentUser } = useCurrentUser();
   const { userId } = currentUser || {};
 
-  const navigate = useNavigate();
+
 
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
-    queryKey: ["myPlaylists", { userId, navigate }],
+    queryKey: ["myPlaylists", { userId }],
     queryFn: async () => {
       if (userId) {
         try {
@@ -138,7 +100,7 @@ export const useFetchMyPlaylists = () => {
             return { ...s, id: i.id, created_at: s.created_at.toDate() };
           });
         } catch (error) {
-          navigate("/");
+        
           // console.log(error);
         }
       } else {
@@ -157,7 +119,7 @@ export const useCreateMyPlaylist = () => {
   const { currentUser } = useCurrentUser();
   const { userId } = currentUser || {};
 
-  const navigate = useNavigate();
+ 
   const [notify] = useNotification();
 
   const queryClient = useQueryClient();
@@ -183,7 +145,7 @@ export const useCreateMyPlaylist = () => {
             },
           });
 
-          navigate(`/my-playlist/${docRef.id}`);
+       
         } catch (error) {
           notify({
             title: "Error",
@@ -212,7 +174,7 @@ export const useFetchMyPlaylist = (id) => {
   const { userId } = currentUser || {};
 
   const [notify] = useNotification();
-  const navigate = useNavigate();
+ 
 
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
     queryKey: [`singleMyPlaylist_${id}`, { userId, id }],
@@ -253,7 +215,7 @@ export const useFetchMyPlaylist = (id) => {
             variant: "error",
             description: "Request failed",
           });
-          navigate("/");
+       
           // console.log(error);
         }
       } else {
@@ -338,7 +300,7 @@ export const useRemoveMyPlaylist = () => {
   const { currentUser } = useCurrentUser();
   const { userId } = currentUser || {};
 
-  const navigate = useNavigate();
+  
   const [notify] = useNotification();
 
   const queryClient = useQueryClient();
@@ -355,7 +317,7 @@ export const useRemoveMyPlaylist = () => {
             await fbDeleteStorage(`myPlaylists/${filePath}/image.jpg`);
           }
 
-          navigate("/my-playlist");
+       
 
           notify({
             title: "Success",

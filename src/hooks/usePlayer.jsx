@@ -4,13 +4,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGlobalAudioPlayer } from "react-use-audio-player";
 import useLocalStorage from "use-local-storage";
 
+
+
 import {
   useSaveRecentPlayed,
   useFetchTracks,
   useUpdateAccountPlayer,
-} from "@/lib/actions";
-import { usePlayerStore, useCurrentUser } from "@/lib/store";
-import { getFormatData } from "@/lib/utils";
+} from "../lib/actions";
+import { usePlayerStore, useCurrentUser } from "../lib/store";
+import { getFormatData } from "../lib/utils";
 
 const formatTime = (seconds) => {
   if (seconds === Infinity) {
@@ -171,6 +173,7 @@ export default function usePlayer() {
   };
 
   const handlePlayPause = () => {
+    console.log("Set pause");
     togglePlayPause();
   };
 
@@ -236,11 +239,14 @@ export default function usePlayer() {
   const getTimer = `${formatTime(timer)} / ${formatTime(duration)}`;
 
   const handleGetPlaylist = (data) => {
+  
     autoplay = true;
     if (data?.tracklist) {
       console.log("Data info in usePlayer:", data);
       getPlaylist(data);
     }
+    
+
 
     if (data?.savePlay) {
       saveRecentPlayed({

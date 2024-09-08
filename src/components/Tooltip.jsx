@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { startCase } from "lodash";
 
-import { classNames } from "@/lib/utils";
+import { classNames } from "../lib/utils";
 
-import { Icon } from "@/components";
+import { Icon } from "../components";
 
 export const AppTooltip = ({
   children,

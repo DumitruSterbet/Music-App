@@ -28,6 +28,6 @@ export const navlinks = [
 ];
 
 export const logo = {
-  name: "Powered by DS",
+  name: "Next TuneTify  ",
   icon: "PiMusicNoteFill",
 };

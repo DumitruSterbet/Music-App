@@ -1,6 +1,6 @@
 import { useId } from "react";
 
-import { Sections } from "@/components";
+import { Sections } from "../../components";
 
 export default function Discography({
   setCurrentTab,
@@ -8,7 +8,7 @@ export default function Discography({
   isPending,
   isSuccess,
 }) {
-  const { details, topTracks, albums, relatedArtists, playlists, radios } =
+  const { details, topTracks, albums, relatedArtists} =
     data || {};
 
   const radioId = useId();
@@ -18,7 +18,7 @@ export default function Discography({
       <div className="grid grid-cols-1 gap-8 md:grid-cols-10">
         <div className="flex flex-col col-span-1 gap-8 md:col-span-7">
           <Sections.TrackSection
-            data={topTracks?.data?.slice(0, 5)}
+            data={topTracks?.slice(0, 5)}
             details={{
               id: details?.id,
               type: "artist",
@@ -38,7 +38,7 @@ export default function Discography({
           />
 
           <Sections.MediaSection
-            data={albums?.data?.slice(0, 9)}
+            data={albums?.slice(0, 9)}
             title="Albums"
             titleType="medium"
             titleDivider={false}
@@ -51,21 +51,9 @@ export default function Discography({
           />
         </div>
         <div className="flex flex-col col-span-1 gap-8 md:col-span-3">
+      
           <Sections.MediaSectionMinified
-            data={playlists ? playlists?.data?.slice(0, 4) : []}
-            title="Playlists"
-            titleType="medium"
-            titleDivider={false}
-            type="playlist"
-            gridNumber={1}
-            showMoreLink={() => setCurrentTab("playlists")}
-            showMoreDisplay="bottom"
-            isLoading={isPending}
-            isSuccess={isSuccess}
-          />
-
-          <Sections.MediaSectionMinified
-            data={relatedArtists?.data?.slice(0, 4)}
+            data={relatedArtists?.slice(0, 4)}
             title="Related Artists"
             titleType="medium"
             titleDivider={false}
@@ -77,30 +65,7 @@ export default function Discography({
             isSuccess={isSuccess}
           />
 
-          <Sections.TrackSection
-            data={radios?.data?.slice(0, 6)}
-            details={{
-              id: radioId,
-              type: "radio",
-            }}
-            disableHeader
-            disableRowList={[
-              "no",
-              "album",
-              "duration",
-              "action_one",
-              "action_two",
-              "dateCreated",
-            ]}
-            imageDims="16"
-            enableTitle
-            listDivider={false}
-            titleName="Radios"
-            titleDivider={false}
-            titleType="medium"
-            isLoading={isPending}
-            isSuccess={isSuccess}
-          />
+  
         </div>
       </div>
     </div>

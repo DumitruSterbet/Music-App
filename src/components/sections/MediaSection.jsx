@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 
-import { classNames, getRandomList, getFormatData } from "@/lib/utils";
+import { classNames, getRandomList, getFormatData } from "../../lib/utils";
 
-import { Title, Cards, Skeletons } from "@/components";
+import { Title, Cards, Skeletons } from "../../components";
 
 const grid = {
   2: "grid-cols-2",
@@ -29,7 +29,6 @@ export default function MediaSection({
 }) 
 {
   const getCardItemNumber = cardItemNumber || data?.length;
-   console.log("Playlist2",data);
   const listFormatted = useMemo(() => {
     if (data) {
       if (randomListNumber) {

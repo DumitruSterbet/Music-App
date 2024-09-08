@@ -1,26 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-
-import { classNames } from "@/lib/utils";
-import { useAppUtil, useAppModal, useCurrentUser } from "@/lib/store";
-import { useLogout } from "@/lib/actions";
-
-import { useTheme } from "@/hooks";
-import { themeConfig, defaultThemeConfig } from "@/configs";
-
-import { Icon, Overlay, Title, Tooltip, Button, Skeletons } from "@/components";
+import { useRouter } from "next/router";
+import { classNames } from "../../lib/utils";
+import { useAppUtil, useAppModal, useCurrentUser } from "../../lib/store";
+import { useLogout } from "../../lib/actions";
+import { useTheme } from "../../hooks";
+import { themeConfig } from "../../configs";
+import { Icon, Overlay, Title, Tooltip, Button, Skeletons } from "../../components";
 
 const User = () => {
   const { currentUser } = useCurrentUser();
-
   const { user } = currentUser || {};
   const { email, username, imageUrl } = user || {};
 
   return (
-    <Link
+    <a
       className="gap-2 p-2 rounded flex_justify_between bg-main"
-      to="/profile"
+      href="/profile"
     >
       <div className="w-10 h-10 rounded-full flex_justify_center bg-sidebar">
         {imageUrl ? (
@@ -32,61 +28,30 @@ const User = () => {
 
       {email && (
         <div className="flex flex-col flex-1 text-sm">
-          <span className="">@{username}</span>
+          <span>@{username}</span>
           <span className="break-all text-secondary">{email}</span>
         </div>
       )}
-    </Link>
-  );
-};
-
-const CreatePlaylistTooltipContent = ({ hideTooltip }) => {
-  const navigate = useNavigate();
-
-  return (
-    <div className="p-4 rounded bg-card">
-      <Title
-        name="Create a Playlist?"
-        desc="Log in to create and share playlists."
-        type="small"
-      />
-      <div className="flex justify-end gap-2 item-center">
-        <Button
-          label="Not now"
-          variant="outlined"
-          className="border-0"
-          onClick={hideTooltip}
-        />
-        <Button
-          label="Sign In"
-          variant="contained"
-          onClick={() => navigate("/login")}
-        />
-      </div>
-    </div>
+    </a>
   );
 };
 
 const Sidebar = () => {
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const pathname = router.pathname;
   const [toggleNav, setToggleNav] = useState(false);
 
   const { logout: signOut } = useLogout();
   const { currentUser } = useCurrentUser();
-
   const { isLoaded: isLoadedUser, user } = currentUser || {};
 
   const { getToggleMenu, toggleMenu, searchRef, getToggleSearch } =
     useAppUtil();
 
   const [theme] = useTheme();
-
   const { close: modalClose } = useAppModal();
-
-  const { sidebar, orientation, isMobile } = theme || defaultThemeConfig;
+  const { sidebar, orientation, isMobile } = theme;
   const isHorizontal = orientation === "horizontal" && !isMobile;
-
   const isFolded = sidebar === "folded";
 
   useEffect(() => {
@@ -107,7 +72,7 @@ const Sidebar = () => {
           },
           {
             id: "browse",
-            name: "Browse",
+            name: "Genres",
             to: "/browse",
             icon: "RiListIndefinite",
             tooltip: "hover",
@@ -122,87 +87,7 @@ const Sidebar = () => {
           },
         ],
       },
-    /*   {
-        name: "Library",
-        subLinks: [
-          ...(user
-            ? [
-                {
-                  id: "favourite_playlists",
-                  name: "Favourite Playlists",
-                  to: "/favourite-playlists",
-                  icon: "GiLoveSong",
-                  tooltip: "hover",
-                },
-                {
-                  id: "my_playlists",
-                  name: "My Playlists",
-                  to: "/my-playlist",
-                  icon: "PiPlaylistBold",
-                  tooltip: "hover",
-                },
-              ]
-            : [
-                {
-                  id: "create_playlists",
-                  name: "Create Playlists",
-                  icon: "PiPlaylistBold",
-                  dialog: true,
-                  tooltip: "click",
-                  tooltipContent: CreatePlaylistTooltipContent,
-                  arrowPos: "left-top",
-                  arrowClassName: "text-card",
-                },
-              ]),
-        ],
-      }, */
-     /*  {
-        name: "Account",
-        subLinks: [
-          ...(user
-            ? [
-                {
-                  id: "profile",
-                  name: "Profile",
-                  to: "/profile",
-                  icon: "BiUser",
-                  tooltip: "hover",
-                },
-                {
-                  id: "notifications",
-                  name: "Notifications",
-                  to: "/notifications",
-                  icon: "IoMdNotificationsOutline",
-                  badgeCount: 3,
-                  tooltip: "hover",
-                },
-                {
-                  id: "logout",
-                  name: "Logout",
-                  to: "/logout",
-                  onClick: signOut,
-                  icon: "MdLogout",
-                  tooltip: "hover",
-                },
-              ]
-            : [
-                {
-                  id: "sign_up",
-                  name: "Sign Up",
-                  to: "/register",
-                  icon: "BiUser",
-                  tooltip: "hover",
-                },
-                {
-                  id: "sign_in",
-                  name: "Sign In",
-                  to: "/login",
-                  icon: "MdLogin",
-                  tooltip: "hover",
-                },
-              ]),
-        ],
-      }, */
+      // Additional navlinks can be added here
     ];
   }, [user]);
 
@@ -222,7 +107,6 @@ const Sidebar = () => {
             "transition-all duration-500",
             toggleMenu && !isHorizontal ? "left-0" : "-left-sidebar"
           ),
-
         isHorizontal
           ? "top-navbar sidebar_horizontal_width bg-sidebar-0 shadow-dialog"
           : "h-full"
@@ -250,7 +134,7 @@ const Sidebar = () => {
             isHorizontal && "flex h-full border-t border-divider"
           )}
         >
-          {isLoadedUser ? (
+          {(
             <>
               {navlinks.map((item) => (
                 <div
@@ -271,7 +155,6 @@ const Sidebar = () => {
                     {item.subLinks.map((link) => (
                       <Fragment key={link.name}>
                         <li
-                          key={link.name}
                           className={classNames(
                             `dropdown_${link.id}`,
                             "relative px-[10px] group",
@@ -297,7 +180,7 @@ const Sidebar = () => {
                                   link?.refFocus?.current?.focus();
                                   getToggleSearch(true);
                                 } else {
-                                  navigate(link.to);
+                                  router.push(link.to);
                                 }
                                 modalClose();
                               }}
@@ -347,12 +230,10 @@ const Sidebar = () => {
                 </div>
               ))}
             </>
-          ) : (
-            <Skeletons.NavlistSkeleton />
           )}
-          {isLoadedUser && user && isMobile && isLoadedUser && (
+          { isMobile && (
             <div className="fixed bottom-0 p-2 bg-sidebar w-sidebar max-h-[100px]">
-              <User />
+              {/* Additional mobile content */}
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
 
-import { Icon } from "@/components";
+import { Icon } from "../components";
 
 const AppDialog = ({ open, onOpenChange, Content, displayCloseBtn = true }) => (
   <Dialog.Root open={open} onOpenChange={onOpenChange}>

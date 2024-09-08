@@ -118,7 +118,7 @@ export const themeConfig = {
   },
 };
 
-const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+const prefersDark = false;//window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 export const defaultThemeConfig = {
   mode: themeConfig?.modes?.[prefersDark ? 1 : 0],

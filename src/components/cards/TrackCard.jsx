@@ -1,43 +1,40 @@
 import { useState } from "react";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 import {
   useAddTrackToMyPlaylist,
-  useRemoveTrackFromMyPlaylist,
+
   useFetchMyPlaylists,
-  useDownload
-} from "@/lib/actions";
-import { useCurrentUser } from "@/lib/store";
+
+} from "../../lib/actions";
+import { useCurrentUser } from "../../lib/store";
 import {
   classNames,
   formatDuration,
   formatIndexToDouble,
   truncate,
-} from "@/lib/utils";
+} from "../../lib/utils";
 
-import { IconButton, DropdownMenu, Icon } from "@/components";
+import { IconButton, DropdownMenu, Icon } from "../../components";
 
 const MoreButtonDropDown = ({
   trackId,
   type,
-  myPlaylistId,
-  imageUrl,
-  artistId,
-  albumId,
-}) => {
-  const navigate = useNavigate();
 
+  imageUrl,
+
+}) => {
   const [openAddPlaylist, setAddPlaylist] = useState(false);
+
 
   const {
     createMyPlaylist: addToMyPlaylist,
     isCreating: isSubmittingAddToPlaylist,
   } = useAddTrackToMyPlaylist();
 
-  const { deleteTrackFromMyPlaylist } = useRemoveTrackFromMyPlaylist();
+  
   const { data: myPlaylists } = useFetchMyPlaylists();
-
 
   return (
     <DropdownMenu
@@ -60,46 +57,7 @@ const MoreButtonDropDown = ({
                 <Icon name="MdArrowRight" size={20} />
               </button>
 
-              {[
-                ...(myPlaylistId
-                  ? [
-                      {
-                        label: "Remove from this playlist",
-                        onClick: () => {
-                          deleteTrackFromMyPlaylist({
-                            trackD: {
-                              [trackId]: {
-                                id: trackId,
-                                type,
-                              },
-                            },
-                            id: myPlaylistId,
-                          });
-                        },
-                      },
-                    ]
-                  : []),
-                {
-                  label: "Go to artist",
-                  onClick: () => {
-                    navigate(`/artist/${artistId}`);
-                  },
-                },
-                {
-                  label: "Go to album",
-                  onClick: () => {
-                    navigate(`/album/${albumId}`);
-                  },
-                },
-              ].map((item) => (
-                <button
-                  key={item.label}
-                  className="flex w-full p-2 text-left rounded hover:bg-card-hover"
-                  onClick={() => item.onClick()}
-                >
-                  <span className="whitespace-nowrap">{item.label}</span>
-                </button>
-              ))}
+   
             </div>
           ) : (
             <div>
@@ -109,14 +67,6 @@ const MoreButtonDropDown = ({
                 onClick={() => setAddPlaylist(false)}
               />
               <div className="">
-                <button
-                  className="flex items-center w-full gap-2 p-2 font-semibold text-left border-b rounded whitespace-nowrap hover:bg-card-hover border-divider"
-                  onClick={() => navigate("/my-playlist")}
-                >
-                  Create a playlist
-                  <Icon name="IoMdAddCircle" size={16} />
-                </button>
-
                 {myPlaylists?.length
                   ? myPlaylists?.map((item, index) => (
                       <button
@@ -161,6 +111,8 @@ const TrackCard = ({
   disableRowList,
   handleTrackClick,
 }) => {
+
+  const router = useRouter();
   const { currentUser } = useCurrentUser();
   const { user, isLoaded } = currentUser || {};
 
@@ -170,17 +122,9 @@ const TrackCard = ({
     trackId === id && trackType === type && playlistId === details.id;
   const isCurrentPlaying = isCurrentTrack && isPlaying;
 
-  const downloadSong = async (item) => {
-    const soundtrack = {
-        name: item?.name,
-        audioSrc: item?.audioSrc
-    };
-   await useDownload(soundtrack);
-   
-};
-
-  
-
+  const goToPremiumPage = () => {
+    router.push('/premium'); // Redirect to the Premium page
+  };
 
   return (
     <li
@@ -205,13 +149,11 @@ const TrackCard = ({
                 isCurrentTrack ? "bg-main opacity-70" : "bg-transparent"
               )}
             />
-           
             <img
               src={item.image}
               alt={item.name}
               className={classNames("h-full w-full rounded aspect-square")}
             />
-
             <div className="absolute top-0 flex items-center justify-center w-full h-full">
               <IconButton
                 name={
@@ -231,25 +173,34 @@ const TrackCard = ({
             </div>
           </div>
           <div className="flex flex-col flex-1 w-full gap-1 text-onNeutralBg">
-            <span className="text-sm">{truncate(item.name, 32)}  </span>
+           
+                {
+                  details.type !== "TopPick" 
+                  ? (
+                    <span className="text-sm">{truncate(item.name, 32)}</span>
+                  ) : (
+                    <span className="text-sm">{truncate(item.name, 15)}</span>
+                  )
+                }
+
+           
+           
+           
+           
             <div className="flex flex-col xs:flex-row">
-            
-            {
-  item.artists.map((artist, index) => (
-    <span key={artist.Id}>
-      <Link
-        title="Artist"
-        to={`/artist/${artist.Id}`}
-        className="text-secondary text-[14px] hover:underline underline-offset-4 cursor-pointer"
-      >
-        {artist.Name}
-      </Link>
-      {index < item.artists.length - 1 && <>&nbsp;&nbsp;</>} {/* Adds space between names */}
-    </span>
-  ))
-}
 
-
+              {item.artists.map((artist, index) => (
+                <span key={artist.Id}>
+                  <Link
+                    href={`/artist/${artist.Id}`}
+                    title="Artist"
+                    className="text-secondary text-[14px] hover:underline underline-offset-4 cursor-pointer"
+                  >
+                    {artist.Name}
+                  </Link>
+                  {index < item.artists.length - 1 && <>&nbsp;&nbsp;</>}
+                </span>
+              ))}
             </div>
           </div>
         </div>
@@ -260,34 +211,45 @@ const TrackCard = ({
             </div>
           )}
 
+          {details.type !== "TopPick" && (
+            <button
+              onClick={goToPremiumPage}
+              className="flex items-center justify-end gap-2 text-sm text-right"
+              title="download"
+            >
+              <svg
+                stroke="currentColor"
+                fill="none"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-onNeutralBg"
+                height="26"
+                width="26"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 8h-14"></path>
+                <path d="M5 12h9"></path>
+                <path d="M11 16h-6"></path>
+                <path d="M15 16h6"></path>
+                <path d="M18 13v6"></path>
+              </svg>
+            </button>
+          )}
+
       
-                      {/* Download button */}
-                      <button
-                        onClick={() => downloadSong(item)}
-                        className="flex items-center justify-end gap-2 text-sm text-right"
-                        title="download"
-                       >
-                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" className="text-onNeutralBg" height="26" width="26" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M19 8h-14"></path>
-                            <path d="M5 12h9"></path>
-                            <path d="M11 16h-6"></path>
-                            <path d="M15 16h6"></path>
-                            <path d="M18 13v6"></path>
-                        </svg>
-                    </button>
-
-
           {user && isLoaded && (
             <>
               {!disableRowList?.includes("more_button") && (
                 <div className="flex items-center justify-end gap-2 text-sm text-right">
                   <MoreButtonDropDown
+                    myPlaylistId={myPlaylistId}
                     trackId={id}
                     type={type}
-                    myPlaylistId={myPlaylistId}
                     imageUrl={item.image}
-                    artistId={item.artistId}
+                    artistId={item.artists[0]?.Id}
                     albumId={item.albumId}
                   />
                 </div>

@@ -1,4 +1,4 @@
-import { Sections } from "@/components";
+import { Sections } from "../../components";
 
 export default function Playlists({ playlists, isPending, isSuccess }) {
   return (

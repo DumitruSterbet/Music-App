@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { apiQuery } from "@/lib/helpers";
+import { apiQuery } from "../../lib/helpers";
 
 export const useFetchTopCharts = (params) => {
+  const { id, section, limit , page = 1 } = params ?? {};
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
     queryKey: ["topCharts", params],
     queryFn: async () => {
       const { id, section } = params ?? {};
 
+      console.log("Test",limit);
       if (!(id && section)) {
         throw new Error("Invalid params");
       }     
       const data = await apiQuery({
-        endpoint: `album`,
+        endpoint: `album?limit=${limit}&page=${page}`,
       });
 
       let resp;
@@ -135,36 +137,43 @@ export const useFetchGenreBySection = ({ id, section }) => {
 };
 
 export const useFetchArtist = (id) => {
+
   return useQuery({
     queryKey: [`artist_${id}`, { id }],
     queryFn: async () => {
-      console.log("DDDD");
+     
       if (id) {
         const limit = "?limit=20";
         try {
-          const [
-            details,
-            topTracks,
-            albums,
-            relatedArtists,
-            playlists,
-            radios,
-          ] = await Promise.all([
-            apiQuery({ endpoint: `artist/${id}` }),
-            apiQuery({ endpoint: `artist/${id}/top${limit}` }),
-            apiQuery({ endpoint: `artist/${id}/albums${limit}` }),
-            apiQuery({ endpoint: `artist/${id}/related${limit}` }),
-            apiQuery({ endpoint: `artist/${id}/playlists${limit}` }),
-            apiQuery({ endpoint: `artist/${id}/radio` }),
-          ]);
+          const promises = [
+            apiQuery({ endpoint: `artist/${id}` }), // Artist details
+            apiQuery({ endpoint: `products/${id}/top${limit}` }), // Top tracks
+            apiQuery({ endpoint: `album/${id}/albums${limit}` }), // Albums
+            apiQuery({ endpoint: `artist/${id}/related${limit}` }), // Related artists
+           // apiQuery({ endpoint: `artist/${id}/playlists${limit}` }) // Playlists
+          ];
+        
+          // Await all promises and destructure the results
+          const [detailsResponse, topTracksResponse, albumsResponse, relatedArtistsResponse, playlistsResponse] = await Promise.all(promises);
+        
 
+          console.log("Raw Responses:", { detailsResponse, topTracksResponse, albumsResponse, relatedArtistsResponse});
+
+          // Extract data from responses (assuming data is in a 'data' field)
+          const details = detailsResponse;
+          const topTracks = topTracksResponse;
+          const albums = albumsResponse;
+          const relatedArtists = relatedArtistsResponse;
+        //  const playlists = playlistsResponse.data;
+
+        //console.log("Raw Responses:", { detailsResponse, topTracksResponse, albumsResponse });
+    
           return {
             details,
             topTracks,
             albums,
             relatedArtists,
-            playlists,
-            radios,
+          //  playlists
           };
         } catch (error) {
           console.error("Error fetching artist data:", error);
@@ -180,6 +189,26 @@ export const useFetchArtist = (id) => {
   });
 };
 
+
+export const useFetchArtists = (page, limit) => {
+  return useQuery({
+    queryKey: ['fetchArtists', page, limit], // Add queryKey to cache results based on page and limit
+    queryFn: async () => {
+
+      try {
+        const detailsResponse = await apiQuery({ endpoint: `artist?limit=${limit}&page=${page}`});
+        return detailsResponse;
+      } 
+      catch (error) {
+        console.error("Error fetching artist data:", error);
+        throw error;
+      }
+    },
+    onError: (error) => {
+      console.error("Error in useQuery:", error);
+    },
+  });
+};
 
 
 export const useFetchChartBySection = ({ id, section }) => {
@@ -209,17 +238,18 @@ export const useFetchChartBySection = ({ id, section }) => {
 };
 
 export const useFetchPlaylists = ({ id, section }) => {
+
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
     queryKey: [`playlist_${section}_${id}`, { id, section }],
     queryFn: async () => {
-      try {
+      try
+       {
+
         if (id && section) {
 
           const response = await apiQuery({
             endpoint: `Products/GetByAlbum/${id}`,
-          });
-
-         
+          });        
           if (response) {
             return response;
           } else {
@@ -231,10 +261,12 @@ export const useFetchPlaylists = ({ id, section }) => {
           return null;
         }
       } catch (err) {
-    
+
+     
         return null;
       }
     },
+    
   });
 
   return {
@@ -336,8 +368,32 @@ export const useDownload = async (data) => {
   }
 };
 
+export const useTopPick = ( ) => {
 
-export const getAlbumDetailedInfo = (id ) => {
+ 
+  const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
+    queryKey: ["topPick"],
+    queryFn: async () => {
+      try {
+              
+          const response = await apiQuery({
+            endpoint: `Products/GetTopPick`,
+          });
+          console.log("ToPicks query",response);
+          return response;
+        
+        
+      } catch (error) {
+        // console.log(error);
+      }
+    },
+  });
+
+  return { isPending, isSuccess, isError, isFetching, error, data };
+};
+
+
+export const useGetAlbumDetailedInfo = (id ) => {
 
  
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({

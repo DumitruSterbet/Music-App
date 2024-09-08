@@ -1,4 +1,4 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
+/* import { Navigate, createBrowserRouter } from "react-router-dom";
 import {
   Discover,
   Browse,
@@ -12,10 +12,11 @@ import {
   Profile,
   Notifications,
   Error,
-} from "@/pages/_root";
+  Premium
+} from "../../pages/_root";
 
-import { Register, Login, ForgetPass, VerifyForgetPass } from "@/pages/_auth";
-import { RootLayout, AuthLayout } from "@/pages/_layout";
+import { Register, Login, ForgetPass, VerifyForgetPass } from "../../pages/_auth";
+import { RootLayout, AuthLayout } from "../../pages/_layout";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
           {
             path: "/profile",
             element: <Profile />,
+          },
+          {
+            path: "/premium",
+            element: <Premium />,
           },
           {
             path: "/notifications",
@@ -102,3 +107,4 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
+ */

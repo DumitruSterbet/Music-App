@@ -3,12 +3,12 @@ import { useEffect } from "react";
 import useLocalStorage from "use-local-storage";
 import { useMediaQuery } from "react-responsive";
 
-import { useCurrentUser } from "@/lib/store";
-import { useTheme } from "@/hooks";
+import { useCurrentUser } from "../lib/store";
+import { useTheme } from "../hooks";
 
-import { defaultThemeConfig } from "@/configs";
+import { defaultThemeConfig } from "../configs";
 
-import { ThemeSwitcher } from "@/components";
+import { ThemeSwitcher } from "../components";
 
 export default function ThemeProvider({ children }) {
   const { currentUser } = useCurrentUser();

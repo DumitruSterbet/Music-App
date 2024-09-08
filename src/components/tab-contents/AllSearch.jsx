@@ -1,6 +1,6 @@
 import { useId, useMemo } from "react";
 
-import { Sections } from "@/components";
+import { Sections } from "../../components";
 
 export default function AllSearch({
   setCurrentTab,
@@ -8,37 +8,41 @@ export default function AllSearch({
   isPending,
   isSuccess,
 }) {
-  const { artists, tracks, albums, playlists, radios } = data || {};
 
-  const radioId = useId();
+
+  
+  const { artists, soundtracks, albums, playlists } = data || {};
+
+  
+console.log("Search",data);
 
   const bannerD = useMemo(() => {
-    let details, type, tracks;
+    let details, type, soundtracks;
     if (artists?.length) {
       details = artists[0];
       type = "artist";
-      tracks = tracks;
+   
     } else if (albums?.length) {
-      details = albums[0].tracks;
+      details = albums[0].soundtracks;
       type = "album";
-      tracks = albums[0]?.tracks;
+      soundtracks= albums[0]?.soundtracks;
     } 
 
-    return { details, type, tracks };
+    return { details, type, soundtracks };
   }, [albums, artists, playlists]);
 
   return (
     <div className="relative h-screen mt-8 all_tab_content">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-10">
         <div className="flex flex-col col-span-1 gap-8 md:col-span-6">
-          <Sections.BannerSection
+          {/* <Sections.BannerSection
             details={bannerD?.details}
             tracks={bannerD?.tracks}
             type="search"
             isLoading={isPending}
             isSuccess={isSuccess}
           />
-
+ */}
           <Sections.MediaSection
             data={artists?.slice(0, 3)}
             title="Artists"
@@ -65,23 +69,12 @@ export default function AllSearch({
             isSuccess={isSuccess}
           />
 
-          <Sections.MediaSection
-            data={playlists?.slice(0, 3)}
-            title="Playlists"
-            titleType="medium"
-            titleDivider={false}
-            showMoreLink={() => setCurrentTab("playlists")}
-            type="album"
-            cardItemNumber={9}
-            gridNumber={3}
-            isLoading={isPending}
-            isSuccess={isSuccess}
-          />
+          
         </div>
         <div className="flex flex-col col-span-1 gap-8 md:col-span-4">
           <div className="sticky top-0">
             <Sections.TrackSection
-              data={tracks?.slice(0, 5)}
+              data={soundtracks?.slice(0, 5)}
               details={{
                 id: bannerD?.details?.id,
                 type: bannerD?.type,

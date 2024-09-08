@@ -1,8 +1,8 @@
 import { Fragment } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 
-import { classNames } from "@/lib/utils";
-import { Icon } from "@/components";
+import { classNames } from "../lib/utils";
+import { Icon } from "../components";
 
 import { Skeleton } from "./skeletons/Skeleton";
 import { connect } from "react-redux";
@@ -26,10 +26,7 @@ const transformContent = (content) => {
         }).filter(item => item !== null);
       }
     });
-  } else {
-
-  }
-
+  } 
   return transformed;
 };
 

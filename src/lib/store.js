@@ -56,11 +56,11 @@ export const usePlayerStore = create((set) => ({
 
   getPlaylist: (value) => set((state) => {
     const { tracklist, playlistId, playlistType, trackIndex, trackId, trackType } = value || {};
-    console.log("seted1",value,state);
+   
     if (tracklist?.length) {
     
       return {
-        tracklist,
+        tracklist: tracklist ,
         playlistId: playlistId || state.playlistId,
         playlistType: playlistType || state.playlistType,
         trackIndex: trackIndex || 0,

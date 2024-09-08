@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { classNames, getRandomList, getFormatData } from "@/lib/utils";
+import { classNames, getRandomList, getFormatData } from "../../lib/utils";
 
 import {
   PatternBg,
@@ -8,7 +8,7 @@ import {
   Title,
   Skeletons,
   Cards,
-} from "@/components";
+} from "../../components";
 
 const grid = {
   1: "grid-cols-1",
@@ -95,7 +95,7 @@ export default function MediaSectionMinified({
                         <Cards.MediaCardMinified
                           key={item.id}
                           item={item}
-                          type={item?.type || type}
+                          type={ type}
                           imageDims={imageDims}
                           isMyPlaylist={isMyPlaylist}
                         />

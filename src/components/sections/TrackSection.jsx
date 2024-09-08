@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from "react";
 
-import { useFetchMyPlaylists} from "@/lib/actions";
-import { usePlayerStore } from "@/lib/store";
-import { classNames, getFormatData } from "@/lib/utils";
-import { usePlayer } from "@/hooks";
+import { useFetchMyPlaylists} from "../../lib/actions";
+import { usePlayerStore } from "../../lib/store";
+import { classNames, getFormatData } from "../../lib/utils";
+import { usePlayer } from "../../hooks";
 
-import { ShowMoreButton, Title, Skeletons, Cards } from "@/components";
+import { ShowMoreButton, Title, Skeletons, Cards } from "../../components";
 
 export default function TrackSection({
   data,
@@ -27,19 +27,16 @@ export default function TrackSection({
   isLoading,
   isSuccess,
 }) {
+
   useFetchMyPlaylists();
+ 
 
-   const { playlistId, trackId, trackType } = usePlayerStore() || {};
-
-  const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer();
 
   
+  const { playlistId, trackId, trackType } = usePlayerStore() || {};
+  const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer(); 
   const trackFormatted = useMemo(() => getFormatData(data), [data]);
-
-
-
   
-
   const handleTrackClick = ({ id, type, index }) => {
 
     if (trackId === id) {
@@ -68,7 +65,7 @@ export default function TrackSection({
         </div>
       )}
 
-      {isSuccess && data?.length ? (
+{isSuccess && data?.length ? (
         <div className="track_section">
           {enableTitle && (
             <Title
