@@ -5,17 +5,7 @@ import { useFetchArtist } from "../../src/lib/actions";
 import { Tab, Sections, TabContents } from "../../src/components";
 import { getAritstDetails } from '../../src/lib/helpers';
 
-export async function getServerSideProps(context) {
-    const { id } = context.query;
-    const artistData = await getAritstDetails(id);
 
-    console.log("Artist Details from Server:", artistData);
-    return {
-      props: {
-        artistDetails: artistData, // Pass the artist data to the component
-      },
-    };
-}
 
 export default function Artist({ artistDetails }) {
   const router = useRouter();
@@ -79,10 +69,11 @@ export default function Artist({ artistDetails }) {
   if (artistDataError) return <div>Error: {artistDataErrorDetails.message}</div>;
 
   return (
+    
     <section className="relative artist_section">
       <Head>
-        <title>{"Vaseaaa"}</title>
-
+        <title>{`Download album ${artistDetails?.name} - TuneTify`}</title>
+        <meta name="description" content={`Download album ${artistDetails?.name} - Download MP3 or WAV format - TuneTify`} />
       </Head>
       <Sections.BannerSection
         details={details}
@@ -119,4 +110,15 @@ export default function Artist({ artistDetails }) {
       </div>
     </section>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { id } = context.query;
+  const artistData = await getAritstDetails(id);
+
+  return {
+    props: {
+      artistDetails: artistData, // Pass the artist data to the component
+    },
+  };
 }

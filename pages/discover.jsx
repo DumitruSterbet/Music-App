@@ -37,12 +37,12 @@ export default function Discover() {
 
   return (
     <>
-    {/*   <Head>
+      <Head>
         <title>Download Electronic Music - TuneTify </title>
         <desciption>
         Download Electronic Music - TuneTify  download MP3 or WAV format - TuneTify
         </desciption>
-      </Head> */}
+      </Head>
 
       <section className="discover_page">
         <div className="flex flex-col gap-y-16">

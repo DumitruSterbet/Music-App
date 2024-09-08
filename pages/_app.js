@@ -5,6 +5,7 @@ import { ThemeProvider, StylesProvider } from "../src/providers";
 import RootLayout from "./RootLayout";
 import React from 'react';
 import './global.css';
+import Head from 'next/head';
 
 const queryClient = new QueryClient();
 
@@ -15,15 +16,16 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="app">
-      <ToastContainer />
-      <ThemeProvider>
-        <StylesProvider />
-               
-        <RootLayout>
-          <Component {...pageProps} />
-        </RootLayout>
+        <ToastContainer />
+        <ThemeProvider>
+          <StylesProvider />
+          <Head>
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+          </Head>
+          <RootLayout>
+            <Component {...pageProps} />
+          </RootLayout>
         </ThemeProvider>
-    
       </div>
     </QueryClientProvider>
   );

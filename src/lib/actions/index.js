@@ -14,7 +14,8 @@ export {
   useDownload,
   useGetArtistByIds,
   useFetchArtists,
-  useTopPick
+  useTopPick,
+  useGetAlbumDetailedInfo
 
 } from "./editorial.action";
 

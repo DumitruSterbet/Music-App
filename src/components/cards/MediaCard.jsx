@@ -83,8 +83,12 @@ export default function MediaCard({ item, type }) {
             </div>
           )}
           {!isTypeTopClick && (
+
             <div className="play_button absolute -translate-y-[30%] -translate-x-[50%] top-[50%] left-[50%]">
-              {playlistId !== item.id && playlistType === type ? (
+
+
+              {playlistId === item.id  ? (
+                
                 <button
                   className="flex items-center justify-center w-10 h-10 rounded-full shadow-dialog primary_linear"
                   onClick={(e) => {
@@ -92,11 +96,13 @@ export default function MediaCard({ item, type }) {
                     handlePlayPause();
                   }}
                 >
+                
                   <Icon
                     name={isPlaying ? "BsFillPauseFill" : "BsFillPlayFill"}
                     className="!text-white"
                     size={24}
                   />
+              
                 </button>
               ) : (
                 <button
@@ -109,8 +115,8 @@ export default function MediaCard({ item, type }) {
                   disabled={isSubmitting}
                   onClick={(e) => {
                     e.stopPropagation();
-                    const callback = (tracks) => {
-                      console.log("tracks",tracks);
+                    const callback = () => {
+
                       handleGetPlaylist({
                         tracklist: getFormatData(playlists, item?.image),
                         playlistId: item?.id,
@@ -125,6 +131,7 @@ export default function MediaCard({ item, type }) {
                     );
                   }}
                 >
+                      
                   <Icon
                     name={
                       isSubmitting

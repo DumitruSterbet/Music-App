@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   formatDateString,
   formatNumberWithCommas,
-  formatTime,
+
   pluralize,
 } from "../lib/utils";
 

@@ -173,6 +173,7 @@ export default function usePlayer() {
   };
 
   const handlePlayPause = () => {
+    console.log("Set pause");
     togglePlayPause();
   };
 

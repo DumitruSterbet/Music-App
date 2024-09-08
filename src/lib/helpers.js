@@ -137,6 +137,19 @@ export const getGenreDetails = async (id) => {
     throw error;
   }
 };
+export const getStyleSettings = async () => {
+
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/styleSettings`);
+
+
+    return response.data; // Return the actual data from the response
+  } catch (error) {
+    console.error('Error fetching album details:', error);
+  
+  }
+};
 
 
 export const getAlbumDetailedInfoApi = async (id) => {

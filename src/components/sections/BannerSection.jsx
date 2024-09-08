@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { usePlayerStore } from "../../lib/store";
-
 import { classNames, getFormatData } from "../../lib/utils";
 import usePlayer from "../../hooks/usePlayer";
+import { useGetAlbumDetailedInfo } from "../../lib/actions";
 
 import {
   Title,
@@ -35,13 +35,7 @@ export default function BannerSection(props) {
 
   const trackFormatted = useMemo(() => getFormatData(tracks), [tracks]);
 
-  const {
-    desc,
-    genres,
-    contributors,
-    albumsNo,
-    fansNo,
-  } = getFormatData([details])?.[0] || {};
+  const { desc, genres, contributors, albumsNo, fansNo } = getFormatData([details])?.[0] || {};
 
   const formatDuration = (duration) => {
     if (!duration) return '';
@@ -52,21 +46,24 @@ export default function BannerSection(props) {
     return `${hours} hrs ${minutes} mins ${seconds} secs`;
   };
 
+  // Call hook unconditionally
+  const albumId = details && Array.isArray(details) ? details[0]?.albumId : null;
+  const albumDetails = useGetAlbumDetailedInfo(albumId).data || {};
+
   let type;
   let name, image, tracksNo, releaseDate, duration, albumArtists;
   let pagename;
 
   if (Array.isArray(details)) {
-    console.log("Album detail",details);
+    console.log("Album detail", details);
     type = "album";
     pagename = "Album";
-    /* const albumDetails = getAlbumDetailedInfo(details[0]?.albumId).data;
     name = albumDetails?.name;
     image = albumDetails?.imageUrl;
     tracksNo = albumDetails?.songQuantity;
     releaseDate = albumDetails?.publishedAt;
     duration = formatDuration(albumDetails?.duration);
-    albumArtists = details?.flatMap(item => item.artists.map(artist => artist.name)).join(', ');  */
+    albumArtists = details?.flatMap(item => item.artists.map(artist => artist.name)).join(', ');
   } else {
     type = "artist";
     pagename = "Artist";
@@ -88,8 +85,6 @@ export default function BannerSection(props) {
 
   return (
     <div className="relative banner_section">
-      
-
       {typeAlt !== "search" && (
         <div className="absolute w-full h-full rounded bg-primary-opacity" />
       )}
@@ -101,18 +96,14 @@ export default function BannerSection(props) {
       )}
 
       {isSuccess && details && (
-        <div
-          className={classNames(typeAlt === "search" && "bg-card rounded p-6")}
-        >
+        <div className={classNames(typeAlt === "search" && "bg-card rounded p-6")}>
           {typeAlt === "search" && (
             <Title name={"Top Results"} type={"medium"} divider={false} />
           )}
-          <div
-            className={classNames(
-              "relative flex flex-col xs:flex-row items-center overflow-hidden z-10 gap-6",
-              typeAlt !== "search" ? "border-b-0 border-divider p-4" : "p-0"
-            )}
-          >
+          <div className={classNames(
+            "relative flex flex-col xs:flex-row items-center overflow-hidden z-10 gap-6",
+            typeAlt !== "search" ? "border-b-0 border-divider p-4" : "p-0"
+          )}>
             {showPattern && <PatternBg />}
             <img
               src={image}
@@ -122,14 +113,12 @@ export default function BannerSection(props) {
                 type === "artist" ? "rounded-full w-[350px]" : "rounded w-[200px]"
               )}
             />
-            <div
-              className={classNames(
-                "text-onNeutralBg flex w-full",
-                typeAlt === "search"
-                  ? "flex-row items-center justify-start gap-8"
-                  : "flex-col items-start justify-between"
-              )}
-            >
+            <div className={classNames(
+              "text-onNeutralBg flex w-full",
+              typeAlt === "search"
+                ? "flex-row items-center justify-start gap-8"
+                : "flex-col items-start justify-between"
+            )}>
               <div className="gap-2">
                 <div className="flex items-center">
                   <div className="block capitalize">{type}</div>
