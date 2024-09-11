@@ -62,6 +62,7 @@ export default function Playlist({ albumDetails }) {
     // Handle invalid section or id
   }
 
+
   return (
     <section className="playlist_section">
       <Head>
@@ -84,7 +85,7 @@ export default function Playlist({ albumDetails }) {
 
           <div className="relative mt-8">
             <Sections.TrackSection
-              data={transformedPlaylists}
+              data={playlists}
               details={{
                 id: playlists?.id,
                 type: playlists?.type,

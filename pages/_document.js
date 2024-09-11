@@ -5,8 +5,8 @@ function MyDocument() {
     <Html lang="en">
       <Head>
         <meta charSet="UTF-8" />
-        <link rel="icon" href="/favicon.ico" />
-        {/* Remove the viewport meta tag from here */}
+        
+        {/* Meta tags like viewport should not be manually added here */}
       </Head>
       <body>
         <Main />

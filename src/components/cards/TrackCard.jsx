@@ -116,7 +116,8 @@ const TrackCard = ({
   const { currentUser } = useCurrentUser();
   const { user, isLoaded } = currentUser || {};
 
-  const { id, type, index } = item || {};
+  const { id, type, index,artists } = item || {};
+  console.log("Artist",artists);
 
   const isCurrentTrack =
     trackId === id && trackType === type && playlistId === details.id;
@@ -189,18 +190,20 @@ const TrackCard = ({
            
             <div className="flex flex-col xs:flex-row">
 
-              {item.artists.map((artist, index) => (
-                <span key={artist.Id}>
+            {artists?.map((artist, index) => (
+                <span key={artist.id}>
                   <Link
-                    href={`/artist/${artist.Id}`}
+                    href={`/artist/${artist.id}`}
                     title="Artist"
                     className="text-secondary text-[14px] hover:underline underline-offset-4 cursor-pointer"
                   >
-                    {artist.Name}
+                    {artist.name}
                   </Link>
-                  {index < item.artists.length - 1 && <>&nbsp;&nbsp;</>}
+                  {index < artists.length - 1 && <>&nbsp;&nbsp;</>}
                 </span>
-              ))}
+          ))}
+
+
             </div>
           </div>
         </div>

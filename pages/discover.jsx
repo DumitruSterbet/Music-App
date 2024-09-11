@@ -39,9 +39,9 @@ export default function Discover() {
     <>
       <Head>
         <title>Download Electronic Music - TuneTify </title>
-        <desciption>
+        <description>
         Download Electronic Music - TuneTify  download MP3 or WAV format - TuneTify
-        </desciption>
+        </description>
       </Head>
 
       <section className="discover_page">
@@ -111,4 +111,31 @@ export default function Discover() {
       </section>
     </>
   );
+}
+
+import { parse, serialize } from 'cookie';
+import { getStyleSettings } from '../src/lib/helpers'; 
+import { defaultThemeConfig } from '../src/configs/theme.config'; // Import defaultThemeConfig if needed
+export async function getServerSideProps(context) {
+  const { req, res } = context;
+  const cookies = parse(req.headers.cookie || '');
+  let theme = cookies.userTheme;
+
+  if (!theme) 
+    {
+    try {
+      const styleSettings = await getStyleSettings();
+      theme = JSON.stringify(styleSettings);
+      res.setHeader('Set-Cookie', serialize('userTheme', theme, { httpOnly: false, path: '/' }));
+
+    } catch (error) {
+      
+      theme = JSON.stringify(defaultThemeConfig);
+      res.setHeader('Set-Cookie', serialize('userTheme', theme, { httpOnly: false, path: '/' }));
+    }
+  }
+
+  return {
+    props: {}, // Add necessary props if needed
+  };
 }
