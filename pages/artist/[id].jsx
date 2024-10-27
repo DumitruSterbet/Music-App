@@ -72,8 +72,8 @@ export default function Artist({ artistDetails }) {
     
     <section className="relative artist_section">
       <Head>
-        <title>{`Download album ${artistDetails?.name} - TuneTify`}</title>
-        <meta name="description" content={`Download album ${artistDetails?.name} - Download MP3 or WAV format - TuneTify`} />
+        <title>{`Download Artist ${artistDetails?.name} - TuneTify`}</title>
+        <meta name="description" content={`Download Artist ${artistDetails?.name} MP3 or WAV format - TuneTify`} />
       </Head>
       <Sections.BannerSection
         details={details}

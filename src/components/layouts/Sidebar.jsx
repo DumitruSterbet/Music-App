@@ -85,6 +85,21 @@ const Sidebar = () => {
             refFocus: searchRef,
             tooltip: "hover",
           },
+          ,
+          {
+            id: "search",
+            name: "Premium",
+            to: "/premium",
+            icon: "RiListIndefinite",        
+            tooltip: "hover",
+          },
+          {
+            id: "search",
+            name: "About",
+            to: "/about",
+            icon: "RiListIndefinite",
+            tooltip: "hover",
+          },
         ],
       },
       // Additional navlinks can be added here

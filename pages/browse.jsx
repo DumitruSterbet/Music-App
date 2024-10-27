@@ -7,29 +7,30 @@ import { useAppUtil } from "../src/lib/store";
 import { useFetchGenres } from "../src/lib/actions";
 import { Overlay } from "../src/components";
 
-export default function Page() {
+export default function Page({ allGenres }) {
   const [selectedGenre, setSelectedGenre] = useState(null);
   const router = useRouter(); // Initialize useRouter
 
   const { getToggleGenres, toggleGenres } = useAppUtil();
-  const { data: genres } = useFetchGenres();-
+  const { data: genres } = useFetchGenres(); -
 
-  // Navigate to genre page when selectedGenre changes
-  useEffect(() => {
-    if (selectedGenre) {
-      router.push(`/genre/${selectedGenre}`); // Navigate to the genre page
-    }
-  }, [selectedGenre, router]);
-
+    // Navigate to genre page when selectedGenre changes
+    useEffect(() => {
+      if (selectedGenre) {
+        router.push(`/genre/${selectedGenre}`); // Navigate to the genre page
+      }
+    }, [selectedGenre, router]);
+  const genreNames = allGenres.map(genre => genre.name).join(', ');
   return (
     <div className="browse_page">
       <Head>
-        <title>Download Electronic Genre genreName Music - TuneTify</title>
+        <title>Download Electronic Music | {genreNames}  - TuneTify </title>
         <meta
           name="description"
-          content="Download Electronic Genre genreName Music - TuneTify. Download MP3 or WAV format - TuneTify"
+          content={`${genreNames} - TuneTify`}
         />
       </Head>
+     
       <div className="relative gap-6">
         <Overlay
           isOpen={toggleGenres}
@@ -37,7 +38,7 @@ export default function Page() {
           transparent
           className="z-[800]"
         />
-        
+
         <div
           className={classNames(
             "grid grid-cols-3 gap-4 p-4",
@@ -68,4 +69,17 @@ export default function Page() {
       </div>
     </div>
   );
+}
+import { getAllGenres } from '../src/lib/helpers';
+
+export async function getServerSideProps() {
+
+  const genres = await getAllGenres();
+
+  return {
+    props: {
+      allGenres: genres || null, // Pass the album data to the component
+    },
+  };
+
 }
