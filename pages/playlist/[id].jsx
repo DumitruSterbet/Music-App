@@ -6,8 +6,9 @@ import Head from "next/head";
 
 const allowedSection = ["playlist", "album", "radio"];
 
-export default function Playlist({ albumDetails }) {
+export default function Playlist({ albumDetails, albumArtists }) {
   const { id } = useRouter().query;
+  const artistNames = albumArtists?.map(artist => artist.name).join(', ');
   const section = "playlist";
   const {
     playlists,
@@ -66,8 +67,8 @@ export default function Playlist({ albumDetails }) {
   return (
     <section className="playlist_section">
       <Head>
-        <title>{`Download album ${albumDetails?.name} - TuneTify`}</title>
-        <meta name="description" content={`Download album ${albumDetails?.name} - Download MP3 or WAV format - TuneTify`} />
+        <title>{`Download album ${albumDetails?.name} | artist - ${artistNames}  - TuneTify`}</title>
+        <meta name="description" content={`Download album ${albumDetails?.name} | artist - ${artistNames} -  MP3 or WAV format - TuneTify`} />
       </Head>
       {playlistDataPending || artistsDataPending ?
        (
@@ -102,18 +103,18 @@ export default function Playlist({ albumDetails }) {
   );
 }
 
-import { getAlbumDetailedInfoApi } from '../../src/lib/helpers';
+import { getAlbumDetailedInfoApi, getArtistsByAlbum } from '../../src/lib/helpers';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
 
     const albumData = await getAlbumDetailedInfoApi(id);
-
-  
+    const albumArtist = await getArtistsByAlbum(id);
 
     return {
       props: {
-        albumDetails: albumData || null, // Pass the album data to the component
+        albumDetails: albumData || null,
+        albumArtists: albumArtist|| null
       },
     };
   

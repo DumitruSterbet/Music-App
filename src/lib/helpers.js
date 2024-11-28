@@ -187,6 +187,23 @@ export const getAlbumDetailedInfoApi = async (id) => {
   }
 };
 
+
+export const getArtistsByAlbum = async (id) => {
+  if (!id) return null;
+  
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/artist/GetByAlbum/${id}`,{ httpsAgent: agent });
+
+
+    return response.data; // Return the actual data from the response
+  } catch (error) {
+    console.error('Error fetching album artists:', error);
+    throw error;
+  }
+};
+
+
 export const getAritstDetails = async (id) => {
   if (!id) return null;
 

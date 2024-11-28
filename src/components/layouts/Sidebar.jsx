@@ -68,14 +68,14 @@ const Sidebar = () => {
             name: "Discover",
             to: "/discover",
             icon: "BiPlayCircle",
-            tooltip: "hover",
+            tooltip: "hover"
           },
           {
             id: "browse",
             name: "Genres",
             to: "/browse",
             icon: "RiListIndefinite",
-            tooltip: "hover",
+            tooltip: "hover"
           },
           {
             id: "search",
@@ -83,25 +83,25 @@ const Sidebar = () => {
             to: "/search",
             icon: "FaSearchengin",
             refFocus: searchRef,
-            tooltip: "hover",
+            tooltip: "hover"
           },
-          ,
+          
           {
             id: "search",
             name: "Premium",
             to: "/premium",
             icon: "RiListIndefinite",        
-            tooltip: "hover",
+            tooltip: "hover"
           },
           {
             id: "search",
             name: "About",
             to: "/about",
             icon: "RiListIndefinite",
-            tooltip: "hover",
-          },
-        ],
-      },
+            tooltip: "hover"
+          }
+        ]
+      }
       // Additional navlinks can be added here
     ];
   }, [user]);
