@@ -35,8 +35,9 @@ export default function TrackSection({
   
   const { playlistId, trackId, trackType } = usePlayerStore() || {};
   const { handlePlayPause, handleGetPlaylist, isPlaying } = usePlayer(); 
+   console.log("Data",data);
   const trackFormatted = useMemo(() => getFormatData(data), [data]);
-  
+  console.log("Data2",trackFormatted);
   const handleTrackClick = ({ id, type, index }) => {
 
     if (trackId === id) {

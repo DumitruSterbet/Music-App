@@ -116,7 +116,8 @@ const TrackCard = ({
   const { currentUser } = useCurrentUser();
   const { user, isLoaded } = currentUser || {};
 
-  const { id, type, index } = item || {};
+  const { id, type, index,artists } = item || {};
+  console.log("Artist",artists);
 
   const isCurrentTrack =
     trackId === id && trackType === type && playlistId === details.id;
@@ -189,25 +190,27 @@ const TrackCard = ({
            
             <div className="flex flex-col xs:flex-row">
 
-              {item.artists.map((artist, index) => (
-                <span key={artist.Id}>
+            {artists?.map((artist, index) => (
+                <span key={artist.id}>
                   <Link
-                    href={`/artist/${artist.Id}`}
+                    href={`/artist/${artist.id}`}
                     title="Artist"
                     className="text-secondary text-[14px] hover:underline underline-offset-4 cursor-pointer"
                   >
-                    {artist.Name}
+                    {artist.name}
                   </Link>
-                  {index < item.artists.length - 1 && <>&nbsp;&nbsp;</>}
+                  {index < artists.length - 1 && <>&nbsp;&nbsp;</>}
                 </span>
-              ))}
+          ))}
+
+
             </div>
           </div>
         </div>
         <div className="absolute right-0 flex items-center gap-2">
           {!disableRowList?.includes("duration") && (
             <div className="flex items-end justify-end text-sm text-right">
-              {formatDuration(item.duration)}
+              {/*formatDuration(item.duration) */}
             </div>
           )}
 
@@ -217,25 +220,12 @@ const TrackCard = ({
               className="flex items-center justify-end gap-2 text-sm text-right"
               title="download"
             >
-              <svg
-                stroke="currentColor"
-                fill="none"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-onNeutralBg"
-                height="26"
-                width="26"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M19 8h-14"></path>
-                <path d="M5 12h9"></path>
-                <path d="M11 16h-6"></path>
-                <path d="M15 16h6"></path>
-                <path d="M18 13v6"></path>
-              </svg>
+       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" id="download">
+  <g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+    <path d="M1 16v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3M6 11l4 4 4-4M10 1v14"></path>
+  </g>
+</svg>
+
             </button>
           )}
 

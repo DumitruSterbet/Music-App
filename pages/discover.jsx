@@ -1,11 +1,7 @@
 import { useState } from "react";
 import Head from "next/head";
-import {
-  useFetchTopCharts,
-  useFetchArtists,
-} from "../src/lib/actions";
+import { useFetchTopCharts, useFetchArtists } from "../src/lib/actions";
 import { Sections } from "../src/components";
-
 
 export default function Discover() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,35 +23,33 @@ export default function Discover() {
 
   const { data: artists } = useFetchArtists(currentPage, itemsPerPage);
 
-  const handleArtistPageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
-
-  const handleTopChartPageChange = (newPage) => {
-    setTopChartCurrentPage(newPage);
-  };
+  const handleArtistPageChange = (newPage) => setCurrentPage(newPage);
+  const handleTopChartPageChange = (newPage) => setTopChartCurrentPage(newPage);
 
   return (
     <>
-      <Head>
-        <title>Download Electronic Music - TuneTify </title>
-        <desciption>
-        Download Electronic Music - TuneTify  download MP3 or WAV format - TuneTify
-        </desciption>
-      </Head>
+    <Head>
+        <title>Download Electronic Music - TuneTify</title>
+        <meta
+          name="description"
+          content="Download Electronic Music - TuneTify download MP3 or WAV format - TuneTify"
+        />
+        </Head>
 
       <section className="discover_page">
         <div className="flex flex-col gap-y-16">
           {/* Top Charts Section */}
-          <Sections.MediaSection
-            data={topChartData}
-            title="Discover"
-            subTitle="Explore albums"
-            type="playlist"
-            cardItemNumber={topChartItemsPerPage}
-            isLoading={isTopChartDataPending}
-            isSuccess={isTopChartDataSuccess}
-          />
+          {topChartData && (
+            <Sections.MediaSection
+              data={topChartData}
+              title="Discover"
+              subTitle="Explore albums"
+              type="playlist"
+              cardItemNumber={topChartItemsPerPage}
+              isLoading={isTopChartDataPending}
+              isSuccess={isTopChartDataSuccess}
+            />
+          )}
 
           {/* Pagination controls for top charts */}
           <div className="pagination-controls flex justify-center items-center gap-4 mt-4">
@@ -69,7 +63,7 @@ export default function Discover() {
             <span className="text-center">Page {topChartCurrentPage}</span>
             <button
               onClick={() => handleTopChartPageChange(topChartCurrentPage + 1)}
-              disabled={topChartData && topChartData.length < topChartItemsPerPage}
+              disabled={topChartData?.length < topChartItemsPerPage}
               className="pagination-button"
             >
               &rarr;
@@ -77,17 +71,19 @@ export default function Discover() {
           </div>
 
           {/* Suggested Artists Section */}
-          <Sections.MediaSection
-            data={artists}
-            title="Suggested Artists"
-            subTitle="Discover new sounds with handpicked artists tailored to your taste."
-            skeletonItemNumber={10}
-            randomListNumber={5}
-            cardItemNumber={itemsPerPage}
-            type="artist"
-            isLoading={isTopChartDataPending}
-            isSuccess={isTopChartDataSuccess}
-          />
+          {artists && (
+            <Sections.MediaSection
+              data={artists}
+              title="Suggested Artists"
+              subTitle="Discover new sounds with handpicked artists tailored to your taste."
+              skeletonItemNumber={10}
+              randomListNumber={5}
+              cardItemNumber={itemsPerPage}
+              type="artist"
+              isLoading={isTopChartDataPending}
+              isSuccess={isTopChartDataSuccess}
+            />
+          )}
 
           {/* Pagination controls for artists */}
           <div className="pagination-controls flex justify-center items-center gap-4 mt-4">
@@ -101,7 +97,7 @@ export default function Discover() {
             <span className="text-center">Page {currentPage}</span>
             <button
               onClick={() => handleArtistPageChange(currentPage + 1)}
-              disabled={artists && artists.length < itemsPerPage}
+              disabled={artists?.length < itemsPerPage}
               className="pagination-button"
             >
               &rarr;
@@ -111,4 +107,31 @@ export default function Discover() {
       </section>
     </>
   );
+}
+
+import { parse, serialize } from 'cookie';
+import { getStyleSettings } from '../src/lib/helpers'; 
+import { defaultThemeConfig } from '../src/configs/theme.config'; // Import defaultThemeConfig if needed
+export async function getServerSideProps(context) {
+  const { req, res } = context;
+  const cookies = parse(req.headers.cookie || '');
+  let theme = cookies.userTheme;
+
+  if (!theme) 
+    {
+    try {
+      const styleSettings = await getStyleSettings();
+      theme = JSON.stringify(styleSettings);
+      res.setHeader('Set-Cookie', serialize('userTheme', theme, { httpOnly: false, path: '/' }));
+
+    } catch (error) {
+      
+      theme = JSON.stringify(defaultThemeConfig);
+      res.setHeader('Set-Cookie', serialize('userTheme', theme, { httpOnly: false, path: '/' }));
+    }
+  }
+
+  return {
+    props: {}, // Add necessary props if needed
+  };
 }

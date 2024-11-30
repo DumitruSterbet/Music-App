@@ -1,7 +1,7 @@
 import axios from "axios";
 import imageCompression from "browser-image-compression";
-
-const API_BASE_URL = "https://productsapi20240819025750.azurewebsites.net/api"; // Replace with your actual API base URL
+import https from 'https';
+const API_BASE_URL = "http://178.128.245.131:5000/api"; // Replace with your actual API base URL
 
 //const DEEZER_API_URL = import.meta.env.VITE_PUBLIC_DEEZER_API_URL;
 //const CORS_URL = import.meta.env.VITE_PUBLIC_CORS_URL;
@@ -12,9 +12,9 @@ const API_BASE_URL = "https://productsapi20240819025750.azurewebsites.net/api"; 
  */
 export const useUpdateAccountTheme = async () => {
   try {
-
-    const response = await axios.get(`${API_BASE_URL}/styleSettings`);
-    
+ 
+    const response = await axios.get(`${API_BASE_URL}/styleSettings`,{ httpsAgent: agent });
+    console.log("Cookies",response);
     return response.data;
   } catch (error) {
     console.error('Error updating theme:', error);
@@ -69,6 +69,9 @@ export const deleteItem = async (id) => {
 
 
 
+const agent = new https.Agent({
+  rejectUnauthorized: false, // Ignore self-signed certificate errors
+});
 
 
 // Upload image function
@@ -128,7 +131,7 @@ export const getGenreDetails = async (id) => {
   if (!id) return null;
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/genre/${id}`);
+    const response = await axios.get(`${API_BASE_URL}/genre/${id}`,{ httpsAgent: agent });
 
 
     return response.data; // Return the actual data from the response
@@ -137,12 +140,29 @@ export const getGenreDetails = async (id) => {
     throw error;
   }
 };
+
+export const getAllGenres = async () => {
+
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/genre`,{ httpsAgent: agent });
+
+
+    return response.data; // Return the actual data from the response
+  } catch (error) {
+    console.error('Error fetching album details:', error);
+    throw error;
+  }
+};
+
+
 export const getStyleSettings = async () => {
 
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/styleSettings`);
-
+   
+    const response = await axios.get(`${API_BASE_URL}/styleSettings`,{ httpsAgent: agent });
+    console.log("Cookies",response);
 
     return response.data; // Return the actual data from the response
   } catch (error) {
@@ -154,9 +174,10 @@ export const getStyleSettings = async () => {
 
 export const getAlbumDetailedInfoApi = async (id) => {
   if (!id) return null;
+  
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/album/${id}`);
+    const response = await axios.get(`${API_BASE_URL}/album/${id}`,{ httpsAgent: agent });
 
 
     return response.data; // Return the actual data from the response
@@ -166,11 +187,28 @@ export const getAlbumDetailedInfoApi = async (id) => {
   }
 };
 
+
+export const getArtistsByAlbum = async (id) => {
+  if (!id) return null;
+  
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/artist/GetByAlbum/${id}`,{ httpsAgent: agent });
+
+
+    return response.data; // Return the actual data from the response
+  } catch (error) {
+    console.error('Error fetching album artists:', error);
+    throw error;
+  }
+};
+
+
 export const getAritstDetails = async (id) => {
   if (!id) return null;
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/artist/${id}`);
+    const response = await axios.get(`${API_BASE_URL}/artist/${id}`,{ httpsAgent: agent });
     return response.data;
   } catch (error) {
     console.error('Error fetching album details:', error);

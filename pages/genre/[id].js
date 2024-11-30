@@ -32,8 +32,8 @@ export default function GenrePage({genreDetails}) {
   return (
     <section className="genre_section">
         <Head>
-        <title>{`Download album ${genreDetails?.name} - TuneTify`}</title>
-        <meta name="description" content={`Download album ${genreDetails?.name} - Download MP3 or WAV format - TuneTify`} />
+        <title>{`Download Genre ${genreDetails?.name} - TuneTify`}</title>
+        <meta name="description" content={`Download Genre ${genreDetails?.name}  MP3 or WAV format - TuneTify`} />
       </Head>
       <div className="relative z-20 flex flex-col gap-10">
         <Sections.MediaSection

@@ -1,6 +1,7 @@
 
 import { ScrollProvider } from "../src/providers";
 import { Modal, Navbar, Sidebar, TrackPlayer, TopPlay } from "../src/components";
+import HomePage from ".";
 
 const RootLayout = ({ children }) => {
   return (
@@ -15,7 +16,7 @@ const RootLayout = ({ children }) => {
             <Navbar />
             <div className="relative mb-6 xl:mb-[100px] overflow-y-scroll hide_scrollbar p-3 sm:p-6 max-w-7xl main_width page_content mt-main-top">
               {/* This is where the nested page content will be rendered */}
-              {children}
+              {children && children.type != HomePage && children }
             </div>
             <Modal />
           </main>

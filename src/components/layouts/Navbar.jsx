@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import { useMediaQuery } from "react-responsive";
 import { isEmpty } from "lodash";
 
-import { classNames, getTimeOfDay } from "../../lib/utils";
-import { useAppUtil, useCurrentUser } from "../../lib/store";
+import { classNames} from "../../lib/utils";
+import { useAppUtil} from "../../lib/store";
 import { useTheme } from "../../hooks";
 
-import { Button, Icon, DropdownMenu, Overlay } from "../../components";
+import {  Icon, Overlay } from "../../components";
 import { defaultThemeConfig } from "../../configs";
 import { logo } from "../../constants";
 import Link from 'next/link';
@@ -184,13 +184,11 @@ export default function Navbar() {
   const { getToggleSearch, toggleSearch } = useAppUtil();
   const [theme] = useTheme();
 
-  const { currentUser } = useCurrentUser();
-
   const { orientation, sidebar, isMobile } = theme || defaultThemeConfig;
   const isHorizontal = orientation === "horizontal" && !isMobile;
   const isFolded = sidebar === "folded";
 
-  const { isLoaded, user } = currentUser || {};
+
 
   return (
     <nav className="fixed z-[1200] h-navbar top-0 bg-neutralBgOpacity backdrop-blur-[50px] sidebar_horizontal_width">

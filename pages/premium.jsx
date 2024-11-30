@@ -5,7 +5,7 @@ const Premium = () => {
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = "https://form.123formbuilder.com/embed/4855766.js";
+    script.src = "http://form.123formbuilder.com/embed/4855766.js";
     script.type = "text/javascript";
     script.defer = true;
     script.dataset.role = "form";

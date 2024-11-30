@@ -1,6 +1,6 @@
 import { useUpdateAccountTheme } from "../lib/actions";
 import { defaultThemeConfig } from "../configs";
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 const THEME_COOKIE_NAME = 'userTheme';

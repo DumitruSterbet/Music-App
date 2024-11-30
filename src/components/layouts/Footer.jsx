@@ -4,7 +4,6 @@ import Link from 'next/link';
 
 
 const pageLink = [
-  { name: "About", link: "/about" },
   { name: "Contact", link: "/contact" },
   { name: "Legal", link: "/legal" },
   { name: "Policy", link: "/policy" },
