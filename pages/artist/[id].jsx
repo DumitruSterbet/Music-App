@@ -20,7 +20,6 @@ export default function Artist({ artistDetails }) {
   } = useFetchArtist(id);
 
   const { details, topTracks, albums, playlists, relatedArtists } = artist || {};
-
   const [currentTab, setCurrentTab] = useState("discography");
 
   const content = {

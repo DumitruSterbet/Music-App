@@ -128,3 +128,50 @@ input:-webkit-autofill:focus {
   background-color: var(--neutralBgAlt) !important;
   color: var(--onNeutralBg) !important;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+.pagination-controls {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* Reduce spacing between buttons */
+  margin-top: 15px;
+}
+
+.pagination-button {
+  position: relative;
+  padding: 8px 12px; /* Reduce padding */
+  text-decoration: none;
+  color: #fff;
+  font-size: 14px; /* Reduce font size */
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px; /* Slightly smaller border radius */
+  transition: background 0.3s ease, color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.pagination-button:disabled {
+  color: rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+}
+
+.pagination-button:hover:not(:disabled),
+.pagination-button.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.ellipsis {
+  color: #fff;
+  font-size: 12px; /* Reduce ellipsis font size */
+  padding: 0 5px; /* Reduce padding around ellipsis */
+}
+
+
