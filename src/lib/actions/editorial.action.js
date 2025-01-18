@@ -10,15 +10,12 @@ export const useFetchTopCharts = (params) => {
     queryFn: async () => {
       const { id, section } = params ?? {};
 
-      console.log("Test",limit);
       if (!(id && section)) {
         throw new Error("Invalid params");
       }     
       const data = await apiQuery({
         endpoint: `album?limit=${limit}&page=${page}`,
       });
-
-      let resp;
       return data;
     },
   });
@@ -26,29 +23,25 @@ export const useFetchTopCharts = (params) => {
   return { isPending, isSuccess, isError, isFetching, error, data };
 };
 
-export const useFetchNewReleases = ({ id }) => {
+export const useFetchNewReleases = ({ id, page, limit }) => {
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({
-    queryKey: [`newReleases_${id}`, { id }],
+    queryKey: [`newReleases_${id}`, { id, page, limit }], // Include page and limit in the queryKey
     queryFn: async () => {
-      try {
-        if (id) {
-  
-          const data = await apiQuery({
-            endpoint: `Album/GetByGenre/${id}`,
-          });
-          return data;
-        } else {
-          return null;
-          // throw new Error("Invalid params");
-        }
-      } catch (error) {
-        // console.log(error);
+      if (!id) {
+        throw new Error("Invalid params");
       }
+      console.log("Fetching data with page:", page, "limit:", limit);
+      const data = await apiQuery({
+        endpoint: `Album/GetByGenre/${id}?limit=${limit}&page=${page}`,
+      });
+      return data;
     },
+    keepPreviousData: true, // Optional: Keep old data while fetching new data
   });
 
   return { isPending, isSuccess, isError, isFetching, error, data };
 };
+
 
 export const useFetchTopSelection = ({ id }) => {
   const { isPending, isSuccess, isError, isFetching, error, data } = useQuery({

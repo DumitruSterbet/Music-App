@@ -1,7 +1,7 @@
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 import https from 'https';
-const API_BASE_URL = "http://178.128.245.131:5000/api"; // Replace with your actual API base URL
+const API_BASE_URL = "https://localhost:7199/api"; // Replace with your actual API base URL
 
 //const DEEZER_API_URL = import.meta.env.VITE_PUBLIC_DEEZER_API_URL;
 //const CORS_URL = import.meta.env.VITE_PUBLIC_CORS_URL;
@@ -171,6 +171,41 @@ export const getStyleSettings = async () => {
   }
 };
 
+export const getAlbumQuantityByGenre = async (id) => {
+  if (!id) return null;
+  
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/album/GetQuantityByGenre/${id}`,{ httpsAgent: agent });
+
+
+    return response.data; // Return the actual data from the response
+  } catch (error) {
+    console.error('Error fetching album details:', error);
+    throw error;
+  }
+};
+export const getAlbumsQuantity = async () => {
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/album/GetTotalQuantity`,{ httpsAgent: agent });
+    return response.data; // Return the actual data from the response
+  } catch (error) {
+    console.error('Error getting quantity of albums', error);
+    throw error;
+  }
+};
+
+export const getArtistsQuantity = async () => {
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/artist/GetTotalQuantity`,{ httpsAgent: agent });
+    return response.data; 
+  } catch (error) {
+    console.error('Error getting quantity of artists', error);
+    throw error;
+  }
+};
 
 export const getAlbumDetailedInfoApi = async (id) => {
   if (!id) return null;
@@ -202,6 +237,7 @@ export const getArtistsByAlbum = async (id) => {
     throw error;
   }
 };
+
 
 
 export const getAritstDetails = async (id) => {

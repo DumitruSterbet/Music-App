@@ -24,7 +24,6 @@ export default function Genre() {
   });
 
   const genreName = genre?.name || "Default Genre"; // Provide a default value
-  console.log("Genre name", genreName);
   const gridNumber = 5;
 
   return (

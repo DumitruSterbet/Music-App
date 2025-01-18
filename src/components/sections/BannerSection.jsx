@@ -64,6 +64,7 @@ export default function BannerSection(props) {
     releaseDate = albumDetails?.publishedAt;
     duration = formatDuration(albumDetails?.duration);
     albumArtists = details?.flatMap(item => item.artists.map(artist => artist.name)).join(', ');
+  // albumArtists =details.artistName;
   } else {
     type = "artist";
     pagename = "Artist";
