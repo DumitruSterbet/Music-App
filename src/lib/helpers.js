@@ -137,7 +137,7 @@ export const getGenreDetails = async (id) => {
     return response.data; // Return the actual data from the response
   } catch (error) {
     console.error('Error fetching album details:', error);
-    throw error;
+    return null;
   }
 };
 
@@ -151,7 +151,7 @@ export const getAllGenres = async () => {
     return response.data; // Return the actual data from the response
   } catch (error) {
     console.error('Error fetching album details:', error);
-    throw error;
+    return null;
   }
 };
 
@@ -167,6 +167,7 @@ export const getStyleSettings = async () => {
     return response.data; // Return the actual data from the response
   } catch (error) {
     console.error('Error fetching album details:', error);
+    return null;
   
   }
 };
@@ -182,7 +183,7 @@ export const getAlbumQuantityByGenre = async (id) => {
     return response.data; // Return the actual data from the response
   } catch (error) {
     console.error('Error fetching album details:', error);
-    throw error;
+    return null;
   }
 };
 export const getAlbumsQuantity = async () => {
@@ -192,7 +193,7 @@ export const getAlbumsQuantity = async () => {
     return response.data; // Return the actual data from the response
   } catch (error) {
     console.error('Error getting quantity of albums', error);
-    throw error;
+    return null;
   }
 };
 
@@ -203,7 +204,7 @@ export const getArtistsQuantity = async () => {
     return response.data; 
   } catch (error) {
     console.error('Error getting quantity of artists', error);
-    throw error;
+    return null;
   }
 };
 
@@ -234,7 +235,7 @@ export const getArtistsByAlbum = async (id) => {
     return response.data; // Return the actual data from the response
   } catch (error) {
     console.error('Error fetching album artists:', error);
-    throw error;
+    return null;
   }
 };
 
@@ -248,7 +249,7 @@ export const getAritstDetails = async (id) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching album details:', error);
-    throw error;
+    return null;
 
   }
 };
